@@ -1,0 +1,75 @@
+\subsection{Group-equivariant CNNs}
+\label{subsec:se2cnn}
+
+Here, we work with planar rigid motions $\eucg = \R^2 \rtimes G$, where $G \subseteq O(2)$ (e.g., $SO(2), O(2), C_N, D_N$) acts on $\R^2$ by rotations/reflections. A $c$-channel feature field is a map $f:\R^2 \to \R^c$ transforming under the induced action of a representation $\rho: G \to GL(\R^c)$,
+
+\begin{equation}
+    (\Ind \rho)(t,g)\, f(x) := \rho(g)\, f\!\big(g^{-1}(x-t)\big),
+\end{equation}
+
+with $\rho$ a homomorphism. 
+For instance, for a scalar field $s:\R^2\to\R$, $\rho(g)=1$ (trivial representation), and for a vector field $v:\R^2\to\R^2$, $\rho(g)=g$ (standard representation). 
+
+The layer-wise equivariance we require is
+
+\begin{equation}
+    \sigma\!\left(\Phi\big((\Ind \rho_{\mathrm{in}})(0,g)\, f_{\mathrm{in}}\big)\right)
+    \;=\; (\Ind \rho_{\mathrm{out}})(0,g)\, \sigma\!\left(\Phi(f_{\mathrm{in}})\right),
+    \quad \forall g \in G,
+    \label{eq:equivariance}
+\end{equation}
+
+where $\sigma$ is a pointwise nonlinearity and $\Phi$ is a cross-channel convolution specified by $(\Phi f)(x)=\int_{\R^2} k(y)\, f(x-y)\, dy$ with $k(y)\in\R^{c_{\mathrm{out}}\times c_{\mathrm{in}}}$. Translations are omitted in \eqref{eq:equivariance} because both convolution and pointwise $\sigma$ are equivariant to $\tau_t:=(\Ind \rho)(t,e)$.
+
+A sufficient way to ensure \eqref{eq:equivariance} is that (i) the nonlinearity is $G$-equivariant on channels,
+
+\begin{equation}
+    \sigma \circ (\Ind \rho_{\mathrm{in}})(0,g) = (\Ind \rho_{\mathrm{out}})(0,g) \circ \sigma, \qquad \forall g \in G,
+    \label{eq:nonlinear-equivariance}
+\end{equation}
+
+and (ii) the convolution kernel satisfies the following constraint
+
+\begin{equation}
+    k(gx) = \rho_{\mathrm{out}}(g) k(x) \rho_{\mathrm{in}}(g^{-1}), \qquad \forall g \in G, x \in \R^2.
+    \label{eq:kernel-constraint}
+\end{equation}
+
+While general steerable kernels can be constructed in Fourier space (e.g., \cite{e2cnn}), we instantiate the finite-rotation case using the (left) regular representation of $C_N=\{\,e,r,\dots,r^{N-1}\,\}$. 
+Given an image $I:\R^2\to\R$ and a base filter $\psi:\R^2\to\R$, define rotated copies $\psi_h(y):=\psi(h^{-1}y)$ and lift $I$ to a $C_N$-indexed feature field by group convolution
+
+\begin{equation}
+    v(x)[h] := (I * \psi_h)(x) = \int_{\R^2} \psi(h^{-1}y) I(x-y) dy, \qquad h\in C_N.
+    \label{eq:v-def}
+\end{equation}
+
+%Then $L_\psi:I\mapsto v$ intertwines the scalar action and the induced regular action, $v(g^{-1}x)[g^{-1}h] = \int_{\R^2} \psi(h^{-1}y) I(g^{-1}x - y) dy$.
+%For such fields, 
+Then the regular action permutes channels; in matrix form,
+
+\begin{equation}
+    \rho_{\mathrm{reg}}(g) = \Pi_g, \qquad (\Pi_g)_{h,h'}=\delta_{h,\,g h'}.
+    \label{eq:rho-reg-matrix}
+\end{equation}
+
+Channel-wise identical nonlinearities ($\rho_{\text{in}} = \rho_{\text{out}}$) are equivariant to these permutations:
+
+\begin{equation}
+    \sigma \big( \Pi_g v(x) \big)=\Pi_g \sigma \big( v(x) \big).
+    \label{eq:sigma-reg-commute}
+\end{equation}
+
+For a convolution layer, linear equivariance reads
+
+\begin{equation}
+    k(gx) = \Pi_g k(x) \Pi_{g^{-1}}, \quad \text{i.e.} \quad k(gx)[h,h']=k(x)\big[ g^{-1}h, g^{-1}h' \big].
+    \label{eq:kernel-operator}
+\end{equation}
+
+If channels are taken independent, then $k(x)[h,h']=\mathbf{0}$ when $h\neq h'$, hence each channel kernel is a rotated copy of the identity channel:
+
+\begin{equation}
+    k(x)[h,h] = k(h^{-1}x)[e,e].
+\end{equation}
+
+To implement invariant layers, one can apply group pooling, $v(x) \mapsto \text{max}(v(x))$, by which resulting features form $G$-invariant scalar fields.

@@ -1,0 +1,167 @@
+\section{Guidance scheduling}
+\label{app:guidance_sch}
+
+We study how the guidance schedule $\eta_t$ in \cref{eq:af3-guided} influences guided \AFiii structure generation.
+Here, we index the reverse process by the reverse-time $\hat{t}\in[0,1]$, which runs from $0$ (start) to $1$ (end) and describe the evolution of $\eta_{\hat{t}}$.
+
+The schedule $\eta_{\hat{t}}$ modulates the width of the isotropic Gaussian
+$p_t \left(\phi_{\text{object}}\mid X_t,a\right)\propto \exp \big(-\|\phi(X_t)-\phi_{\text{object}}\|_2^2/(2\sigma_t^2)\big)$.
+Prior work commonly used simple schedules—--e.g., a constant value \cite{maddipatla2025inverse} or a mid-trajectory sigmoid \cite{raghu2025multiscale}—--
+but, to our knowledge, there has not been a systematic quantification of how these choices affect generated structures.
+
+\subsection{Experimental settings}
+\label{app:guidance_exp}
+
+\paragraph{Schedule family and design of the sweep.}
+We consider the sigmoidal family in \cref{eq:sigmoid} and vary two hyperparameters that control \emph{when} guidance turns on and \emph{how strong} it becomes at the end:
+the onset time $\hat{t}_{\text{start}}$ and the terminal amplitude $y_{\text{max}}$ (the shape parameters $\alpha,\beta$ are fixed throughout).
+We evaluate a $5\times 5$ grid over these two quantities—--$\hat{t}_{\text{start}}$ at five evenly spaced points in $[0.4,0.9]$ and $y_{\text{max}}$ at five evenly spaced points in $[0.6,1.6]$—--yielding 25 schedule settings in total.
+For each setting we generate five independent samples and report metric means.
+
+\paragraph{System and targets.}
+All generations target \flhac, and, consistent with the main text, we selected the domain pairs \acdi--\acdiv and \acdii--\acdiii as variables.
+As a baseline, preliminary AF3 predictions without restraints on \flhac yield inter-domain distances of $(3.47\mathrm{nm},\,4.38\mathrm{nm})$.
+We then specify two target distance vectors $\phi_{\text{object}}$:
+(i) an in-distribution target, $\phi_{\text{object}}=(2.5\mathrm{nm},\,4.5\mathrm{nm})$, extracted from our in-house MD trajectory; and
+(ii) an out-of-distribution target, $\phi_{\text{object}}=(2.0\mathrm{nm},\,3.0\mathrm{nm})$, which we did not observe in the PDB or in the MD trajectory.
+
+\begin{equation}
+    \eta(\hat{t}) =
+    \frac{y_{\text{max}}}{2}
+    \left(
+        1 +
+        \frac{\tanh\!\left( \alpha(\tau - \beta) / 2 \right)}
+             {\tanh\!\left( \alpha\beta / 2 \right)}
+    \right),
+    \qquad
+    \tau = \frac{\hat{t} - \hat{t}_{\text{start}}}{1 - \hat{t}_{\text{start}}},
+    \quad
+    \alpha = 10.0,
+    \quad
+    \beta = 0.5.
+    \label{eq:sigmoid}
+\end{equation}
+
+\subsection{Results}
+\label{app:guidance_results}
+
+\paragraph{Results with the in-distribution target.}
+\Cref{fig:guidance_scheduling}~(b) reports the MolProbity score for conformations generated under each guidance schedule setting.
+\Cref{fig:guidance_scheduling}~(c) shows, for each schedule setting, the mean squared error (MSE) between $\phi_{\text{object}}$ and the generated conformations, and \cref{fig:guidance_scheduling}~(d) shows the coordinates of the mean inter-domain distance vector computed over the generated conformations.
+The color of each point corresponds to the values shown in \cref{fig:guidance_scheduling}~(a).
+
+The schedule settings split into two main groups: one group exhibits structural violations and therefore high MolProbity scores (typically when $\hat{t}_{\text{start}}<0.5$ and $y_{\text{max}}>1.0$), and the other group yields low MolProbity scores.
+
+In general, a smaller $\hat{t}_{\text{start}}$ or a larger $y_{\text{max}}$ tends to reduce the MSE, but instead, increase MolProbity scores.
+
+\paragraph{Results with the out-of-distribution target.}
+As in the in-distribution case, \cref{fig:guidance_scheduling}~(h), (i), and (j) report, respectively, the MolProbity score, the mean squared error (MSE) between $\phi_{\text{object}}$ and the generated conformations, and the coordinates of the mean inter-domain distance computed over the generated conformations, for each schedule setting.
+
+Here too, we observe a trade-off: schedule settings that reduce the MSE tend to increase the MolProbity score.
+However, comparing the MolProbity-score contour maps for the in-distribution target and the out-of-distribution taget, the region in which $\hat{t}_{\text{start}}$ is early and $y_{\text{max}}$ is high—--specifically near $\hat{t}_{\text{start}}<0.8$ and $y_{\text{max}}<0.6$--—tends to yield low MolProbity scores for the in-distribution target but high scores for the out-of-distribution target.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\linewidth]{images/figures-06.png}
+    \caption{
+        \textbf{Validation results of guidance scheduling}.
+        \textbf{(a)} All guidance schedules evaluated in this study. 
+        The setting used in our main experiments, $\hat{t}_{\text{start}}=0.6$ and $y_{\text{max}}=0.6$, is highlighted with a thick red line. 
+        \textbf{(b)--(g)} Results for the in-distribution target. 
+        \textbf{(h)--(m)} Results for the out-of-distribution target. 
+        \textbf{(b), (h)} Average MolProbity scores. 
+        \textbf{(c), (i)} Mean squared error (MSE). 
+        \textbf{(d), (j)} Mean inter-domain distance vectors (25 points, one per schedule setting) of the generated conformations, with point colors representing the MolProbity scores. 
+        \textbf{(e), (f), (g), (k), (l), (m)} Evaluation metrics obtained during MolProbity scoring: clash score, Ramachandran favored rate (\%), and rotamer outlier rate (\%).
+        }
+    \label{fig:guidance_scheduling}
+\end{figure}
+
+\subsection{Conclusion}
+Across schedule settings, each choice entails trade-offs.
+Specifically, making $\hat{t}_{\text{start}}$ smaller and $y_{\text{max}}$ larger reduces the discrepancy between the inter-domain distances of the generated conformations and the target vector $\phi_{\text{object}}$, but it tends to increase geometric violations (as reflected in higher MolProbity scores).
+Conversely, increasing $\hat{t}_{\text{start}}$ and decreasing $y_{\text{max}}$ yields more stable geometries, but the guidance becomes less effective and may fail to move the samples toward $\phi_{\text{object}}$.
+
+In practice, we find that settings around $\hat{t}_{\text{start}}<0.8$ and $y_{\text{max}}<0.6$ are a reasonable choice.
+In particular, $\hat{t}_{\text{start}}=0.6$ and $y_{\text{max}}=0.6$ allow effective guidance without substantially degrading structural quality.
+Note, however, that the generated conformations do not necessarily coincide with $\phi_{\text{object}}$.
+
+\section{Model Implementation Details}
+\label{app:additional_alg}
+
+\begin{algorithm}[H]
+\caption{\textsc{Forward function of $(\R^2, +) \rtimes C_8$ invariant CNN}}
+\label{alg:cnscnn}
+\begin{algorithmic}
+\State \textbf{Input:} $I \in \mathbb{R}^{B \times D \cdot N \times H \times W}$, $D=1$, $N=8$, $H=W=35$; \\
+channels = [3,6,6,12,12,8], kernel\_size = [7,5,5,5,5,5], \\
+$N_{\text{hidden-layers}} = 3$, $D_{\text{hidden}} = 64$, $D_{\text{out}} = N_{\text{domain-pairs}}$
+\State \textbf{Output:} $\mathbf{D} \in \mathbb{R}^{B \times D_{\text{out}}}$
+
+\State $I \gets \mathrm{R2Conv}(I;\, \text{in}=D \cdot N,\, \text{out}=\mathrm{channels}[0] \cdot N,\, k=\mathrm{kernel\_size}[0]) \to \mathrm{InnerBatchNorm} \to \mathrm{ReLU}$
+\For{$i = 1 \to \mathrm{len(channels)}-1$}
+    \State $I \gets \mathrm{R2Conv}(I;\, \text{in}=\mathrm{channels}[i-1]\!\cdot N,\, \text{out}=\mathrm{channels}[i]\!\cdot N,\, k=\mathrm{kernel\_size}[i])$
+    \State $I \gets \mathrm{InnerBatchNorm}(I) \to \mathrm{ReLU}(I)$
+    \If{$i \bmod 2 = 0$}
+        \State $I \gets \mathrm{PointwiseAvgPoolAntialiased}\!\left(I;\, \sigma=0.66,\, \mathrm{stride}=
+        \begin{cases}
+        2 & \text{if size odd}\\
+        1 & \text{if size even}
+        \end{cases}\right)$
+    \EndIf
+\EndFor
+
+\State $I' \gets \mathrm{GroupPooling}(I)$ \hfill $I' \in \mathbb{R}^{B \times \mathrm{channels}[-1] \times H' \times W'}$
+\State $I'' \gets \mathrm{PointwiseAvgPool}(I')$ \hfill $I'' \in \mathbb{R}^{B \times \mathrm{channels}[-1] \times 1 \times 1}$
+\State $\mathbf{z} \gets \mathrm{Flatten}(I'')$ \hfill $\mathbf{z} \in \mathbb{R}^{B \times \mathrm{channels}[-1]}$
+\State $\mathbf{h} \gets \mathrm{Linear}(\mathbf{z};\, \text{in}=\mathrm{channels}[-1],\, \text{out}=D_{\text{hidden}}) \to \mathrm{BatchNorm1d} \to \mathrm{ELU}$ \hfill $\mathbf{h} \in \mathbb{R}^{B \times D_{\text{hidden}}}$
+\For{$j = 1 \to N_{\text{hidden-layers}}-1$}
+    \State $\mathbf{h} \gets \mathrm{Linear}(\mathbf{h};\, \text{in}=D_{\text{hidden}},\, \text{out}=D_{\text{hidden}}) \to \mathrm{ReLU}(\mathbf{h})$ \hfill $\mathbf{h} \in \mathbb{R}^{B \times D_{\text{hidden}}}$
+\EndFor
+\State $\mathbf{D} \gets \mathrm{Linear}(\mathbf{h};\, \text{in}=D_{\text{hidden}},\, \text{out}=D_{\text{out}})$ \hfill $\mathbf{D} \in \mathbb{R}^{B \times D_{\text{out}}}$
+\State \Return $\mathbf{D}$
+\end{algorithmic}
+\end{algorithm}
+
+\section{Additional Figures}
+\label{app:additional_fig}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\linewidth]{images/figures-05.png}
+    \caption{
+        \textbf{Validation results of noise robustness}.
+        \textbf{(a)} AFM images at various noise levels, where the noise level denotes the standard deviation of Gaussian noise applied in pseudo-AFM images. 
+        \textbf{(b)} Results of conformation reconstruction from AFM images with different noise levels, evaluated in RMSD. The horizontal axis indicates the noise level of the training images, and the vertical axis indicates the noise level of the reference images during inference. The pseudo-AFM images for training were generated from the training conformations (see \cref{subsubsec:afm-prep}), whereas the reference AFM images for validation were generated from MD simulation structures as well as in the other results. For each combination, we predicted conformations from 20 different images, and the average RMSD is plotted. 
+        \textbf{(c)} Under the same conditions as in (b), the success rate of structural prediction was plotted, defining success as RMSD $< 0.3$ nm.
+    }
+    \label{fig:noise_robustness}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{images/figures-08.png}
+    \caption{
+        \textbf{Selected candidate conformations for \AK and MolProbity evaluation for them}.
+        \textbf{(a)} Projection of the candidate conformations into the inter-domain distance space. 
+        The horizontal axis represents the LID--CORE distance, the vertical axis represents the CORE--AMPbd distance, and the color encodes the AMPbd--LID distance. 
+        \textbf{(b)} MolProbity score. 
+        \textbf{(c)} Clash score. 
+        \textbf{(d)} Ramachandran favored rate (\%). 
+        \textbf{(e)} Rotamer outlier rate (\%).
+        }
+    \label{fig:ak_selection}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{images/figures-07.png}
+    \caption{
+        \textbf{Selected candidate conformations for \flhac and MolProbity evaluation for them}.
+        \textbf{(b)} MolProbity score. 
+        \textbf{(c)} Clash score. 
+        \textbf{(d)} Ramachandran favored rate (\%). 
+        \textbf{(e)} Rotamer outlier rate (\%).
+        }
+    \label{fig:flhac_selection}
+\end{figure}

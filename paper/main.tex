@@ -1,0 +1,79 @@
+\documentclass{article}
+
+% Language setting
+\usepackage[english]{babel}
+
+% Set page size and margins
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+% Packages
+\usepackage{amsmath, amsfonts, amssymb}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{xspace}
+\usepackage{gensymb}
+\usepackage{float}
+\usepackage{appendix}
+\usepackage{caption}
+\captionsetup[table]{skip=3pt}
+
+% リンク付き参照
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage[capitalize]{cleveref}
+\crefname{figure}{fig.}{figs.}
+\Crefname{figure}{Fig.}{Figs.}
+\crefname{equation}{eq.}{eqs.}
+\Crefname{equation}{Eq.}{Eqs.}
+\crefname{table}{table}{tables}
+\Crefname{table}{Table}{Tables}
+\crefname{algorithm}{alg.}{algs.}
+\Crefname{algorithm}{Alg.}{Algs.}
+\usepackage{authblk}
+
+% biblatex と相性の良い引用符パッケージ
+\usepackage{csquotes}
+
+% 文献：biblatex+biber（数字スタイル）
+\usepackage[backend=biber,style=chem-acs,sorting=none,giveninits=true]{biblatex}
+\addbibresource{citation.bib}
+
+% 定理環境
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+% カスタム定義のコマンド
+\input{commands}
+
+\title{Rapid Reconstruction of Atomic 3D Configurations from an AFM image by AlphaFold~3}
+
+\author[1]{Tsuyoshi Kawai}
+\author[1,2]{Yasuhiro Matsunaga}
+
+\affil[1]{Graduate School of Science and Engineering, Saitama University}
+\affil[2]{RIKEN}
+
+\begin{document}
+\maketitle
+
+\input{sections/abstract}
+\input{sections/introduction}
+\input{sections/related_work}
+\input{sections/methods}
+\input{sections/results}
+\input{sections/discussion}
+\input{sections/conclusion}
+
+\printbibliography
+
+\appendix
+
+\input{sections/appendix}
+
+\end{document}

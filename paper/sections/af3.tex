@@ -1,0 +1,43 @@
+\subsection{Guiding \AFiii with inter-domain distance restraints}
+\label{subsec:guided-diffusion}
+
+Let $a$ denote an amino acid sequence and $X=(x_1,\ldots,x_m)$ the 3D coordinates of all atoms, where $x_i\in\mathbb{R}^3$.
+We write $X_t$ for the state at diffusion time $t\in[0,1]$.
+Sampling in \AFiii can be written as the reverse-time variance-preserving SDE (VP-SDE):
+
+\begin{equation}
+    dX_t = -\Bigl(\tfrac{1}{2}X_t + \nabla_{X_t} \log \pt{X_t}\Bigr) \beta_t dt + \sqrt{\beta_t} d\bar{W}_t,
+    \label{af3-sde}
+\end{equation}
+
+where $\beta_t$ is the noise schedule, $\bar{W}_t$ is a standard Wiener process, and the score $\nabla_{X_t}\log \pt{X_t}$ is approximated by a denoising network $s_\theta(X_t,t,a)$.
+We integrate \eqref{af3-sde} backward from $t=1$ to $t=0$.
+
+Let $\phi_{\text{object}} \in \mathbb{R}^D$ denote the target vector of inter-domain distances, where $D$ is the number of domain pairs, and let $\phi: X \to \mathbb{R}^D$ be a differentiable mapping from structures to this feature space.
+By Bayes’ rule, the conditional score decomposes as
+\begin{equation}
+    \nabla_{X_t}\log p_t \bigl(X_t \big| \phi_{\text{object}}, a \bigr)
+    = \nabla_{X_t} \log \pt{X_t} + \nabla_{X_t} \log \ptc{\phi_{\text{object}}}{X_t}.
+    \label{eq:score-decomp}
+\end{equation}
+
+Accordingly, we bias the reverse-time dynamics by adding the guidance term:
+
+\begin{equation}
+    dX_t = -\Bigl(\tfrac{1}{2}X_t + \nabla_{X_t}\log \pt{X_t} + \eta_t \nabla_{X_t}\log \ptc{\phi_{\text{object}}}{X_t}\Bigr)\,\beta_t\,dt + \sqrt{\beta_t}\,d\bar{W}_t,
+    \label{eq:af3-guided}
+\end{equation}
+
+so that the process is guided toward $\phi(X_0) \approx \phi_{\text{object}}$.
+Here, $\eta_t$ is a (possibly time-dependent) guidance strength.
+
+In practice, we replace the guidance score by the negative gradient of a squared-error loss:
+\begin{equation}
+    \mathcal{L}_{\text{MSE}}(X) \;=\; \bigl\|\phi(X)-\phi_{\text{object}}\bigr\|_2^2,
+    \qquad
+    \nabla_{X_t} \log \ptc{\phi_{\text{object}}}{X_t} \approx - c_t \nabla_{X_t} \mathcal{L}_{\text{MSE}}(X_t),
+\end{equation}
+
+which is consistent with an isotropic Gaussian model $p_t \bigl( \phi_{\text{object}} | X_t,a \bigr) \propto \exp \big( - \| \phi(X_t) - \phi_{\text{object}} \|_2^2 / ( 2 \sigma_t^2 ) \big)$, in which case $c_t = 1/(2\sigma_t^2)$. 
+The scale $c_t$ can be absorbed into $\eta_t$, which is analyzed in \cref{app:guidance_sch}.
+

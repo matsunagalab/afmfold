@@ -1,0 +1,114 @@
+\subsection{\Model}
+\label{subsec:afm-guidance}
+
+\Model operates in three stages: (1) Preparation, where candidate conformations and pseudo-AFM images are generated for training; (2) Training, where a CNN is trained to predict inter-domain distances from pseudo-AFM images; and (3) Inference, where the trained CNN guides the generation process of \AFiii.
+
+\subsubsection{Preparation}
+\label{subsubsec:afm-prep}
+
+As training data for a CNN, pseudo-AFM images are generated analytically from 3D conformations. 
+Following \cite{matsunaga2023endtoend}, each conformation is placed on the stage at $z=0$ and scanned with a virtual AFM probe; the pseudo-height image corresponds to the probe’s vertical displacement (i.e., a morphological dilation).
+
+The pipeline consists of: (i) assembling a candidate conformation set that covers practically relevant domain-level arrangements so that major conformations are not missed, and (ii) rendering pseudo-AFM images from those conformations.
+
+\paragraph{Constructing candidate conformations.}
+We propose an efficient procedure to cover domain-level rearrangements while avoiding unrealistic outliers that would contaminate the CNN's prediction.
+First, a reference structure $X_{\text{ref}}$ is obtained with \AFiii (with no restraints).
+%Let $\phi(X)\in\R^D$ denote the previously defined projection to the inter-domain distance space $\R^D$.
+Target vectors $\{\phi_{\text{perturb}}^{\,i}\}$ are then placed on a grid around $\phi(X_{\text{ref}})$ such that, for each axis $d$,
+
+\begin{equation}
+    \phi_{\text{perturb},d}^i \in \bigl[ 0, 4.0 \times \phi(X_{\text{ref}})_d \bigr], \qquad \forall i.
+    \label{eq:target_domain_distance}
+\end{equation}
+
+The grid uses a step of $0.6~\mathrm{nm}$ for each axis. 
+Then, we generate conformations with \AFiii using $\{\phi_{\text{perturb}}^{\,i}\}$ as the restraints.
+
+\paragraph{Validity criterion and stopping rule.}
+A generated conformation is marked \emph{invalid} if fewer than $92\%$ of its C$\alpha$–C$\alpha$ bond lengths fall within $[0.37,0.39]~\mathrm{nm}$.
+To avoid unproductive sampling, targets on the $\phi$-grid are processed in order of increasing distance from $\phi(X_{\text{ref}})$, starting at $\phi_{\text{perturb}}=\phi(X_{\text{ref}})$.
+For any frontier target, if all candidates within a three-step neighborhood on the grid (i.e., nodes reachable in at most three edges) yield invalid realizations, exploration beyond that target is stopped.
+
+\paragraph{Geometric sanitization.}
+Generated conformations are filtered with MolProbity using permissive thresholds (see \cref{tab:score_thresholds}) to remove geometric violations. 
+Together, broad coverage in $\phi$-space and MolProbity-based filtering yield a conformation set that is both sufficiently wide and geometrically clean for training the CNN in \Model.
+
+\begin{table}[H]
+\centering
+\caption{MolProbity thresholds for candidate conformations.}
+\label{tab:score_thresholds}
+\begin{tabular}{|l|c|}
+\hline
+Criterion & Threshold \\
+\hline
+MolProbity Score & $\leq 10.0$ \\
+Clash Score & $\leq 13.0$ \\
+Ramachandran favored (\%) & $\geq 90.0$ \\
+Rotamer Outlier (\%) & $\leq 50.0$ \\
+\hline
+\end{tabular}
+\end{table}
+
+\paragraph{Pseudo-AFM image rendering.}
+As preprocessing, each selected conformation is randomly rotated and translated so that its minimum $z$-coordinate equals $0$. 
+The $xy$ position is uniformly randomized within the image boundaries while keeping the molecule inside the frame.
+Pseudo-AFM images are then generated using the settings in \cref{tab:afm_settings}.
+Because the tip geometry is unknown in experiments, the tip radius $r$ and taper angle $a$ are sampled uniformly within specified ranges to mimic realistic variability.
+For \flhac, \verb|skimage.exposure.match_histograms| is applied to match each image histogram to that of all experimental frames.
+
+\begin{table}[htbp]
+\centering
+\caption{Settings for training AFM images.}
+\label{tab:afm_settings}
+\begin{tabular}{|l|c|c|}
+\hline
+ & \AK & \flhac \\
+\hline
+Resolution [nm/pixel] & 0.3 & 0.98 \\
+Image Size [pixel $\times$ pixel] & $35 \times 35$ & $35 \times 35$ \\
+Tip Radius [nm] & $r \sim \mathrm{Uniform}(1,2)$ & $r \sim \mathrm{Uniform}(2,6)$ \\
+Tip Angle [degree] & $a \sim \mathrm{Uniform}(10,30)$ & $a \sim \mathrm{Uniform}(10,30)$ \\
+Noise Std. Dev. [nm] & 0.0 & 0.5 \\
+Histogram Matching & --- & \checkmark \\
+Dataset Size [frames] & 5M & 5M \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsubsection{Training}
+\label{subsubsec:afm-training}
+
+We adopted a CNN that is invariant under the discrete version of the $\SE$ group, namely $(\R^2, +) \rtimes C_8$. The specific implementation is described in \cref{alg:cnscnn}. 
+
+All models in this paper were trained on a single node equipped with a NVIDIA RTX A6000 GPU (48~GB memory). 
+The training took approximately 5 hours for the \AK dataset, whereas it required about 64 hours for \flhac. 
+The loss convergence for \flhac took significantly longer, but our empirical observation suggests that the training time tends to depend on the range of the tip radius and the noise level.
+
+\subsubsection{Inference}
+\label{subsubsec:afm-inference}
+
+In inference, the pre-trained CNN predicts $\phi_{\text{predict}}$ from an AFM image, and \AFiii generate a 3D conformation $X_{\text{gen}}$ using $\phi_{\text{predict}}$ as a restraint. 
+For both \AK and \flhac, the inference took less than 1 minute.
+
+%In this study, because the guidance scheduling $\eta_t$ was adjusted, the inter-domain distances of generated 
+%conformations often deviated from the restraints. To address this issue, instead of directly adopting the CNN's output as $\phi_{\text{target}}$, we set restrictions based on past predictions, typically the conformation pool created during training data generation. 
+We considered inference to be successful when the root squared error in the inter-domain distance space between $\phi_{\text{predict}}$ and $\phi(X_{\text{gen}})$ was less than 0.1~nm.
+
+\subsubsection{Evaluation}
+\label{subsubsec:afm-evaluation}
+
+To evaluate how well the predicted conformation reproduces the reference image, we performed a rigid-body fitting procedure comprising 60{,}000 random rotations uniformly sampled from $\mathrm{SO}(3)$.
+For each rotation $R \in \mathrm{SO}(3)$, we (i) rotated the structure by $R$, (ii) aligned its $xy$ coordinates to the image centroid, and (iii) translated it in both $x$ and $y$ over $[-5,5]$ nm with 0.5 nm increments.
+
+At each translated pose, we generated a pseudo-AFM image and computed its the correlation coefficient (c.c.) with the reference image, using \cref{eq:cc}.
+For each rotation, we recorded the pose with the maximum c.c. over translations.
+Finally, the pose achieving the overall maximum c.c. across all rotations and translations was taken as the optimal pose.
+
+\begin{equation}
+    \mathrm{c.c.}(R)=
+    \frac{\sum_{p \in \text{pixels}} H^{\text{(exp)}}_p H^{\text{(sim)}}_p(R)}
+         {\sqrt{\sum_{p \in \text{pixels}} \left(H^{\text{(exp)}}_p\right)^2}
+          \sqrt{\sum_{p \in \text{pixels}} \left(H^{\text{(sim)}}_p(R)\right)^2}}
+    \label{eq:cc}
+\end{equation}

@@ -1,0 +1,45 @@
+\section{Introduction}
+\label{sec:intro}
+
+High-speed atomic force microscopy (HS-AFM) enables direct visualization of biomolecular dynamics in solution, offering mechanistic insight into how biomolecules change their conformations and its function. However, AFM images report only the surface topography of the specimen, and their spatial resolution is fundamentally constrained by the effective radius of the cantilever tip. Overcoming these limitations requires computational methodologies that can bridge AFM surface imaging with atomistic three-dimensional (3D) structural models.
+
+An early strategy to address this challenge has been rigid-body fitting, in which the rotation and translation of a molecular complex are optimized to best match the AFM image. Although powerful, this approach cannot account for conformational changes. In real biological systems, the function of biomolecules often depends not only on a single static conformation but also on the conformational ensemble. Therefore, characterizing these conformational transitions from AFM images is critical for analyzing and interpreting the experimental AFM data. 
+
+In recent years, methods have been proposed that utilize molecular dynamics (MD) or Monte Carlo (MC) simulations to generate conformations consistent with AFM images. For example, in flexible fitting \cite{Niina2020}, defining the agreement with an AFM image as a potential function $V_{\mathrm{AFM}}$, MD simulations are driven to minimize it. In NMFF-AFM \cite{Wu2024}, optimizing a subset of normal modes effectively prevents overfitting. Although such approaches can be effective, they are constrained by the general limitations inherent in molecular simulations. In the former case, sampling is often trapped in local minima, making optimization slow when separated by high barriers. In the latter case, the identification of normal modes is computationally demanding, which further restricts the practical applicability. As a result, achieving both general applicability and reproducibility remains a significant challenge.
+
+From the perspective of machine learning, the development of sequence-to-structure models such as \AFii \cite{jumper2021highly}, \AFiii, and \Boltzi \cite{wohlwend2024boltz1} have demonstrated unprecedented precision in predicting the 3D fold of a protein. These models can be regarded as generating atomistic conformational ensembles from a given sequence. However, in practice, the resulting conformational distributions typically exhibit sharp peaks around specific stable states and thus fail to capture a diverse range of conformations.
+
+Recently, guiding the generative process of diffusion-based structure prediction models, including \AFiii and \Boltzi, has emerged as an approach aimed at generating targeted conformational ensembles. For example, in the context of NMR \cite{maddipatla2025inverse}, it has been demonstrated that imposing electron density–based restraints during the generative process enables the generation of ensembles consistent with experimental observations. Similarly, for Cryo-EM \cite{raghu2025multiscale}, the incorporation of global or local density-map fitting as restraints has been proposed as a means of steering the predicted conformations toward agreement with the experimental data.
+
+In this study, we introduce \Model, which extends these ideas to AFM by employing structural restraints extracted from AFM images to guide the sampling trajectories of pre-trained protein structure prediction models. Specifically, a group-invariant CNN \cite{e2cnn} estimates low-dimensional structural variables---namely, inter-domain distances---from AFM images, and these estimated values are then used as restraints to guide the generative process, enabling the sampling of 3D conformations consistent with AFM images.
+
+We validated \Model in twin experiments. First, using Adenylate Kinase from Escherichia coli (\AK, PDBID: 1AKE \cite{muller1992adenylate}, 4AKE \cite{muller1996adenylate}), we reconstructed the underlying conformations and accurately reproduced the ground-truth conformations. Second, we applied \Model to experimental data from the flagellar protein \flhac (PDBID: 3A5I \cite{saijo-hamano2010flha}) and confirmed that it predicts conformations more consistent with AFM images than the corresponding PDB database structure.
+
+The main contributions of this study are as follows.
+\begin{itemize}
+    \item We propose \Model, a novel approach for reconstructing atomic-level protein structures from AFM images.
+    \item Using pseudo-AFM images of a model protein, we demonstrated that \Model can accurately reconstruct the ground-truth conformations.
+    \item With experimental AFM data, we confirmed that \Model outperforms rigid-body fitting and provided concrete examples of its application.
+    \item In contrast to existing structure reconstruction methods from AFM images, which typically require hours to days, our approach enables structure prediction in under a minute while avoiding overfitting.
+    \item In the Appendix, we systematically evaluated guidance strength for the generative module and summarized effective strategies. We further proposed a method to sample structures from a broad conformational space at low computational cost by leveraging these strategies.
+\end{itemize}
+
+A key aspect of \Model is that learning, generation, and inference are carried out without any prior assumptions about long-timescale MD simulations or slow dynamical modes. This enables accurate prediction while reducing computational cost, including the preparation of training data, and allows the observation of dynamics without force-field biases. \Model thus provides a powerful framework for observing conformational transitions and functional mechanisms underlying AFM images, and the resulting insights will advance the understanding of biomolecular mechanisms, and also improve MD simulations themselves.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{images/figures-01.png}
+    \caption{
+        \textbf{Schematic overview of \Model and outcome}. AFM-based guidance steers \AFiii and reproduces the closed and open states of \AK.
+        \textbf{(a)} Schematic diagram of \Model. 
+        The AFM image, shown at the lower left, serves as the input and is processed as follows: 
+        (1) coordinates in the inter-domain distance space are predicted from the AFM image by a group-invariant CNN; 
+        (2) at diffusion time $t > 0.54$, the mean squared error (MSE) is computed between the predicted coordinates and the generated conformations; 
+        (3) the gradient of the MSE is used as a correction score to guide the generative process of \AFiii. 
+        \textbf{(b)(c)} Results of structure prediction from pseudo-AFM images of \AK. 
+        In (c), the blue structures (left: close; right: open) represent the reference ground-truth conformations, which were used to generate the two reference images shown at the bottom of (b). 
+        Using these reference images, our method successfully predicted the red structures in (c). 
+        After aligning the predicted conformations to the reference conformations by rigid-body fitting, the resulting pseudo-AFM images are shown at the top of (b), demonstrating good agreement with the reference images.
+        }
+    \label{fig:overview}
+\end{figure}

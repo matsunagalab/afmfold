@@ -1,0 +1,146 @@
+\section{Results}
+\label{sec:results}
+
+\subsection{Adenylate Kinase (\AK)}
+\label{subsec:ak_results}
+
+To first validate the effectiveness of \Model, we employed \AK, a well-studied monomeric enzyme known for its large-scale conformational transitions.
+%, catalyzing the reversible phosphoryl transfer reaction (ATP + AMP $\leftrightarrow$ 2ADP) that regulates cellular energy homeostasis. 
+\AK is composed of three relatively rigid domains: the central CORE domain (residues 1–29, 68–117, and 161–214), the AMP-binding domain (AMPbd; residues 30–67), and the lid-like ATP-binding domain (LID; residues 118–167). 
+Crystallographic studies have suggested that upon ligand binding, the enzyme undergoes a transition from an inactive open conformation to an active closed conformation (see \cref{fig:overview}~(c)). 
+In this validation, we rigorously evaluate how accurately \Model predicts 3D conformations of \AK from AFM images.
+
+\paragraph{CNN training.}
+First, we generated candidate conformations (see \cref{subsubsec:afm-prep}), and projected them to the inter-domain distance space.
+Results are shown in \cref{fig:ak_cnn_training}~(b). 
+Here, we selected all possible combinations of domain pairs: LID--CORE, CORE--AMPbd, and AMPbd--LID, so the inter-domain distance space is equivalent to $\R^3$.
+\Cref{fig:ak_cnn_training}~(a) is that of representive conformations in a 450 ns MD trajectory. 
+%In this simulation, multiple transitions between the open and closed conformations were observed, suggesting that a wide conformational space was explored. 
+Importantly, the sampling broadly covered the conformational space that was explored by MD. 
+%even though we used no prior knowledge about MD simulations.
+
+\paragraph{Steering ability.}
+\AFiii generates an open conformation without any restraints.
+As an initial test of \Model's ability to steer \AFiii's sampling trajectory, we generated pseudo-AFM images from the closed (PDB ID: 1AKE) and open (PDB ID: 4AKE) X-ray crystal structures, and reconstructed 3D conformations from each image.
+
+The results are shown in \cref{fig:overview}~(b), (c).
+The RMSD between the ground-truth and reconstructed conformations was 0.216 nm for the closed form and 0.176 nm for the open form.
+Even considering that the RMSD between the closed and open crystal structures is 0.715 nm, \Model clearly distinguishes the two states.
+
+The pseudo-AFM images generated from predicted conformations after rigid-body fitting are displayed in the top row of \cref{fig:overview}~(b). 
+Using \cref{eq:cc} to compute the c.c., we obtained 0.997 for the closed form and 0.998 for the open form.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\linewidth]{images/figures-02.png}
+    \caption{
+        \textbf{Training data and prediction accuracy of the group-invariant CNN}.
+        \textbf{(a)} Projection of a 450 ns MD simulation trajectory into the inter-domain distance space. 
+        \textbf{(b)} Projection of the candidate conformations into the inter-domain distance space. 
+        \textbf{(c)} A histogram of root squared error in the inter-domain distance space between the pre-trained CNN's outputs and ground-truth. 
+        The CNN predicted inter-domain distance from pseudo-AFM images, which ware generated from randomly selected MD conformations. 
+        The root mean squared error (RMSE) was 0.183 [nm].
+        \textbf{(d)} A scatter plot of root squared error in the inter-domain distance space and RMSDs. 
+        The RMSD was computed between conformations that \AFiii generated using predicted inter-domain distances as restraints, and the ground-truth conformation.
+        }
+    \label{fig:ak_cnn_training}
+\end{figure}
+
+\paragraph{Accuracy evaluation.}
+To investigate the prediction accuracy of \Model, we extracted representative frames from the 450 ns MD simulation and generated pseudo-AFM images from each conformation (settings identical to those in \cref{tab:afm_settings}).
+Using these images, we predicted 3D conformations with the \Model framework.
+Results are shown in \cref{fig:ak_cnn_training}~(c), (d) and \cref{fig:ak_accuracy}~(a)--(c).
+
+An informative observation is that we can analyze sources of error in \Model's 3D conformation reconstruction.
+From the histogram of the root square error between the pre-trained CNN predictions and the ground-truth inter-domain distances (\cref{fig:ak_cnn_training}~(c)), the CNN achieves an RMSE of 0.183 nm.
+Based on a linear regression (\cref{fig:ak_cnn_training}~(d)), the CNN’s typical prediction error corresponds to an RMSD of 0.245 nm, which is sufficient to distinguish the open and closed states.
+
+However, \cref{fig:ak_cnn_training}~(d) also shows cases where the RMSD remains relatively large even when the CNN predictions are accurate: specifically, points in the upper-left region exhibit small RMSE but large RMSD.
+Close inspection of such cases reveals that this discrepancy arises when domains move along a shear direction: inter-domain distances remain similar, but other degrees of freedom differ, yielding a larger RMSD.
+
+A second factor that degrades reconstruction accuracy is the quality of the images themselves.
+\cref{fig:ak_accuracy}~(a) shows the distribution of RMSD between the ground-truth and predicted conformations.
+While most cases exhibit low RMSD, a subset shows high RMSD in \cref{fig:ak_accuracy}~(a).
+\cref{fig:ak_accuracy}~(b) shows the distribution of the c.c. between the reference images and the pseudo-AFM images generated by rigid-body fitting of the predictions to the reference.
+In contrast to RMSD, \cref{fig:ak_accuracy}~(b) is skewed toward high c.c.
+Indeed, \cref{fig:ak_accuracy}~(c) indicates that even when RMSD is relatively high, c.c. can remain high (upper-right region), suggesting that some of the reference AFM image does not sufficiently determine inter-domain distances.
+
+Taken together, despite the presence of systematic errors stemming from methodological limitations of \Model, the framework reliably distinguishes large-scale domain motions with high probability overall.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{images/figures-03.png}
+    \caption{
+        \textbf{Evaluation of prediction accuracy}. 
+        \textbf{(a)} Histogram of RMSD between predicted and ground-truth structures (mean: 0.273 nm). 
+        \textbf{(b)} Histogram of correlation coefficients (C.C.) between reference images and rigid-body fitted predicted images (mean: 0.997). 
+        \textbf{(c)} Scatter plot of C.C. and RMSD, indicating a negative correlation between image similarity and structural accuracy.
+    }
+    \label{fig:ak_accuracy}
+\end{figure}
+
+\paragraph{Noise Robustness}
+To assess how \Model performs under varying noise conditions, we evaluated its robustness to image noise.
+From \cref{fig:noise_robustness}, we observed the following.
+When we used noise-free AFM images as training data, the model accurately extracted features and inferred structures from noise-free inputs.
+However, it lacked robustness to noisy inputs: inference accuracy degraded substantially when the reference images (inputs) were heavily contaminated by noise.
+By contrast, using images with comparatively high noise levels for training introduced a trade-off between peak accuracy and robustness.
+Specifically, even when the input noise matched the training noise, the prediction accuracy did not reach that of the noise-free case.
+Nevertheless, unlike the noise-free setting, the model retained reasonable accuracy even when the input noise level differed from that of the training data.
+
+In general, the noise level of the training data should match that of the target images.
+Based on these results, the recommended practice depends on the noise level of the reference images.
+If the reference images have high noise levels ($\gtrsim 0.3$ nm), one should accept somewhat lower reliability, but reasonable accuracy can still be expected even when the input noise level differs from the training data.
+Conversely, if the reference images are low-noise, highly reliable predictions are achievable, but only when the input noise level is similar to that of the training data; images with markedly different noise levels should not be used as references.
+
+\subsection{\flhac}
+\label{subsec:flhac_results}
+
+FlhA is the largest subunit of the flagellar protein export apparatus, and its C-terminal cytoplasmic domain, \flhac, is thought to assist secretion by facilitating the binding of soluble proteins to the transporter, thereby promoting their export.
+Structurally, \flhac comprises four domains (\acdi, \acdii, \acdiii, and \acdiv) and a linker to the transmembrane domain (FlhA\textsubscript{TM}).
+Previous studies using X-ray crystallography and mutational analysis indicate that hinge motions among these domains influence transport activity and motility \cite{saijo-hamano2010flha}.
+
+\paragraph{Preprocessing}
+We selected \acdi--\acdiv and \acdii--\acdiii as inter-domain distance features.
+The candidate conformations and their MolProbity scores are shown in \cref{fig:flhac_selection}.
+
+\paragraph{Comparison with Rigid-Body Fitting}
+To evaluate the applicability of \Model to real AFM data, we selected three snapshots from HS-AFM movies of the \flhac monomer and predicted a conformation from each.
+The frames consisted of one image resembling an open state, one resembling a closed state, and one distinct from both.
+For each image, we predicted the conformation and reproduced AFM images by rigid-body fitting of the predicted conformation (see \cref{subsubsec:afm-evaluation}).
+For comparison, rigid-body fitting was also performed using X-ray crystal structures obtained from the PDB.
+
+\Cref{fig:flhac_results}~(a) shows the selected reference images (upper: open-like; middle: closed-like; lower: distinct).
+\Cref{fig:flhac_results}~(b) shows the AFM images reproduced by rigid-body fitting (for each, top: \Model predictions; bottom: crystal structures).
+In \cref{fig:flhac_results}~(c), the correlation coefficients (c.c.) across rotations are plotted.
+
+For both the \Model predictions (\cref{fig:flhac_results}~(c), top) and the crystal structures (\cref{fig:flhac_results}~(c), bottom), the optimal pose obtained by rigid-body fitting (star symbol) generally captured the global maximum of c.c.
+Furthermore, \cref{fig:flhac_results}~(d) presents histograms of c.c. over uniformly sampled $\mathrm{SO}(3)$ rotations.
+In all cases, results using the conformations that \Model predicted (\cref{fig:flhac_results}~(d), top) show higher c.c. with the reference images than those using the crystal structures (\cref{fig:flhac_results}~(d), bottom).
+
+Of particular note is the result for the final reference image (lower).
+The reference image (\cref{fig:flhac_results}~(a), lower) exhibits a highly elongated shape, suggesting that conformations in which the four domains are aligned in a parallel would yield high correlations.
+However, \Model did not produce such an extremely open conformation.
+This limitation arises because the CNN performs interpolation but not extrapolation: the CNN's prediction is constrained by the candidate conformations, and it cannot output conformations far beyond them.
+%Since we did not find extremely open and stable conformations during candidate generation, \Model did not predict such conformations.
+
+To mitigate this issue, two approaches may be possible: (i) explore a broader range of candidate conformations and generate training data with weights according to thermodynamic stability; or (ii) replace \AFiii as the base model with an ensemble generative model that has a broader prior distribution.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\linewidth]{images/figures-04.png}
+    \caption{
+        \textbf{Results for \flhac}.
+        \textbf{(a)} Reference AFM images selected from real experimental data. 
+        \textbf{(b)} Results of rigid-body fitting. 
+        For each reference image, we reconstructed 3D conformations and database structures, applied rigid-body fitting, and plotted the resulting optimal poses along with their corresponding pseudo-AFM images. 
+        For each row, the top figures show the results for \Model’s predictions, and the bottom figures show the results for the database structures. 
+        \textbf{(c)} Visualization of the rigid-body fitting process. 
+        For all sampled SO(3) rotations, the corresponding correlation coefficients (c.c.) are color-mapped: blue indicates lower c.c. (worse fits), while red indicates higher c.c. (better fits). 
+        The star denotes the optimal pose. 
+        \textbf{(d)} Histogram of c.c. values. 
+        We uniformly sampled SO(3) rotations and computed the c.c. for each case. 
+        The histogram shows the resulting distribution, and the top-right annotation reports both the maximum c.c. (i.e., at the optimal pose) and the mean c.c. value.
+    }
+    \label{fig:flhac_results}
+\end{figure}

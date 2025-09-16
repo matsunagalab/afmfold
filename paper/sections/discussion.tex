@@ -1,0 +1,24 @@
+\section{Discussion}
+
+\paragraph{Merits}
+% Candidates: Advantages, Merits, Benefits
+
+\Model extracts features from AFM images with a group-invariant (symmetry-aware) CNN, reducing computational cost in two ways.
+First, it reduces the amount of required training data, because symmetry-aware representations learn efficiently from limited images \cite{e2cnn}.
+Second, it shortens inference time: guiding \AFiii requires computing $\ptc{\phi_{\text{object}}}{X_t}$; replacing this with $\mathcal{L}_{\text{MSE}}(X_t)$ keeps the computational cost per structure low.
+In our tests, per-structure inference finished within one minute on a single GPU.
+
+Across our evaluations, \Model delivered competitive prediction accuracy at low computational cost.
+Therefore, \Model can help deepen understanding of biological processes---for example, by quantifying large-scale domain rearrangements along putative pathways and by prioritizing follow-up measurements in single-molecule studies.
+
+The \Model framework can be readily extended by altering the physical observables it incorporates.
+While we used inter-domain distances here, it can incorporate residue-level distance restraints, enabling AFM-guided reconstructions that capture finer-grained motions without a disproportionate increase in runtime.
+
+\paragraph{Limitations \& Future Work}
+% Candidates: Weaknesses, Constraints, Challenges
+
+\Model infers conformations from a single AFM image and currently does not quantify predictive uncertainty due to image noise or molecular orientation.
+Extending the framework to estimate uncertainty would make the predictions easier to interpret \cite{Kendall2017Uncertainty}.
+Moreover, AFM image sequences constitute time-series data in which poses change only slightly between adjacent frames; incorporating temporal dependencies---for example, with TimeSformer \cite{Bertasius2021TimeSformer} or non-local networks \cite{Wang2018NonLocalNetworks}---could further improve fidelity.
+Finally, in this work we steered \AFiii's sampling using AFM images; consequently, neither thermodynamic stability nor explicit physical priors is incorporated.
+In the future, conditioning the prior of an ensemble generative model should enable integrated modeling that unifies experimental measurements, physical priors, and computational inference.
