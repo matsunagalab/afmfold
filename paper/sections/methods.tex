@@ -1,14 +1,15 @@
 \section{Methods}
 \label{sec:methods}
 
-\Model leverages \AFiii (particularly we used its open-source PyTorch reproduction, Protenix \cite{bytedance2025protenix}) to predict the underlying 3D conformation from a reference AFM image, and its key features can be summarized as follows. 
-First, the reference AFM image is fed into a convolutional neural network (CNN), which predicts the inter-domain distances of the molecule captured in the image. 
-Then, by incorporating these predicted distances as restraints into the generation process of \AFiii, a structure consistent with the reference AFM image is obtained (see \cref{fig:overview} (a)).
+Our \Model framework leverages \AFiii (here, we used the open-sourced Protenix \cite{bytedance2025protenix} model, a PyTorch reimplementation of \AFiii) to estimate the underlying 3D conformation from a given AFM image. To generate 3D structures consistent with AFM images using \AFiii, we follow two main steps: (i) First, we estimate low-dimensional collective variables (CVs) for the target molecule from the given AFM image using a pre-trained convolutional neural network (CNN) to predict these CVs. For CVs, we typically assume the use of inter-domain distances, especially in the case of multi-domain proteins. (ii) Next, we use the estimated CVs to add restraints to \AFiii during structure generation, producing 3D structures that are consistent with the AFM image (see \Cref{fig:overview}a).
+
+%First, the reference AFM image is fed into a convolutional neural network (CNN), which predicts the inter-domain distances of the molecule captured in the image. 
+%Then, by incorporating these predicted distances as restraints into the generation process of \AFiii, a structure consistent with the reference AFM image is obtained (see \cref{fig:overview} (a)).
 
 In this section, we present our methodology in three parts. 
-In \cref{subsec:se2cnn}, we describe how the CNN process AFM images to extract the inter-domain distances. 
-In \cref{subsec:guided-diffusion}, we explain how we restrained the diffusion process of \AFiii using the predicted inter-domain distances. 
-Finally in \cref{subsec:model}, we explain the overall framework of \Model, including how we prepare the training data for the CNN, train it, and perform prediction.
+In \cref{subsec:se2cnn}, we describe our CNN architecutre to estimate the CVs from AFM images. 
+In \cref{subsec:guided-diffusion}, we explain how we add restrains in the diffusion process of \AFiii using the estimated CVs. 
+Finally in \cref{subsec:afm-guidance}, the overall computational protocol of our \Model framework is given, including the training of the CNN model. 
 
 \input{sections/cnn.tex}
 \input{sections/af3.tex}
