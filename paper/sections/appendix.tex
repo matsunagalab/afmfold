@@ -1,64 +1,102 @@
+\setcounter{equation}{0}
+\renewcommand{\theequation}{S\arabic{equation}}
+\setcounter{figure}{0}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\setcounter{table}{0}
+\renewcommand{\thetable}{S\arabic{table}}
+\setcounter{algorithm}{0}
+\renewcommand{\thealgorithm}{S\arabic{algorithm}}
+
 \section{Guidance scheduling}
 \label{app:guidance_sch}
 
 We study how the guidance schedule $\eta_t$ in \cref{eq:af3-guided} influences guided \AFiii structure generation.
-Here, we index the reverse process by the reverse-time $\hat{t}\in[0,1]$, which runs from $0$ (start) to $1$ (end) and describe the evolution of $\eta_{\hat{t}}$.
+Here, we index the reverse process by the reverse-time $\hat{t} = 1 - t \in [0,1]$, which runs from $0$ (start) to $1$ (end),
 
-The schedule $\eta_{\hat{t}}$ modulates the width of the isotropic Gaussian
-$p_t \left(\phi_{\text{object}}\mid X_t,a\right)\propto \exp \big(-\|\phi(X_t)-\phi_{\text{object}}\|_2^2/(2\sigma_t^2)\big)$.
+\begin{equation}
+    d\hat{X}_{\hat{t}} = 
+    \Bigl(
+        \tfrac{1}{2}\hat{X}_{\hat{t}} + 
+        \nabla_{\hat{X}_{\hat{t}}}\log \hat{p}_{\hat{t}}(\hat{X}_{\hat{t}}) + 
+        \hat{\eta}_{\hat{t}} \nabla_{\hat{X}_{\hat{t}}}\log \hat{p}_{\hat{t}}(\phi_{\text{object}} | \hat{X}_{\hat{t}})
+    \Bigr)
+    \beta_{1 - \hat{t}} \; d\hat{t} + 
+    \sqrt{\beta_{1-\hat{t}}} \; d\widetilde{W}_{\hat{t}},
+    \label{eq:af3-guided-hatt}
+\end{equation}
+where $\hat{p}_{\hat{t}} = p_{1-\hat{t}}$, $\hat{\eta}_{\hat{t}} = \eta_{1 - \hat{t}}$ and $\widetilde{W}_{\hat{t}}$ denotes a standard Brownian motion in the forward direction of $\hat{t}$: $\widetilde{W}_{\hat{t}} = \bar{W}_1 - \bar{W}_{\,1-\hat{t}}$. 
+
+Intuitively, the guidance strength $\hat{\eta}_{\hat{t}}$ controls how strongly the generation is pulled toward the target feature $\phi_{\text{object}}$.  
+In terms of the isotropic Gaussian model
+$p_t \big( \phi_{\text{object}} | X_t, a \big) \propto\; 
+\exp \big(-\tfrac{1}{2\sigma_t^2}\|\phi(X_t)-\phi_{\text{object}}\|_2^2\big)$,
+$\hat{\eta}_{\hat{t}}$ effectively determines the variance $\sigma_t^2$: larger values correspond to narrower distributions and thus stronger enforcement.  
+
 Prior work commonly used simple schedules—--e.g., a constant value \cite{maddipatla2025inverse} or a mid-trajectory sigmoid \cite{raghu2025multiscale}—--
 but, to our knowledge, there has not been a systematic quantification of how these choices affect generated structures.
+Here, our goal is to quantify, across different guidance schedules, the trade-off between the effectiveness of the guidance
+and the physical plausibility of the generated structures, and to propose an optimal scheduling strategy.
 
 \subsection{Experimental settings}
 \label{app:guidance_exp}
 
 \paragraph{Schedule family and design of the sweep.}
-We consider the sigmoidal family in \cref{eq:sigmoid} and vary two hyperparameters that control \emph{when} guidance turns on and \emph{how strong} it becomes at the end:
-the onset time $\hat{t}_{\text{start}}$ and the terminal amplitude $y_{\text{max}}$ (the shape parameters $\alpha,\beta$ are fixed throughout).
-We evaluate a $5\times 5$ grid over these two quantities—--$\hat{t}_{\text{start}}$ at five evenly spaced points in $[0.4,0.9]$ and $y_{\text{max}}$ at five evenly spaced points in $[0.6,1.6]$—--yielding 25 schedule settings in total.
-For each setting we generate five independent samples and report metric means.
+We consider candidate guidance schedules $\hat{\eta}_{\hat{t}}$ from the sigmoidal family defined in \cref{eq:sigmoid}.
+Specifically, we vary two hyperparameters that determine \emph{when} guidance turns on ($\hat{t}_{\text{start}}$) and \emph{how strong} it becomes at the end ($y_{\text{max}}$).
+For the two hyperparameters, we select five candidate values each: 
+$\hat{t}_{\text{start}}$ is chosen at evenly spaced points in $[0.4,0.9]$, 
+and $y_{\text{max}}$ is chosen at evenly spaced points in $[0.6,1.6]$. 
+By evaluating all combinations of these choices, we obtain $5\times 5 = 25$ distinct schedule settings in total. 
+For each setting we generate five independent samples and report the mean values of the evaluation metrics.
 
 \paragraph{System and targets.}
-All generations target \flhac, and, consistent with the main text, we selected the domain pairs \acdi--\acdiv and \acdii--\acdiii as variables.
-As a baseline, preliminary AF3 predictions without restraints on \flhac yield inter-domain distances of $(3.47\mathrm{nm},\,4.38\mathrm{nm})$.
-We then specify two target distance vectors $\phi_{\text{object}}$:
-(i) an in-distribution target, $\phi_{\text{object}}=(2.5\mathrm{nm},\,4.5\mathrm{nm})$, extracted from our in-house MD trajectory; and
+Here, we describe the choice of protein system and the collective variables (CVs) on which restraints are applied.  
+The way restraints are imposed can in principle depend on factors such as protein size or the specific CVs chosen, 
+but our goal is to provide a concrete reference point that can serve as a guideline when users consider how to set the guidance strength.  
+
+Specifically, we focus on \flhac, and, consistent with the main text, we selected the domain pairs \acdi--\acdiv and \acdii--\acdiii as variables.  
+As a baseline, preliminary \AFiii predictions without restraints on \flhac yield inter-domain distances of $(3.47\mathrm{nm},\,4.38\mathrm{nm})$.  
+We then specify two target distance vectors $\phi_{\text{object}}$:  
+(i) an in-distribution target, $\phi_{\text{object}}=(2.5\mathrm{nm},\,4.5\mathrm{nm})$, extracted from our in-house MD trajectory; and  
 (ii) an out-of-distribution target, $\phi_{\text{object}}=(2.0\mathrm{nm},\,3.0\mathrm{nm})$, which we did not observe in the PDB or in the MD trajectory.
 
 \begin{equation}
-    \eta(\hat{t}) =
-    \frac{y_{\text{max}}}{2}
-    \left(
-        1 +
-        \frac{\tanh\!\left( \alpha(\tau - \beta) / 2 \right)}
-             {\tanh\!\left( \alpha\beta / 2 \right)}
-    \right),
-    \qquad
-    \tau = \frac{\hat{t} - \hat{t}_{\text{start}}}{1 - \hat{t}_{\text{start}}},
-    \quad
-    \alpha = 10.0,
-    \quad
-    \beta = 0.5.
-    \label{eq:sigmoid}
+    \begin{split}
+        \eta(\hat{t}) =
+        \frac{y_{\text{max}}}{2}
+        \frac{\| \delta \|_2}{\| g \|_2}
+        \left(
+            1 +
+            \frac{\tanh\!\left( \alpha(\tau - \beta) / 2 \right)}
+                 {\tanh\!\left( \alpha\beta / 2 \right)}
+        \right),
+        \qquad
+        \tau = \frac{\hat{t} - \hat{t}_{\text{start}}}{1 - \hat{t}_{\text{start}}},
+        \\[1.5ex]
+        \delta = \nabla_{\hat{X}_{\hat{t}}}\log \hat{p}_{\hat{t}}(\hat{X}_{\hat{t}}),
+        \quad
+        g = \nabla_{\hat{X}_{\hat{t}}}\log \hat{p}_{\hat{t}}(\phi_{\text{object}} | \hat{X}_{\hat{t}}),
+        \quad
+        \alpha = 10.0,
+        \quad
+        \beta = 0.5.
+        \label{eq:sigmoid}
+    \end{split}
 \end{equation}
 
 \subsection{Results}
 \label{app:guidance_results}
 
-\paragraph{Results with the in-distribution target.}
-\Cref{fig:guidance_scheduling}~(b) reports the MolProbity score for conformations generated under each guidance schedule setting.
-\Cref{fig:guidance_scheduling}~(c) shows, for each schedule setting, the mean squared error (MSE) between $\phi_{\text{object}}$ and the generated conformations, and \cref{fig:guidance_scheduling}~(d) shows the coordinates of the mean inter-domain distance vector computed over the generated conformations.
-The color of each point corresponds to the values shown in \cref{fig:guidance_scheduling}~(a).
+Across both the in-distribution and out-of-distribution targets, three clear patterns emerge.  
 
-The schedule settings split into two main groups: one group exhibits structural violations and therefore high MolProbity scores (typically when $\hat{t}_{\text{start}}<0.5$ and $y_{\text{max}}>1.0$), and the other group yields low MolProbity scores.
-
-In general, a smaller $\hat{t}_{\text{start}}$ or a larger $y_{\text{max}}$ tends to reduce the MSE, but instead, increase MolProbity scores.
-
-\paragraph{Results with the out-of-distribution target.}
-As in the in-distribution case, \cref{fig:guidance_scheduling}~(h), (i), and (j) report, respectively, the MolProbity score, the mean squared error (MSE) between $\phi_{\text{object}}$ and the generated conformations, and the coordinates of the mean inter-domain distance computed over the generated conformations, for each schedule setting.
-
-Here too, we observe a trade-off: schedule settings that reduce the MSE tend to increase the MolProbity score.
-However, comparing the MolProbity-score contour maps for the in-distribution target and the out-of-distribution taget, the region in which $\hat{t}_{\text{start}}$ is early and $y_{\text{max}}$ is high—--specifically near $\hat{t}_{\text{start}}<0.8$ and $y_{\text{max}}<0.6$--—tends to yield low MolProbity scores for the in-distribution target but high scores for the out-of-distribution target.
+\begin{itemize}
+    \item First, there is a dividing line in the MSE landscape, approximately connecting $(\hat{t}_{\text{start}}, y_{\text{max}})=(0.65,\,0.60)$ and $(0.73,\,1.60)$ (see \cref{fig:guidance_scheduling} (c, i)).
+        On the right side of this line (i.e., with later $\hat{t}_{\text{start}}$ and smaller $y_{\text{max}}$), the MSE between the target CVs and the generated conformation's CVs rises sharply. 
+    \item Second, the MolProbity-score contours are roughly circular, centered near $(\hat{t}_{\text{start}}, y_{\text{max}})=(0.40,\,1.60)$, rather than linear (see \cref{fig:guidance_scheduling} (b, h)).
+        For example, the contour at 1.9 in the in-distribution case and at 2.7 in the out-of-distribution case both illustrate this pattern. 
+    \item Third, combining these two observations, we find that starting the guidance early (small $\hat{t}_{\text{start}}$) and keeping the restraint weak (low $y_{\text{max}}$) enables the application of constraints 
+        without substantially compromising the physical plausibility of the generated structures.
+\end{itemize}
 
 \begin{figure}[htbp]
     \centering
@@ -78,13 +116,13 @@ However, comparing the MolProbity-score contour maps for the in-distribution tar
 \end{figure}
 
 \subsection{Conclusion}
-Across schedule settings, each choice entails trade-offs.
-Specifically, making $\hat{t}_{\text{start}}$ smaller and $y_{\text{max}}$ larger reduces the discrepancy between the inter-domain distances of the generated conformations and the target vector $\phi_{\text{object}}$, but it tends to increase geometric violations (as reflected in higher MolProbity scores).
-Conversely, increasing $\hat{t}_{\text{start}}$ and decreasing $y_{\text{max}}$ yields more stable geometries, but the guidance becomes less effective and may fail to move the samples toward $\phi_{\text{object}}$.
+Overall, we observed the expected trade-off: stronger guidance improves agreement with the target, but tends to degrade structural plausibility. 
+At the same time, we obtained an additional insight: rather than applying strong restraints only in the final stages of the reverse process, it is more effective to apply weak restraints from the early stages.  
+In fact, for the out-of-distribution case, we observe a plateau around $\hat{t}_{\text{start}} \approx 0.5,\, y_{\text{max}} \approx 0.6$ where the values remain stable at approximately $\text{MSE} \approx 0.7$ and MolProbity score $\approx 2.5$.  
+By contrast, near $\hat{t}_{\text{start}} \approx 0.7,\, y_{\text{max}} \approx 1.6$, the region with comparable values is much narrower (see \cref{fig:guidance_scheduling} (h,i)).  
+In other words, in the latter setting, even small deviations from the optimal point cause either the MSE or the MolProbity score to rise sharply.
 
-In practice, we find that settings around $\hat{t}_{\text{start}}<0.8$ and $y_{\text{max}}<0.6$ are a reasonable choice.
-In particular, $\hat{t}_{\text{start}}=0.6$ and $y_{\text{max}}=0.6$ allow effective guidance without substantially degrading structural quality.
-Note, however, that the generated conformations do not necessarily coincide with $\phi_{\text{object}}$.
+Based on these observations, in our study we adopt $\hat{t}_{\text{start}}=0.6$ and $y_{\text{max}}=0.6$ that allow effective guidance without substantially degrading structural quality.
 
 \section{Model Implementation Details}
 \label{app:additional_alg}
