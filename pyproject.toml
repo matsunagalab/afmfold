@@ -1,0 +1,71 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "afmfold"
+version = "0.1.0"
+description = "AFMFold: AFM-guided folding utilities with adapted Protenix components."
+readme = "README.md"
+requires-python = ">=3.10,<3.13"
+license = { file = "LICENSE" }
+authors = [
+  { name = "Tsuyoshi Kawai", email = "kawai.t.778@ms.saitama-u.ac.jp" }
+]
+keywords = ["protein", "structure", "AFM", "folding", "equivariance", "Protenix"]
+
+# Core runtime dependencies (pin/constraints as provided)
+dependencies = [
+  "PyYAML",
+  "scipy",
+  "ml_collections",
+  "tqdm",
+  "pandas",
+  "optree",
+  "rdkit",
+  "biopython==1.83",
+  "modelcif==0.7",
+  "biotite==1.0.1",
+  "scikit-learn",
+  "scikit-learn-extra",
+  "deepspeed==0.16.7",
+  "protobuf==3.20.2",
+  "icecream",
+  "ipdb",
+  "wandb",
+  "numpy==1.26.3",
+  "matplotlib==3.10.1",
+  "ipywidgets",
+  "py3Dmol",
+  "nvidia-cublas-cu12",
+  "torch==2.3.1",
+  "mdtraj==1.9.9",
+  "scikit-image==0.24.0",
+  "shapely>=2.0,<2.1",
+  "pyproj>=3.6,<3.7",
+  "cartopy>=0.23,<0.24"
+]
+
+# Optional extras
+[project.optional-dependencies]
+# Install with: pip install "afmfold[e2cnn]"
+e2cnn = [
+  # Use the GitHub source to maximize compatibility with newer Torch/CUDA stacks.
+  "e2cnn @ git+https://github.com/QUVA-Lab/e2cnn.git"
+]
+
+[project.urls]
+Homepage = "https://github.com/matsunagalab/afmfold"
+Repository = "https://github.com/matsunagalab/afmfold"
+
+# ----- src/ layout (packages live under src/afmfold/...) -----
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["afmfold*"]
+namespaces = false
+
+[project.scripts]
+afmfold = "afmfold.runner.batch_inference:protenix_cli"
