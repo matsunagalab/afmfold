@@ -6,25 +6,11 @@
 # https://github.com/matsunagalab/ColabBTR/blob/main/colabbtr/morphology.py
 
 import os
-import copy
 import glob
-import time
-from datetime import datetime
 import math
-import shutil
 import numpy as np
 import torch
-import json
-import mdtraj as md
-from Bio.PDB import PDBParser, PDBIO
-from Bio.PDB.StructureBuilder import StructureBuilder
-import matplotlib.pyplot as plt
-from matplotlib.patches import Circle
 from skimage.exposure import match_histograms
-from scipy.ndimage import center_of_mass
-from scipy.ndimage import label as nd_label
-import subprocess
-from pprint import pprint
 from tqdm import tqdm
 import torch.nn.functional as F
 from skimage.exposure import match_histograms
@@ -55,16 +41,16 @@ def sample_uniform_so3(n, device='cpu'):
 
 def apply_rotations(xyz, rot_matrices):
     """
-    xyz          : (X, N, 3) テンソル
-    rot_matrices : (Y, 3, 3) テンソル（Y個の回転行列）
+    xyz          : (X, N, 3) tensor
+    rot_matrices : (Y, 3, 3) tensor (Y rotation matrices)
 
     Returns:
-        rotated : (X, Y, N, 3) テンソル
+        rotated : (X, Y, N, 3) tensor
     """
     # (X, N, 3) → (X, 1, N, 3)
-    xyz = xyz.unsqueeze(1)  # 回転軸Yにブロードキャストできるように
+    xyz = xyz.unsqueeze(1)  # Make it broadcastable along rotation axis Y
     # (Y, 3, 3) → (1, Y, 3, 3)
-    rot_matrices = rot_matrices.unsqueeze(0)  # サンプルXにブロードキャスト
+    rot_matrices = rot_matrices.unsqueeze(0)  # Broadcast over samples X
 
     # (X, Y, N, 3) = (X, 1, N, 3) @ (1, Y, 3, 3).transpose(-1, -2) → (X, Y, N, 3)
     rotated = torch.matmul(xyz, rot_matrices.transpose(-1, -2))
@@ -73,7 +59,8 @@ def apply_rotations(xyz, rot_matrices):
 
 def generate_landscape(coords, xedges, yedges):
     """
-    座標を xedges[b], yedges[b] で定義されたグリッドに分割し、各グリッドで最大 z を抽出しつつ中心座標を与える。
+    Divide coordinates into a grid defined by xedges[b], yedges[b],
+    and extract the maximum z within each grid cell while assigning the center coordinates.
 
     Args:
         coords (torch.Tensor): [..., B, N, 3] tensor.
@@ -94,27 +81,27 @@ def generate_landscape(coords, xedges, yedges):
     if yedges.ndim == 1:
         yedges = torch.tile(yedges[None,:], (len(coords), 1))
     
-    # 入力形状の展開
-    *outer_shape, B, N, _ = coords.shape  # outer_shape ≔ 追加のバッチ次元
+    # Expand input shape
+    *outer_shape, B, N, _ = coords.shape  # outer_shape ≔ additional batch dimensions
     outer_prod = int(torch.tensor(outer_shape).prod()) if outer_shape else 1
     
     W = xedges.shape[-1] - 1
     H = yedges.shape[-1] - 1
     device = coords.device
 
-    # [T, N, 3] へ変形 (T = outer_prod * B)
+    # Reshape to [T, N, 3] (T = outer_prod * B)
     coords = coords.reshape(outer_prod * B, N, 3)  # [T, N, 3]
 
-    # xedges, yedges を T 行へブロードキャスト
+    # Broadcast xedges, yedges to T rows
     xedges = xedges.unsqueeze(0).expand(outer_prod, -1, -1).reshape(outer_prod * B, W + 1)  # [T, W+1]
     yedges = yedges.unsqueeze(0).expand(outer_prod, -1, -1).reshape(outer_prod * B, H + 1)  # [T, H+1]
 
-    # グリッド中心座標
+    # Grid center coordinates
     x_centers = (xedges[:, :-1] + xedges[:, 1:]) / 2  # [T, W]
     y_centers = (yedges[:, :-1] + yedges[:, 1:]) / 2  # [T, H]
 
-    # x, y をグリッドに割り当て
-    x, y, z = coords.unbind(-1)  # 各 [T, N]
+    # Assign x, y to grid cells
+    x, y, z = coords.unbind(-1)  # each [T, N]
 
     x_bin = (x.unsqueeze(-1) >= xedges[:, :-1].unsqueeze(1)) & (x.unsqueeze(-1) <  xedges[:, 1:].unsqueeze(1))  # [T, N, W]
     y_bin = (y.unsqueeze(-1) >= yedges[:, :-1].unsqueeze(1)) & (y.unsqueeze(-1) <  yedges[:, 1:].unsqueeze(1))  # [T, N, H]
@@ -126,11 +113,11 @@ def generate_landscape(coords, xedges, yedges):
     grid_idx = y_idx * W + x_idx  # [T, N]
 
     flat_idx = torch.arange(outer_prod * B, device=device).unsqueeze(1) * (H * W) + grid_idx                       # [T, N]
-    flat_idx = flat_idx[valid].reshape(-1)  # 有効だけ抽出
+    flat_idx = flat_idx[valid].reshape(-1)  # Extract only valid ones
 
     z_flat = z[valid].reshape(-1)  # [N_valid]
 
-    # 各グリッドで最大 z を計算
+    # Compute max z in each grid cell
     max_z = torch.full((outer_prod * B * H * W,), 0.0, device=device, dtype=z_flat.dtype)
     max_z = max_z.scatter_reduce(0, flat_idx, z_flat, reduce='amax', include_self=True)
     landscape = max_z.view(outer_prod, B, H, W)  # [T, H, W]
@@ -196,72 +183,72 @@ def idilation(image, tip):
     B, H, W = image.shape
     K = tip.shape[0]          # assume square tip
 
-    # (B, 1, H, W) にして channel=1 を追加
+    # Convert to (B, 1, H, W) and add channel=1
     x = image.unsqueeze(1)
 
-    # 有効受容野分のパディング
+    # Padding for valid receptive field
     x = fixed_padding(x, K, dilation=1, padding_type="idilation")
 
-    # unfold で各ピクセル中心の KxK パッチを展開
-    # 返り値は (B, 1*K*K, H*W)
+    # Use unfold to extract KxK patches around each pixel center
+    # Returns (B, 1*K*K, H*W)
     x = F.unfold(x, kernel_size=K, dilation=1, padding=0, stride=1)
 
-    # 重み (tip) を展開してブロードキャスト加算
+    # Expand weights (tip) and broadcast-add
     # weight: (1, 1, K*K, 1)
     weight = tip.view(1, 1, -1, 1)
     # x: (B, 1, K*K, H*W)
     x = x.unsqueeze(1) + weight
 
-    # K*K 次元で max を取る → (B, 1, H*W)
+    # Take max along K*K dimension → (B, 1, H*W)
     x, _ = x.max(dim=2)
 
-    # 元の空間次元へ整形してチャンネルを落とす
+    # Reshape to original spatial dimensions and drop channel
     x = x.view(B, H, W)
     return x
 
 def generate_tip_shape(radius, angle, device="cpu"):
     """
-    半球＋外部のテーパ（傾斜）をもつ形状を生成する
+    Generate a shape with a hemisphere + outer taper (slope).
 
     Args:
-        radius (float): 半球の半径
-        angle (float): radius外での傾斜角（度）
+        radius (float): radius of hemisphere
+        angle (float): slope angle (degrees) outside the radius
 
     Returns:
-        torch.Tensor: 形状 (dim, dim) の高さテンソル
+        torch.Tensor: height tensor of shape (dim, dim)
     """
     angle_rad = angle / 180 * math.pi
     dim = int(math.ceil(radius) * 3)
-    center = (dim - 1) / 2  # ピクセル中心が中央にくるように
+    center = (dim - 1) / 2  # Ensure pixel center is aligned with grid center
     tangent = math.tan(0.5 * math.pi - angle_rad)
 
-    # グリッド座標 (dim, dim)
+    # Grid coordinates (dim, dim)
     y = torch.arange(dim).float()
     x = torch.arange(dim).float()
     yy, xx = torch.meshgrid(y, x, indexing='ij')
     dx = xx - center
     dy = yy - center
-    r = torch.sqrt(dx**2 + dy**2).to(device)  # 各セル中心から中心点までの距離
+    r = torch.sqrt(dx**2 + dy**2).to(device)  # Distance from each cell center to the center point
 
-    # 空の高さテンソル
+    # Empty height tensor
     height = torch.zeros_like(r).to(device)
 
-    # 半球内部：高さ = sqrt(radius^2 - r^2)
+    # Inside hemisphere: height = sqrt(radius^2 - r^2)
     mask_inside = r <= radius
     height[mask_inside] = torch.sqrt(radius**2 - r[mask_inside]**2)
 
-    # 半球外部：高さ = - (r - radius) * tan(angle)
+    # Outside hemisphere: height = - (r - radius) * tan(angle)
     mask_outside = r > radius
     deltas = r[mask_outside] - radius
     height[mask_outside] = -deltas * tangent
 
-    # 最小値を0に正規化
+    # Normalize so that min = 0
     height -= height.min()
 
     return height.to(device)
 
 def add_noise(real_images, pseudo_images, r=1.0, noise_threshold=0.0, seed=None):
-    # numpyに変換
+    # Convert to numpy
     inputs_is_tensor = False
     if isinstance(real_images, torch.Tensor) and isinstance(pseudo_images, torch.Tensor):
         device = real_images.device
@@ -272,35 +259,35 @@ def add_noise(real_images, pseudo_images, r=1.0, noise_threshold=0.0, seed=None)
     
     rng = np.random.default_rng(seed)
     
-    # 平均を統一
+    # Normalize means
     real_images = real_images.copy()
     pseudo_images = pseudo_images.copy()
     
     real_images -= np.median(real_images)
     pseudo_images -= np.median(pseudo_images, axis=(1,2))[:,None,None]
     
-    # 擬似AFMに存在するノイズ部分を無視
+    # Ignore noisy parts in pseudo AFM
     pseudo_images[pseudo_images < noise_threshold] = 0.0
     
-    # 参照ヒストグラム (> +σ) を作成（同じ処理）
+    # Create reference histogram (> +σ) (same process)
     neg = real_images[real_images < 0]
     sigma = np.sqrt((neg**2).mean())
     ref = real_images[real_images > (r * sigma)]
     
-    # ヒストグラムマッチング（基板=0 は除外して一括）
+    # Histogram matching (excluding substrate=0, apply in batch)
     mask = pseudo_images > 0
     matched = pseudo_images.copy()
     matched[mask] = match_histograms(pseudo_images[mask], ref, channel_axis=None)
     matched[~mask] = 0.0
     
-    # ノイズ生成
-    #    ─ 行ごとオフセット + ピクセルごとガウシアン
+    # Noise generation
+    #    ─ line offset + per-pixel Gaussian noise
     N, H, W = matched.shape
     
-    # 行オフセットを各フレームにブロードキャスト
+    # Broadcast row offsets to each frame
     random_noise  = rng.normal(0.0, sigma, size=(N, H, W))
     
-    # 合成
+    # Combine
     matched_noise = matched + random_noise
     
     if inputs_is_tensor:
@@ -318,18 +305,18 @@ def generate_images(
     ):
     device = torch.device(device)
     
-    # トラジェクトリを読み込む
+    # Load trajectory
     xyz = torch.from_numpy(traj.xyz).to(device)
     xedges = resolution_nm * torch.arange(-int(width/2) - 1, width - int(width/2), device=device)
     yedges = resolution_nm * torch.arange(-int(height/2) - 1, height - int(height/2), device=device)
     
-    # ラベルを読み込む
+    # Load labels
     if distance is None:
         ref_labels = None
     else:
         ref_labels = torch.from_numpy(distance).to(device)
     
-    # 参照画像をtorchに変換
+    # Convert reference images to torch
     if ref_images is not None:
         if isinstance(ref_images, np.ndarray):
             ref_images = torch.from_numpy(ref_images).to(device)
@@ -338,71 +325,71 @@ def generate_images(
         else:
             raise ValueError("ref_images must be either numpy array or torch tensor.")
     
-    # 画像を生成
+    # Generate images
     output_image_list = []
     output_label_list = []
     for epoch in tqdm(range(epochs), disable=is_tqdm):
         batch_image_list = []
         batch_label_list = []
         for step in tqdm(range(math.ceil(dataset_size / (len(xyz) * batch_size))), disable=not is_tqdm, desc=f"Epoch {epoch+1}/{epochs}"):
-            # 回転させる
+            # Apply rotations
             rots = sample_uniform_so3(batch_size, device=device)
             rotated = apply_rotations(xyz, rots)  # [Nframe, Nrot, N, 3]
             
-            # ラベルを回転に合わせる
+            # Rotate labels accordingly
             rotated = rotated.reshape((-1, *rotated.shape[-2:]))  # [Nframe * Nrot, N, 3]
             if ref_labels is not None:
                 labels = torch.tile(ref_labels[:,None,:], (1,batch_size,1))  # [Nframe, Nrot, Ndistance]
                 labels = labels.reshape((-1, labels.shape[-1]))  # [Nframe * Nrot, Ndistance]
             
-            # 画像と重心を合わせてから並進させる
+            # Align by center of mass, then translate
             rotated_com = torch.mean(rotated, dim=-2, keepdim=True)
             translated = rotated - rotated_com
 
-            # z座標を調節する
+            # Adjust z coordinates
             z_unit = torch.tensor([[[0.0, 0.0, 1.0]]]).to(device)
             min_coord, _ = torch.min(translated, dim=-2, keepdim=True)
             translated = translated + (- min_coord + min_z) * z_unit
             
-            # 擬似AFM画像を作成
+            # Create pseudo-AFM image
             pure_image = generate_landscape(translated, xedges, yedges)
             pure_image = pure_image.reshape((-1, height, width))
 
-            # 擬似チップを生成
+            # Generate pseudo tip
             tip_radius = torch.rand((1,)).to(device) * (max_tip_radius - min_tip_radius) + min_tip_radius
             tip_angle = torch.rand((1,)).to(device) * (max_tip_angle - min_tip_angle) + min_tip_angle
             tip = generate_tip_shape(radius=tip_radius, angle=tip_angle, device=device)
             del tip_radius, tip_angle
         
-            # 擬似AFM画像を膨張させる
+            # Dilate pseudo-AFM image
             afm_image = idilation(pure_image, tip)
 
-            # ノイズを付加
+            # Add noise
             if noise_nm > 0.0:
                 noise = np.random.normal(0.0, noise_nm, afm_image.shape)
                 noise = torch.from_numpy(noise).to(afm_image.dtype).to(device)
                 afm_image += noise
                 
-            # 画像のヒストグラムを参照画像に合わせる
+            # Match image histogram to reference images
             if match_histgram and ref_images is not None:
                 _, afm_image = add_noise(ref_images, afm_image, r=1.0, noise_threshold=0.0, seed=step)
             
-            # 画像・ラベルを numpy に変換して保存
+            # Convert images/labels to numpy and store
             batch_image_list.append(afm_image.detach().cpu().numpy())
             if ref_labels is not None:
                 batch_label_list.append(labels.detach().cpu().numpy())
         
-        # 生成した画像とラベルを結合
+        # Concatenate generated images and labels
         batch_images = np.concatenate(batch_image_list, axis=0)
-        batch_images = batch_images[0:dataset_size]  # dataset_size まで切り詰める
+        batch_images = batch_images[0:dataset_size]  # Truncate to dataset_size
         
         if len(batch_label_list) > 0:
             assert len(batch_label_list) == len(batch_image_list), f"Mismatch in number of batches between images and labels: {len(batch_label_list)} != {len(batch_image_list)}."
             batch_labels = np.concatenate(batch_label_list, axis=0)
-            batch_labels = batch_labels[0:dataset_size]  # dataset_size まで切り詰める
+            batch_labels = batch_labels[0:dataset_size]  # Truncate to dataset_size
         
         if save_dir is not None:
-            # 保存先のファイル名を決定
+            # Determine filenames for saving
             max_index = max([int(p.split("image_")[-1].split(".npy")[0]) for p in glob.glob(os.path.join(save_dir, "image_*.npy"))], default=-1)
             save_image_path = os.path.join(save_dir, f"image_{max_index + 1}.npy")
             save_label_path = os.path.join(save_dir, f"label_{max_index + 1}.npy")

@@ -2,7 +2,6 @@ import os
 import torch
 import numpy as np
 import mdtraj as md
-import matplotlib.pyplot as plt
 import json
 import glob
 from tqdm import tqdm
@@ -32,6 +31,8 @@ def inference(
     out_dir,
     base_seed,
     device,
+    t_start=0.54,
+    y_max=0.60,
     max_trial=3,
     mse_threshold=10.0,
     suppress=True,
@@ -41,12 +42,12 @@ def inference(
     prev_restraints=None, 
     prev_predictions=None,
 ):
-    # 名前の取得
+    # Get the name
     with open(json_file, mode="r") as f:
         data = json.load(f)
     name = data[0]["name"]
 
-    # 初期設定
+    # Initial settings
     if isinstance(device, str):
         device = torch.device(device)
     model.to(device)
@@ -55,11 +56,11 @@ def inference(
     H, W = images.shape[-2:]
     images = images.reshape((-1, H, W))
     
-    # 推定を実行
+    # Run inference
     cif_list = []
     seed = base_seed
     for i in tqdm(range(len(images))):
-        # 拘束を決定
+        # Determine restraints
         if predictions is None:
             images_pt = torch.from_numpy(images[i]).unsqueeze(0).unsqueeze(0).to(torch.float).to(device)
             out = model(images_pt).detach().cpu().numpy()[0]
@@ -75,10 +76,10 @@ def inference(
         for j in range(max_trial):
             kwargs = {
                 "sample_diffusion.N_sample": 1,
-                "guidance_kwargs.t_start": 0.54,
+                "guidance_kwargs.t_start": t_start,
                 "guidance_kwargs.manual": target_domain_distance,
                 "guidance_kwargs.scaling_kwargs.func_type": "sigmoid",
-                "guidance_kwargs.scaling_kwargs.y_max": 0.60,
+                "guidance_kwargs.scaling_kwargs.y_max": y_max,
                 "guidance_kwargs.domain_pairs": domain_pairs,
             }
 
@@ -89,7 +90,7 @@ def inference(
             with suppress_output(suppress=suppress):
                 inference_jsons(json_file, out_dir, seeds=seeds, **kwargs)
                 
-            # 出力の確認
+            # Check output
             output_cifs = glob.glob(os.path.join(out_dir, name, f"seed_{seeds[0]}", "predictions", "*.cif"))
             assert len(output_cifs) == 1, output_cifs
             output_cif = output_cifs[0]
@@ -105,12 +106,12 @@ def inference(
                 pred_domain_distance[k] = d.item()
             pred_domain_distance *= 10.0
 
-            # 拘束をprev_restraints, prev_predictionsに書き込み
+            # Write restraints into prev_restraints and prev_predictions
             if prev_restraints is not None and prev_predictions is not None:
                 prev_restraints = np.concatenate([prev_restraints, target_domain_distance[None,:]], axis=0)
                 prev_predictions = np.concatenate([prev_predictions, pred_domain_distance[None,:]], axis=0)
             
-            # 拘束を出力に追加書き込み
+            # Append restraints to output
             mse = np.sum((out - pred_domain_distance) ** 2)
             restraint_info = {
                 "target": out.tolist(),
@@ -125,14 +126,14 @@ def inference(
                 
             add_arg_to_json(output_json, restraint_info)
 
-            # 差分を計算
+            # Compute differences
             delta = out - pred_domain_distance
             adelta = np.abs(delta)
             mask = adelta > 1.0
             target_domain_distance[mask] = target_domain_distance[mask] + delta[mask]
             
             if mse < mse_threshold:
-                # 他の要素を保存
+                # Save other elements
                 input_dict = {
                     "image": images[i],
                 }
@@ -146,7 +147,7 @@ def inference(
                     os.path.join(out_dir, name, f"seed_{seeds[0]}", "predictions", "inputs.npz"), **input_dict
                 )
 
-                # 格納
+                # Store
                 cif_list.append(output_cif)
                 break
             else:
@@ -155,3 +156,4 @@ def inference(
             seed += 1
 
     return cif_list
+

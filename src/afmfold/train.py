@@ -5,9 +5,6 @@ import time
 import glob
 from tqdm import tqdm
 import shutil
-import math
-import matplotlib.pyplot as plt
-import matplotlib.gridspec as gridspec
 from torch.optim import Adam
 from scipy.spatial.transform import Rotation as R
 import mdtraj as md
@@ -30,7 +27,7 @@ class Trainer:
                  save_interval_sec: int = 3600,
                  device: str = "cuda"):
         """
-        初期化：全構成要素と保存先などを受け取る。
+        Initialization: receives all components and output paths.
         """
         device = torch.device(device if device == "cuda" and torch.cuda.is_available() else "cpu")
         self.model = model.to(device)
@@ -51,7 +48,7 @@ class Trainer:
         self.save_interval_sec = save_interval_sec
         self.device = device
         
-        # ログ保存ディレクトリ構造の作成
+        # Create directory structure for log saving
         self.timestamp = time.strftime("%Y%m%d_%H%M%S")
         if output_subdir is None:
             self.output_dir = os.path.join(output_root, run_name + self.timestamp)
@@ -61,7 +58,7 @@ class Trainer:
         self.loss_dir = os.path.join(self.output_dir, "loss")
         self.last_save_time = time.time()
         
-        # 途中から実行する場合、過去の結果を読み取る
+        # If resuming, load previous results
         if os.path.exists(self.model_dir) and len(os.listdir(self.model_dir)) > 0:
             prev_model_paths = glob.glob(os.path.join(self.model_dir, "model_epoch*.pt"))
             prev_model_epochs = [int(os.path.basename(p).split("epoch")[-1].split("_")[0]) for p in prev_model_paths]
@@ -69,10 +66,10 @@ class Trainer:
         else:
             self.initial_epoch = 0
             
-        # 保存管理
+        # Save management
         self.top_k_losses = []  # List of (loss, path)
 
-        # 損失履歴
+        # Loss history
         if prev_train_losses is None:
             self.train_losses = []
         else:
@@ -84,93 +81,93 @@ class Trainer:
 
     def train(self, epochs: int):
         """
-        学習ループ全体の開始
+        Start the full training loop.
         """
-        # 学習ループ
+        # Training loop
         for epoch in range(self.initial_epoch, self.initial_epoch + epochs):
             self.model.train()
-            self.train_one_epoch(epoch)  # 1エポック分の訓練
+            self.train_one_epoch(epoch)  # Train for one epoch
             
             self.model.eval()
-            self.validate_one_epoch(epoch)  # 1エポック分の検証
+            self.validate_one_epoch(epoch)  # Validate for one epoch
         
-        # 最終結果を保存
+        # Save final results
         self.save_model(epoch, self.val_losses[-1])
         self.save_loss_log(epoch)
 
     def train_one_epoch(self, epoch):
         """
-        1エポック分の訓練
+        Train for one epoch.
         """
-        for batch in tqdm(self.train_loader, desc=f"Epoch {epoch} - Training"):  # tqdm表示
-            loss = self.compute_loss(batch)  # 訓練
+        for batch in tqdm(self.train_loader, desc=f"Epoch {epoch} - Training"):  # tqdm progress display
+            loss = self.compute_loss(batch)  # Training step
             
             self.optimizer.zero_grad()
             loss.backward()
             self.optimizer.step()
         
-            # 一定時間ごとにモデルと損失を保存
+            # Save model and losses at regular time intervals
             if time.time() - self.last_save_time >= self.save_interval_sec:
                 self.save_model(epoch, loss.detach().cpu().item(), save_topk=False, suffix="_train")
                 self.save_loss_log(epoch)
             
-            # 損失を記録
+            # Record loss
             self.train_losses.append(loss.detach().cpu().item())
         
-        # 最後にモデルと損失を保存
+        # Save model and loss at the end
         self.save_model(epoch, self.train_losses[-1], save_topk=False, suffix="_train")
         self.save_loss_log(epoch)
     
     def validate_one_epoch(self, epoch):
         with torch.no_grad():
-            for batch in self.val_loader:  # 検証ステップでは表示は不要
-                loss = self.compute_loss(batch)  # 検証
+            for batch in self.val_loader:  # No tqdm display needed during validation
+                loss = self.compute_loss(batch)  # Validation step
                 
-                # 一定時間ごとにモデルと損失を保存
+                # Save model and losses at regular time intervals
                 if time.time() - self.last_save_time >= self.save_interval_sec:
                     self.save_model(epoch, loss.detach().cpu().item(), save_topk=False, suffix="_val")
                     self.save_loss_log(epoch)
 
-                # エポックごとの検証損失を計算
+                # Record validation loss for this epoch
                 self.val_losses.append(loss.detach().cpu().item())
         
-        # 一定時間ごとにモデルと損失を保存
+        # Save model and loss for this epoch
         self.save_model(epoch, self.val_losses[-1], save_topk=True, suffix="_val")
         self.save_loss_log(epoch)
             
     def compute_loss(self, batch):
         """
-        バッチから損失を計算する。
+        Compute loss from a batch.
         """
         data, label = batch
         data = data.unsqueeze(1)
         
-        # デバイスに移動
+        # Move data to device
         data, label = move_all_tensors_in_device(data, label, device=self.device)
         
-        # フォワードパス
+        # Forward pass
         output = self.model(data)
 
-        # 検証損失を計算
+        # Compute loss
         loss = self.criterion(output, label)
 
         return loss
         
     def save_model(self, epoch, loss, save_topk=False, suffix=""):
         """
-        モデルを保存し、Top-Kのうち最も良いものを保持。
-        通常ファイルとtop-kファイルの両方を保存する。
+        Save model and keep the best Top-K models.
+        Both regular files and Top-K files are saved.
         """
-        # 保存先ディレクトリの作成
+        # Create directories if not exist
         os.makedirs(self.output_dir, exist_ok=True)
         os.makedirs(self.model_dir, exist_ok=True)
         self.last_save_time = time.time()
         
-        # 通常の保存ファイル名
+        # Regular save filename
         filename = f"model_epoch{epoch}_loss{loss:.4f}{suffix}.pt"
         filepath = os.path.join(self.model_dir, filename)
 
-        # モデルと状態を保存
+        # Save model and state
         torch.save({
             'epoch': epoch,
             'model_state_dict': self.model.state_dict(),
@@ -188,18 +185,18 @@ class Trainer:
         }, filepath)
 
         if save_topk:
-            # Top-Kに登録
-            self.top_k_losses.append((loss, filepath, epoch))  # epochも記録
-            self.top_k_losses.sort(key=lambda x: x[0])  # 損失でソート
+            # Register into Top-K
+            self.top_k_losses.append((loss, filepath, epoch))  # Also record epoch
+            self.top_k_losses.sort(key=lambda x: x[0])  # Sort by loss
 
-            # Top-Kモデルとして保存
+            # Save Top-K models
             for k, (top_loss, top_path, top_epoch) in enumerate(self.top_k_losses[:self.top_k], 1):
                 top_filename = f"model_top{k}.pt"
                 top_filepath = os.path.join(self.model_dir, top_filename)
                 if not os.path.exists(top_filepath):
                     shutil.copyfile(top_path, top_filepath)
 
-            # Top-Kを超えた古いモデルを削除（オリジナルのみ削除、top_kファイルは残す）
+            # Remove old models beyond Top-K (only original files, Top-K files remain)
             while len(self.top_k_losses) > self.top_k:
                 _, path_to_remove, _ = self.top_k_losses.pop(-1)
                 if os.path.exists(path_to_remove):
@@ -207,9 +204,9 @@ class Trainer:
 
     def save_loss_log(self, epoch, suffix=""):
         """
-        損失履歴をnumpy形式でエポック付きファイル名で保存
+        Save loss history as numpy arrays with epoch in filenames.
         """
-        # 保存先ディレクトリの作成
+        # Create directories if not exist
         os.makedirs(self.output_dir, exist_ok=True)
         os.makedirs(self.loss_dir, exist_ok=True)
         self.last_save_time = time.time()
@@ -219,4 +216,3 @@ class Trainer:
 
         np.save(train_path, np.array(self.train_losses))
         np.save(val_path, np.array(self.val_losses))
-        

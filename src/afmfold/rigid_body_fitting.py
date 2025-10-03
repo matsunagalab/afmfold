@@ -4,20 +4,18 @@ from datetime import datetime
 import math
 import numpy as np
 import torch
-import torch.nn.functional as F
 import json
 import glob
 import mdtraj as md
-from skimage.exposure import match_histograms
 from scipy.ndimage import center_of_mass
-from pprint import pprint
 from tqdm import tqdm
 
 from afmfold.images import generate_landscape, sample_uniform_so3, apply_rotations, generate_tip_shape, idilation, add_noise
 from afmfold.utils import compute_rmsd_single_frame
 
 def hat(v):
-    """Skew map (R^3 -> so(3)).
+    """
+    Skew map (R^3 -> so(3)).
     v: (..., 3)
     returns: (..., 3, 3)
     """
@@ -40,7 +38,8 @@ def _taylor_omc_over_x2(x):
     return 0.5 - x2/24 + x2*x2/720 - x2*x2*x2/40320
 
 def exp_so3(omega):
-    """Exponential map from so(3) (axis-angle vector) to SO(3).
+    """
+    Exponential map from so(3) (axis-angle vector) to SO(3).
     omega: (..., 3) axis-angle vector
     returns: (..., 3, 3) rotation matrix
     """
@@ -80,7 +79,8 @@ def sample_so3_gaussian(
     Sigma=None,
     seed=None,
 ):
-    """Sample rotations on SO(3) around `center` via tangent-space Gaussian + exp.
+    """
+    Sample rotations on SO(3) around `center` via tangent-space Gaussian + exp.
     
     Args:
         center: (3,3) rotation matrix (torch.Tensor)
@@ -209,11 +209,11 @@ def compute_correlation_coeﬃcient(image1, image2):
 class RigidBodyFitting:
     def __init__(
         self, target_image, traj, steps, 
-        resolution_nm=0.98, min_z=None, translation_range=(-3, 3), 
+        resolution_nm=0.98, min_z=None, translation_range=(-5.0, 5.0), 
         translation_batch=10, rot_batch=32, prove_radius=4.2, prove_angle=20,
         ref_pdb=None, log_interval=1, dry_run=False, match_histgram=False, device="cpu",
         ):
-        # 入力をインスタンス化
+        # Instantiate inputs
         if isinstance(target_image, np.ndarray):
             target_image = target_image.reshape((-1, *target_image.shape[-2:]))
             self.target_image = torch.from_numpy(target_image).to(device)
@@ -236,14 +236,14 @@ class RigidBodyFitting:
         self.device = device
         assert len(traj) == len(self.target_image)
         
-        # ref_pdb に合わせてアライン
+        # Align with ref_pdb
         if ref_pdb is not None:
             ref_traj = md.load(ref_pdb)
             ref_traj = ref_traj.atom_slice(ref_traj.topology.select("element != H"))
             traj.superpose(ref_traj, frame=0)
             del ref_traj
             
-        # 初期設定
+        # Initial settings
         self.num_frames, self.H, self.W = target_image.shape
         assert self.num_frames == len(traj)
         self.xyz = torch.from_numpy(traj.xyz).to(device)
@@ -257,7 +257,7 @@ class RigidBodyFitting:
         self.target_medianvalue = torch.median(self.target_image)
         self.log = {}
         
-        # 並進グリッドの作成
+        # Create translation grid
         delta = resolution_nm * torch.linspace(translation_range[0], translation_range[1], translation_batch)
         X, Y = torch.meshgrid(delta, delta, indexing='ij')  # shape: (5, 3) each
         grid = torch.stack((X, Y), dim=-1)
@@ -271,26 +271,26 @@ class RigidBodyFitting:
     def sample(self, is_tqdm=True, desc=None):
         initial_time = time.time()
         for step in tqdm(range(math.ceil(self.steps / self.rot_batch)), disable=not is_tqdm, desc=desc):
-            # 回転させる
+            # Apply rotation
             rots = sample_uniform_so3(self.rot_batch, device=self.device)  # [Brot, 3, 3]
             rotated = apply_rotations(self.xyz, rots)  # [F, Brot, N, 3]
             
-            # 画像と重心を合わせてから並進させる
+            # Align with image centroid, then apply translation
             centered = self.fit_translation(rotated).unsqueeze(1)  # [F, 1, Brot, N, 3]
             delta = self.trans.unsqueeze(1).unsqueeze(1).unsqueeze(0)  # [Btrans, 3] => [1, Btrans, 1, 1, 3]
             translated = (centered + delta).reshape((-1, *self.xyz.shape[-2:]))  # [F*Btrans*Brot, N, 3]
 
-            # z座標を調整
+            # Adjust z-coordinate
             if self.min_z is not None:
-                # z座標を調節する
+                # Adjust z-coordinate
                 z_unit = torch.tensor([[[0.0, 0.0, 1.0]]]).to(self.device)
                 min_coord, _ = torch.min(translated, dim=-2, keepdim=True)
                 translated = translated + (- min_coord + self.min_z) * z_unit
             
-            # 擬似AFM画像を作成
+            # Generate pseudo AFM images
             pseudo_image = self.pseudo_afm(translated)  # [F*Btrans*Brot, H, W]
 
-            # 画像をマッチさせる
+            # Match images
             if self.match_histgram:
                 (_, matched_image_np), _ = add_noise(self.target_image.unsqueeze(0).detach().cpu().numpy(), pseudo_image.detach().cpu().numpy())
                 matched_image = torch.from_numpy(matched_image_np).to(self.device)  # [F*Btrans*Brot, H, W]
@@ -300,15 +300,15 @@ class RigidBodyFitting:
                 max_values, min_values = max_values.unsqueeze(-1), min_values.unsqueeze(-1)
                 matched_image = (pseudo_image - min_values) / (max_values - min_values + 1e-6) * (self.target_maxvalue - self.target_medianvalue) + self.target_medianvalue  # [F*Btrans*Brot, H, W]
                 
-            # 相関を計算
+            # Compute correlation
             matched_image = matched_image.reshape((self.num_frames, -1, *matched_image.shape[-2:]))  # [F, Btrans*Brot, H, W]
             cc = compute_correlation_coefficient(self.target_image.unsqueeze(1), matched_image)  # [F, 1, H, W] * [F, Btrans*Brot, H, W] -> [F, 1, Btrans*Brot]
             
-            # 相関が最も高い並進インデックスを決定
+            # Determine the translation index with the highest correlation
             reshaped_cc = cc.reshape((self.num_frames, self.translation_batch**2, self.rot_batch))  # [F, Btrans, Brot]
             best_ccs, best_trans_index = torch.max(reshaped_cc, dim=-2)  # [F, Brot]
             
-            # 相関が最も高い並進を抜き出す
+            # Extract the translation with the highest correlation
             best_trans_index_4image = best_trans_index.unsqueeze(-1).unsqueeze(-1).expand(-1, -1, self.H, self.W).unsqueeze(1)  # [F, 1, Brot, H, W]
             matched_image = matched_image.reshape((self.num_frames, self.translation_batch**2, self.rot_batch, *matched_image.shape[-2:]))  # [F, Btrans, Brot, H, W]
             best_images = torch.gather(matched_image, dim=1, index=best_trans_index_4image)  # [F, 1, Brot, H, W]
@@ -322,7 +322,7 @@ class RigidBodyFitting:
             assert best_images.shape == (self.num_frames, self.rot_batch, self.H, self.W), best_images.shape
             assert best_translated.shape == (self.num_frames, self.rot_batch, *self.xyz.shape[-2:]), best_translated.shape
             
-            # 結果を保存
+            # Save results
             if step % self.log_interval == 0:
                 self.log[step] = {"cc": best_ccs.detach().cpu().numpy(), "image": best_images.detach().cpu().numpy(), "R": rots.detach().cpu().numpy(), "coords": best_translated.detach().cpu().numpy()}
             
@@ -349,7 +349,7 @@ class RigidBodyFitting:
             return self.log[best_index.item()]
         
     def summarize_results(self):
-        # 保存対象がない場合
+        # If there is nothing to save
         if len(self.log) == 0:
             return {}
         
@@ -358,7 +358,7 @@ class RigidBodyFitting:
         rots = np.concatenate([v["R"] for v in self.log.values()], axis=0)  # [S, 3, 3]
         coords = np.concatenate([v["coords"] for v in self.log.values()], axis=1)  # [F, S, N, 3]
         
-        # 保存
+        # Save
         summary = {
             "cc": ccs,
             "images": images,
@@ -366,17 +366,18 @@ class RigidBodyFitting:
             "coords": coords,
         }
         return summary
-        
+
 def save_args_to_file(args, json_path, **kwargs):
-    # Namespace → dict に変換
+    # Convert Namespace → dict
     args_dict = vars(args)
     args_dict = {**args_dict, **kwargs}
 
-    # JSON ファイルに保存（インデント付き）
+    # Save to JSON file (with indentation)
     with open(json_path, 'w') as f:
         json.dump(args_dict, f, indent=4)
 
     print(f"Arguments saved to {json_path}")
+
 
 def seconds_since(timestr):
     time_format = "%Y%m%d_%H%M%S"
@@ -386,11 +387,29 @@ def seconds_since(timestr):
         delta = now - past_time
         return int(delta.total_seconds())
     except ValueError as e:
-        print("時刻の形式が正しくありません:", e)
+        print("Invalid time format:", e)
         return None
 
+
 def load_results(output_dirs, stop_at=None):
-    # 結果の収集
+    """
+    Collects and loads results from output directories.
+
+    Args:
+        output_dirs (list): List of output directory paths.
+        stop_at (int, optional): If provided, stops loading after this many directories.
+
+    Returns:
+        images (np.ndarray): AFM images [F, H, W].
+        pred_traj (md.Trajectory): Predicted trajectory.
+        true_traj (md.Trajectory or None): Ground-truth trajectory (if available).
+        truths (np.ndarray or None): Ground-truth restraints.
+        targets (np.ndarray): Target restraints.
+        restraints (np.ndarray): Used restraints.
+        predictions (np.ndarray): Model predictions.
+    """
+    
+    # Collect results
     image_list = []
     true_xyz_list = []
     pred_xyz_list = []
@@ -398,30 +417,39 @@ def load_results(output_dirs, stop_at=None):
     target_list = []
     restraint_list = []
     prediction_list = []
+    
     for i in tqdm(range(len(output_dirs))):
         output_dir = output_dirs[i]
+
+        # Locate prediction files
         cifs = glob.glob(os.path.join(output_dir, "predictions", "*.cif"))
         jsons = glob.glob(os.path.join(output_dir, "predictions", "*.json"))
         npzs = glob.glob(os.path.join(output_dir, "predictions", "*.npz"))
         assert all(len(flist) == 1 for flist in [cifs, jsons, npzs]), output_dir
         
+        # Load input .npz file
         inputs = np.load(npzs[0])
         inputs = dict(inputs)
         
+        # Store image and ground-truth coordinates (if available)
         image_list.append(inputs["image"][None,:,:])
         if "coords" in inputs:
             true_xyz_list.append(inputs["coords"][None,:,:])
         
+        # Load predicted structure from .cif
         traj = md.load(cifs[0])
         pred_xyz_list.append(traj.xyz)
         
+        # Load metadata from .json
         with open(jsons[0], mode="r") as f:
             settings = json.load(f)
         
+        # Collect ground-truth restraints if available
         if "truth" in settings:
             truth = np.array(settings["truth"])
             truth_list.append(truth[None,:])
         
+        # Collect target, restraint, and prediction values
         target = np.array(settings["target"])
         target_list.append(target[None,:])
         
@@ -431,23 +459,29 @@ def load_results(output_dirs, stop_at=None):
         prediction = np.array(settings["prediction"])
         prediction_list.append(prediction[None,:])
         
+        # Stop early if stop_at is specified
         if stop_at is not None and (i+1) >= stop_at:
             break
         
+    # Concatenate collected data
     images = np.concatenate(image_list, axis=0)
     pred_xyzs = np.concatenate(pred_xyz_list, axis=0)
+    
     if len(true_xyz_list) > 0:
         true_xyzs = np.concatenate(true_xyz_list, axis=0)
     else:
         true_xyzs = None
+    
     if len(truth_list) > 0:
         truths = np.concatenate(truth_list, axis=0)
     else:
         truths = None
+    
     targets = np.concatenate(target_list, axis=0)
     restraints = np.concatenate(restraint_list, axis=0)
     predictions = np.concatenate(prediction_list, axis=0)
     
+    # Construct mdtraj trajectories
     pred_traj = md.Trajectory(pred_xyzs, topology=traj.topology)
     if true_xyzs is not None:
         true_traj = md.Trajectory(true_xyzs, topology=traj.topology)
@@ -483,51 +517,98 @@ def run_rigid_body_fitting(
     use_ref_structure=False,
     device="cuda",
     ):
+    """
+    Perform rigid-body fitting for predicted structures and AFM images.
+    
+    Args:
+        output_dirs (list): List of output directories containing prediction results.
+        ref_pdb (str): Path to the reference PDB file.
+        steps (int): Number of optimization steps.
+        stop_at (int, optional): Limit the number of output directories to process.
+        batchsize (int): Number of images/structures to process per batch.
+        resolution_nm (float): AFM image resolution (nm).
+        prove_radius (float): Probe radius for AFM tip.
+        min_z (float): Minimum z-coordinate adjustment.
+        rot_batch (int): Number of sampled rotations per batch.
+        translation_range (tuple): Translation range (nm).
+        use_ref_structure (bool): If True, also perform fitting with the reference structure.
+        device (str): Device for computation ("cpu" or "cuda").
+    
+    Returns:
+        dict: Aggregated summary containing correlations, fitted images, coordinates, 
+              errors, RMSDs, and other evaluation metrics.
+    """
+
     total_summary = {}
+
+    # Load results from the specified output directories
     images, pred_traj, true_traj, truths, targets, restraints, predictions = load_results(output_dirs, stop_at=stop_at)
+
+    # Process in batches
     for i in range(math.ceil(len(images)/batchsize)):
         _ref_images = images[i*batchsize:(i+1)*batchsize]
         _pred_traj = pred_traj[i*batchsize:(i+1)*batchsize]
+
+        # Ground-truth trajectory (if available)
         if true_traj is not None:
             _true_traj = true_traj[i*batchsize:(i+1)*batchsize]
+
+        # Ground-truth restraints (scaled by 0.1)
         if truths is not None:
             _truths = 0.1 * truths[i*batchsize:(i+1)*batchsize]
+
+        # Target restraints (scaled)
         _targets = 0.1 * targets[i*batchsize:(i+1)*batchsize]
-        #_restraints = 0.1 * restraints[i*batchsize:(i+1)*batchsize]
+
+        # Model predictions (scaled)
+        #_restraints = 0.1 * restraints[i*batchsize:(i+1)*batchsize]  # (unused)
         _predictions = 0.1 * predictions[i*batchsize:(i+1)*batchsize]
         
         if use_ref_structure:
-            # それぞれの画像について、ref_trajを使った剛体フィッティングも実行する
+            # For each image, also perform rigid-body fitting with reference structure
             ref_traj = md.join([md.load(ref_pdb) for _ in range(len(_ref_images))])
+            
+            # Concatenate predicted and reference images
             _ref_images = np.concatenate([_ref_images, _ref_images], axis=0)
-            _target_traj = md.Trajectory(np.concatenate([_pred_traj.xyz, ref_traj.xyz], axis=0), topology=_pred_traj.topology)
+            
+            # Concatenate predicted and reference trajectories
+            _target_traj = md.Trajectory(
+                np.concatenate([_pred_traj.xyz, ref_traj.xyz], axis=0),
+                topology=_pred_traj.topology
+            )
         else:
             _target_traj = _pred_traj
             
+        # Initialize rigid-body fitting
         fitting = RigidBodyFitting(
             _ref_images, _target_traj, steps, 
             resolution_nm=resolution_nm, prove_radius=prove_radius, min_z=min_z, 
             ref_pdb=ref_pdb, rot_batch=rot_batch, translation_range=translation_range, device=device,
-            )
+        )
+
+        # Perform sampling (rigid-body fitting iterations)
         summary = fitting.sample()
         
-        # Extract the best CC values in all rotations
+        # Extract best correlation coefficients (CC) and corresponding data
         _ccs = summary["cc"]
-        _best_rot_indices = np.argmax(_ccs, axis=1)
+        _best_rot_indices = np.argmax(_ccs, axis=1)  # Best rotation index per frame
         _best_ccs = _ccs[np.arange(len(_ccs)), _best_rot_indices]
         _best_images = summary["images"][np.arange(len(_ccs)), _best_rot_indices]
         _best_rots = summary["rots"][_best_rot_indices]
         _best_coords = summary["coords"][np.arange(len(_ccs)), _best_rot_indices]
         
+        # Compute squared errors against ground-truth restraints
         if truths is not None:
             _sqerrors = np.sum((_truths - _targets)**2, axis=1)
         
+        # Compute RMSDs against ground-truth trajectory
         if true_traj is not None:
             _rmsds = np.zeros((len(_pred_traj),))
             for j in range(len(_pred_traj)):
                 _rmsd = compute_rmsd_single_frame(_pred_traj[j], _true_traj[j])
                 _rmsds[j] = _rmsd
         
+        # Prepare summary dictionary
         summary = {
             "all_cc": summary["cc"],
             "all_rots": summary["rots"],
@@ -539,12 +620,16 @@ def run_rigid_body_fitting(
             "ref_domain_distance": _targets,
             "pred_domain_distance": _predictions,
         }
+
+        # Add errors if available
         if truths is not None:
             summary["squared_error"] = _sqerrors
         if true_traj is not None:
             summary["rmsd"] = _rmsds
             summary["ref_coords"] = _true_traj.xyz,
             
+        # Concatenate current batch summary into total summary
         total_summary = cat_data([total_summary, summary])
     
     return total_summary
+
