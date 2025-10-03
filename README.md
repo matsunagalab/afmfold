@@ -1,13 +1,6 @@
 # AFM-Fold
 
-AFM-Fold is an implementation of **protein structure prediction from AFM (Atomic Force Microscopy) images**.  
-This github page includes:
-
-1. **Pretrained models** used in the paper,
-2. **Code to reproduce the results** reported in the paper (excluding real AFM data),
-3. **Pseudo-AFM image generation scripts**,
-4. **Training scripts**,
-5. **Inference scripts**.
+AFM-Fold is an implementation of **protein structure prediction from AFM (Atomic Force Microscopy) images**. 
 
 <!-- ![Example Figure](./figures/ak.png) -->
 ![Example Figure](./figures/inference.gif)
@@ -18,18 +11,28 @@ We recommend using Python 3.10–3.12 with CUDA-enabled PyTorch (tested with PyT
 Clone this repository and install dependencies as follows:
 
 ```bash
+# Clone this repository
+git clone https://github.com/matsunagalab/afmfold.git
+cd afmfold
+
+# Unzip the released data
+wget https://zenodo.org/record/XXXX/files/results.zip
+unzip results.zip
+ls results
+
+# Install dependancies
 pip install -e .[e2cnn]
 ```
 
 ## Usage
 
 ### Reproducing the Paper Results
-The basic usage is demonstrated in `notebooks/example.ipynb`. This notebook illustrates:
+The basic usage is demonstrated in `notebooks/example.ipynb`. This notebook demonstrates the reproduction of the main results from the paper:
 
-- **(A) Fig. 1**: How to generate pseudo-AFM images of the open and closed conformations of Adenylate Kinase (AK), and how to predict 3D structures from each image. 
-- **(B) Fig. 2-3**: How to evaluate the statistical accuracy of AFM-Fold’s predictions. 
-- **(C) Fig. 3**: How to evaluate the noise robustness of AFM-Fold’s predictions. 
-- **(D) Fig. 4**: How to compare the agreement between experimental AFM images of FlhA<sub>C</sub> and pseudo-AFM images, using both AFM-Fold–predicted structures and reference structures obtained from the PDB. 
+- (A) Conditional structure generation (Fig. 1)
+- (B) Evaluation of estimation error using MD data (Fig. 2-3)
+- (C) Noise robustness (Fig. 3)
+- (D) Comparison with rigid-body fitting (Fig. 4) 
 
 ### Training & Inference
 The procedures for training and inference are described in detail in [`scripts/SCRIPTS.md`](scripts/SCRIPTS.md). 
@@ -66,4 +69,4 @@ See the [LICENSE](LICENSE) file for more details.
 ## Contact Us
 If you have any questions, issues, or suggestions, please:  
 - Open an issue on GitHub, or  
-- Contact us directly via email: [kawai.t.778@ms.saitama-u.ac.jp](mailto:kawai.t.778@ms.saitama-u.ac.jp), [ymatsunaga@mail.saitama-u.ac.jp](mailto:ymatsunaga@mail.saitama-u.ac.jp)
+- Contact us directly via email: [kawai.t.778@ms.saitama-u.ac.jp](mailto:kawai.t.778@ms.saitama-u.ac.jp), [ymatsunaga@mail.saitama-u.ac.jp](mailto:ymatsunaga@mail.saitama-u.ac.jp).
