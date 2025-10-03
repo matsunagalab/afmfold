@@ -21,9 +21,9 @@ Clone this repository and install dependencies as follows:
 pip install -e .[e2cnn]
 ```
 
-## 2. Usage
+## Usage
 
-### 2.1. Reproducing the Paper Results
+### Reproducing the Paper Results
 The basic usage is demonstrated in `notebooks/example.ipynb`. This notebook illustrates:
 
 - **(A) Fig. 1**: How to generate pseudo-AFM images of the open and closed conformations of Adenylate Kinase (AK), and how to predict 3D structures from each image. 
@@ -31,7 +31,7 @@ The basic usage is demonstrated in `notebooks/example.ipynb`. This notebook illu
 - **(C) Fig. 3**: How to evaluate the noise robustness of AFM-Fold’s predictions. 
 - **(D) Fig. 4**: How to compare the agreement between experimental AFM images of FlhA<sub>C</sub> and pseudo-AFM images, using both AFM-Fold–predicted structures and reference structures obtained from the PDB. 
 
-### 2.2. Training & Inference
+### Training & Inference
 The procedures for training and inference are described in detail in [`scripts/SCRIPTS.md`](scripts/SCRIPTS.md). 
 By following these, you can also reproduce **Fig. 2** of the paper: 
 1. Prepare training datasets with different noise levels and train a CNN model on each of them.  
@@ -54,16 +54,16 @@ If you use AFM-Fold in your work, please cite as follows:
 }
 ```
 
-### Acknowledgements
+## Acknowledgements
 AFM-Fold relies heavily on the implementation of:  
 - [Protenix](https://github.com/bytedance/Protenix/tree/main)  
 - [e2cnn](https://github.com/QUVA-Lab/e2cnn)  
 
-### License
+## License
 AFM-Fold is released under the **MIT License**.  
 See the [LICENSE](LICENSE) file for more details.
 
-### Contact Us
+## Contact Us
 If you have any questions, issues, or suggestions, please:  
 - Open an issue on GitHub, or  
 - Contact us directly via email: [kawai.t.778@ms.saitama-u.ac.jp](mailto:kawai.t.778@ms.saitama-u.ac.jp), [ymatsunaga@mail.saitama-u.ac.jp](mailto:ymatsunaga@mail.saitama-u.ac.jp)
