@@ -106,35 +106,13 @@ Conversely, if the reference images are low-noise, highly reliable predictions a
 \subsection{\flhac}
 \label{subsec:flhac_results}
 
-FlhA is the largest subunit of the flagellar protein export apparatus, and its C-terminal cytoplasmic domain, \flhac, is thought to assist secretion by facilitating the binding of soluble proteins to the transporter, thereby promoting their export.
-Structurally, \flhac comprises four domains (\acdi, \acdii, \acdiii, and \acdiv) and a linker to the transmembrane domain (FlhA\textsubscript{TM}).
+FlhA is a key component of the flagellar protein export system, and its C-terminal domain, \flhac, helps transport proteins by assisting their binding to the exporter.
+Structurally, \flhac comprises four domains (\acdi, \acdii, \acdiii, and \acdiv) and a linker to the transmembrane domain (FlhA\textsubscript{TM}). See \cref{fig:flhac_statistic}~(a) for details.
 Previous studies using X-ray crystallography and mutational analysis indicate that hinge motions among these domains influence transport activity and motility \cite{saijo-hamano2010flha}.
 
 \paragraph{Preprocessing}
 We selected \acdi--\acdiv and \acdii--\acdiii as inter-domain distance features.
 The candidate conformations and their MolProbity scores are shown in \cref{fig:flhac_selection}.
-
-\paragraph{Comparison with Rigid-Body Fitting}
-To evaluate the applicability of \Model to real AFM data, we selected three snapshots from HS-AFM movies of the \flhac monomer and predicted a conformation from each.
-The frames consisted of one image resembling an open state, one resembling a closed state, and one distinct from both.
-For each image, we predicted the conformation and reproduced AFM images by rigid-body fitting of the predicted conformation (see \cref{subsubsec:afm-evaluation}).
-For comparison, rigid-body fitting was also performed using X-ray crystal structures obtained from the PDB.
-
-\Cref{fig:flhac_results}~(a) shows the selected reference images (upper: open-like; middle: closed-like; lower: distinct).
-\Cref{fig:flhac_results}~(b) shows the AFM images reproduced by rigid-body fitting (for each, top: \Model predictions; bottom: crystal structures).
-In \cref{fig:flhac_results}~(c), the correlation coefficients (c.c.) across rotations are plotted.
-
-For both the \Model predictions (\cref{fig:flhac_results}~(c), top) and the crystal structures (\cref{fig:flhac_results}~(c), bottom), the optimal pose obtained by rigid-body fitting (star symbol) generally captured the global maximum of c.c.
-Furthermore, \cref{fig:flhac_results}~(d) presents histograms of c.c. over uniformly sampled $\mathrm{SO}(3)$ rotations.
-In all cases, results using the conformations that \Model predicted (\cref{fig:flhac_results}~(d), top) show higher c.c. with the reference images than those using the crystal structures (\cref{fig:flhac_results}~(d), bottom).
-
-Of particular note is the result for the final reference image (lower).
-The reference image (\cref{fig:flhac_results}~(a), lower) exhibits a highly elongated shape, suggesting that conformations in which the four domains are aligned in a parallel would yield high correlations.
-However, \Model did not produce such an extremely open conformation.
-This limitation arises because the CNN performs interpolation but not extrapolation: the CNN's prediction is constrained by the candidate conformations, and it cannot output conformations far beyond them.
-%Since we did not find extremely open and stable conformations during candidate generation, \Model did not predict such conformations.
-
-To mitigate this issue, two approaches may be possible: (i) explore a broader range of candidate conformations and generate training data with weights according to thermodynamic stability; or (ii) replace \AFiii as the base model with an ensemble generative model that has a broader prior distribution.
 
 \begin{figure}[htbp]
     \centering
@@ -154,3 +132,74 @@ To mitigate this issue, two approaches may be possible: (i) explore a broader ra
     }
     \label{fig:flhac_results}
 \end{figure}
+
+\paragraph{Predictions from real AFM images}
+To evaluate the applicability of \Model to real AFM data, we selected three snapshots from HS-AFM movies of the \flhac monomer and predicted a conformation for each.
+The first two frames (upper and middle panels in \cref{fig:flhac_results}~(a)) were visually chosen because their overall size and shape resembled the X-ray crystal structures obtained from the PDB.
+The final frame (lower panel in \cref{fig:flhac_results}~(a)) was selected because it appeared to have a considerably larger size than the crystal structure.
+
+For each image, we predicted the conformation and searched for the pose that achieved the highest c.c. through rigid-body fitting.
+For comparison, rigid-body fitting was also performed using crystal structures (in each case, the top row in (b,c,d) corresponds to \Model predictions, and the bottom row to the crystal structures).
+
+For all cases, the rigid-body fitting was run with sufficiently long searches to ensure convergence.
+\Cref{fig:flhac_results}~(c) shows all c.c. values sampled during the fitting process, demonstrating that the rotational space was thoroughly explored and that the global maximum was likely identified.
+
+As a result, \Model reproduced every reference image more accurately than crystal structures.
+\Cref{fig:flhac_results}~(d) shows histograms of the c.c. values sampled during rigid-body fitting.
+Looking at the highest c.c. in each case (denoted as “Max” in the figure), we found that the best c.c. values were consistently higher for \Model's prediction than for the crystal structures.
+The pseudo-AFM images corresponding to these maxima are shown in \cref{fig:flhac_results}~(b).
+
+%Interestingly, there were no obvious shape differences visible to the human eye between the pseudo-AFM images generated from \Model predictions and the crystal structure.
+%Indeed, when visually comparing the upper and lower results in \cref{fig:flhac_results}~(b), it is difficult for human eyes to judge which is better, yet \Model successfully distinguishes subtle image features to predict the correct conformation.
+
+Interestingly, we found that \Model tends not to fit the images too tightly, maintaining a reasonable level of generalization.
+A particularly notable case is the final image.
+For this elongated structure, \cite{Niina2020} reported an extended structure, including partial unfolding.
+In contrast, \Model predicted a conformation that remains relatively close to the native structure, involving only minor structural changes.
+This difference can be attributed to the exclusion of physically unrealistic conformations during the preparation of CNN training data, 
+suggesting that \Model tends to generate predictions within a physically reasonable conformational space.
+
+\clearpage
+
+\paragraph{Statistical assessment}
+To further observe the statistical performance of \Model, we carried out conformation predictions using many experimental AFM images.
+Although images with obvious noise were excluded from the analysis, 
+in total, conformations were predicted for 160 AFM frames, most of which were consecutive snapshots (corresponging to about 13 seconds).
+
+For each reference image, we performed rigid-body fitting in the same way as described above, using both the predicted conformations and the crystal structures for comparison.
+\Cref{fig:flhac_statistic}~(b) summarizes the results of these fittings.
+\Model reproduced almost all reference images more accurately than the crystal structures.
+
+In \cref{fig:flhac_statistic}~(b), the color of each point indicates the distance between \acdii and \acdiv of the \Model's predictions.
+Smaller distances correspond to closed conformations, while larger distances correspond to open conformations (see \cref{fig:flhac_statistic}~(a)).
+Interestingly, the c.c. values do not show a clear dependence on this distance.
+This means that \Model can flexibly predict either open or closed states depending on the input image, while still achieving high agreement with the AFM data.
+
+Also, it is interesting to note that, the inter-domain distance in the crystal structure is 3.71 nm.
+Even when the predicted conformations had similar distances, \Model still produced higher c.c. values with the experimental images.
+This suggests that \Model adjusts additional degrees of freedom beyond the \acdii–\acdiv motion to better match the observed images.
+In the current setup, the CNN predicts two CVs: the distances between \acdi–\acdiv and between \acdii–\acdiii.
+%These results imply that increasing the number of CVs predicted by the CNN could further improve structural accuracy.
+
+\Cref{fig:flhac_statistic}~(c) shows the distribution of the \acdii–\acdiv distances predicted by \Model.
+The gray dashed line marks the corresponding distance in the crystal structure.
+Compared with distributions sampled in previous studies, this predicted distribution is slightly broader, covering both open and closed conformations.
+
+Even though the distribution is not thermodynamically reliable, it is important that the distribution still spans the relevant conformational space.
+This indicates that reweighting the ensemble with an appropriate potential could help filter out unreliable predictions.
+Ideally, conformational prediction itself should be drived by equilibrium distribution, 
+allowing conformations to be generated according to their stability.
+We leave this for future work and will discuss it further in the \cref{sec:discussion}.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=1.0\linewidth]{images/figures-09.png}
+    \caption{
+        \textbf{Statistical results for \flhac}.
+        \textbf{(a)} Crystal structure of \flhac (PDB ID: 3A5I). The four domains are colored as follows: dark blue, linker; sky blue, \acdi; green, \acdii; yellow, \acdiii; and orange, \acdiv.
+        \textbf{(b)} Comparison of cross-correlation (c.c.) values between \Model predictions and the crystal structure for various reference images. The color represents the distance between \acdii and \acdiv.
+        \textbf{(c)} Distribution of the \acdii–\acdiv distances suggested by the structures predicted by \Model. The distribution was obtained from dynamics corresponding to approximately 13 seconds of observation.
+    }
+    \label{fig:flhac_statistic}
+\end{figure}
+
