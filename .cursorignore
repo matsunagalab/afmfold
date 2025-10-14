@@ -1,0 +1,16 @@
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+main.run.xml
+*.dcd
+*.pdb
+*.dat
+*.npy
+*.gif
+*.jpg
+*.jpeg
+*.pdf
+*.bst
+*.eps
