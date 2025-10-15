@@ -7,18 +7,18 @@
 \setcounter{algorithm}{0}
 \renewcommand{\thealgorithm}{S\arabic{algorithm}}
 
-\section{Guidance scheduling}
+\section{Steering scheduling}
 \label{app:guidance_sch}
 
-We study how the guidance schedule $\eta_t$ in \cref{eq:af3-guided} influences guided \AFiii structure generation.
-Here, we index the reverse process by the reverse-time $\hat{t} = 1 - t \in [0,1]$, which runs from $0$ (start) to $1$ (end),
+We investigated how the steering schedule $\eta_t$ in \Cref{eq:af3-guided} affects the steering of \AFiii structure generation. 
+Here, we represent the reverse process by the reverse-time $\hat{t} = 1 - t \in [0,1]$, which runs from $0$ (start) to $1$ (end),
 
 \begin{equation}
     d\hat{X}_{\hat{t}} = 
     \Bigl(
         \tfrac{1}{2}\hat{X}_{\hat{t}} + 
         \nabla_{\hat{X}_{\hat{t}}}\log \hat{p}_{\hat{t}}(\hat{X}_{\hat{t}}) + 
-        \hat{\eta}_{\hat{t}} \nabla_{\hat{X}_{\hat{t}}}\log \hat{p}_{\hat{t}}(\phi_{\text{object}} | \hat{X}_{\hat{t}})
+        \hat{\eta}_{\hat{t}} \nabla_{\hat{X}_{\hat{t}}}\log \hat{p}_{\hat{t}}(\phi_{\text{target}} | \hat{X}_{\hat{t}})
     \Bigr)
     \beta_{1 - \hat{t}} \; d\hat{t} + 
     \sqrt{\beta_{1-\hat{t}}} \; d\widetilde{W}_{\hat{t}},
@@ -26,30 +26,31 @@ Here, we index the reverse process by the reverse-time $\hat{t} = 1 - t \in [0,1
 \end{equation}
 where $\hat{p}_{\hat{t}} = p_{1-\hat{t}}$, $\hat{\eta}_{\hat{t}} = \eta_{1 - \hat{t}}$ and $\widetilde{W}_{\hat{t}}$ denotes a standard Brownian motion in the forward direction of $\hat{t}$: $\widetilde{W}_{\hat{t}} = \bar{W}_1 - \bar{W}_{\,1-\hat{t}}$. 
 
-Intuitively, the guidance strength $\hat{\eta}_{\hat{t}}$ controls how strongly the generation is pulled toward the target feature $\phi_{\text{object}}$.  
+Intuitively, the guidance strength $\hat{\eta}_{\hat{t}}$ controls how strongly the generation is pulled toward the target feature $\phi_{\text{target}}$.  
 In terms of the isotropic Gaussian model
-$p_t \big( \phi_{\text{object}} | X_t, a \big) \propto\; 
+$p_t \big( \phi_{\text{target}} | X_t, a \big) \propto\; 
 \exp \big(-\tfrac{1}{2\sigma_t^2}\|\phi(X_t)-\phi_{\text{object}}\|_2^2\big)$,
 $\hat{\eta}_{\hat{t}}$ effectively determines the variance $\sigma_t^2$: larger values correspond to narrower distributions and thus stronger enforcement.  
 
 Prior work commonly used simple schedules—--e.g., a constant value \cite{maddipatla2025inverse} or a mid-trajectory sigmoid \cite{raghu2025multiscale}—--
 but, to our knowledge, there has not been a systematic quantification of how these choices affect generated structures.
-Here, our goal is to quantify, across different guidance schedules, the trade-off between the effectiveness of the guidance
-and the physical plausibility of the generated structures, and to propose an optimal scheduling strategy.
+Here, across different steering schedules, we evaluated the trade-off 
+between the accuracy of following the target CV values and the physical plausibility of the generated structures, 
+and found an optimal steering parameter set.
 
-\subsection{Experimental settings}
-\label{app:guidance_exp}
+%\subsection{Experimental settings}
+%\label{app:guidance_exp}
 
-\paragraph{Schedule family and design of the sweep.}
-We consider candidate guidance schedules $\hat{\eta}_{\hat{t}}$ from the sigmoidal family defined in \cref{eq:sigmoid}.
-Specifically, we vary two hyperparameters that determine \emph{when} guidance turns on ($\hat{t}_{\text{start}}$) and \emph{how strong} it becomes at the end ($y_{\text{max}}$).
+\paragraph{Steering family and design of the sweep.}
+We defined steering schedules $\hat{\eta}_{\hat{t}}$ from the sigmoidal family defined in \cref{eq:sigmoid}.
+Specifically, we vary two hyperparameters that determine \emph{when} steering turns on ($\hat{t}_{\text{start}}$) and \emph{how strong} it becomes at the end ($y_{\text{max}}$).
 For the two hyperparameters, we select five candidate values each: 
 $\hat{t}_{\text{start}}$ is chosen at evenly spaced points in $[0.4,0.9]$, 
 and $y_{\text{max}}$ is chosen at evenly spaced points in $[0.6,1.6]$. 
-By evaluating all combinations of these choices, we obtain $5\times 5 = 25$ distinct schedule settings in total. 
-For each setting we generate five independent samples and report the mean values of the evaluation metrics.
+By evaluating all combinations of these choices, we obtained $5\times 5 = 25$ distinct schedule settings in total. 
+For each setting we generated five independent conformations and computed the averages of evaluation metrics of them. 
 
-\paragraph{System and targets.}
+\paragraph{Systems and collective variables}
 Here, we describe the choice of protein system and the collective variables (CVs) on which restraints are applied.  
 The way restraints are imposed can in principle depend on factors such as protein size or the specific CVs chosen, 
 but our goal is to provide a concrete reference point that can serve as a guideline when users consider how to set the guidance strength.  
@@ -84,8 +85,8 @@ We then specify two target distance vectors $\phi_{\text{object}}$:
     \end{split}
 \end{equation}
 
-\subsection{Results}
-\label{app:guidance_results}
+%\subsection{Results}
+%\label{app:guidance_results}
 
 Across both the in-distribution and out-of-distribution targets, three clear patterns emerge.  
 
