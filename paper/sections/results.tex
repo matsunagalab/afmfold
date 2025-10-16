@@ -29,7 +29,7 @@ We then evaluated the RSMDs of the conformations estimated from the pseudo-AFM e
     \centering
     \includegraphics[width=0.7\linewidth]{images/figures-02.png}
     \caption{
-        \textbf{Training data and accuracy of the group-invariant CNN and \AFiii steering}.
+        \textbf{Training data and estimation accuracy of \Model}.
         \textbf{(a)} Projection of a 450 ns MD simulation trajectory into the inter-domain distance space. 
         \textbf{(b)} Projection of \AFiii-generated training data into the inter-domain distance space. 
         \textbf{(c)} Density of root squared error in the inter-domain distance space between the trained g-CNN's estimations and the ground-truth. The inter-domain distance was estimated by the trained g-CNNfrom pseudo-AFM images, which were generated from randomly selected MD conformations. The average of the root squared errors is indicated by the broken line (0.254 nm). 
@@ -98,16 +98,17 @@ The candidate conformations and their MolProbity scores are shown in \Cref{fig:f
     \includegraphics[width=0.9\linewidth]{images/figures-04.png}
     \caption{
         \textbf{Results for \flhac}.
-        \textbf{(a)} Reference AFM images selected from real experimental data. 
-        \textbf{(b)} Results of rigid-body fitting. 
-        For each reference image, we reconstructed 3D conformations and database structures, applied rigid-body fitting, and plotted the resulting optimal poses along with their corresponding pseudo-AFM images. 
-        For each row, the top figures show the results for \Model’s predictions, and the bottom figures show the results for the database structures. 
-        \textbf{(c)} Visualization of the rigid-body fitting process. 
-        For all sampled SO(3) rotations, the corresponding correlation coefficients (c.c.) are color-mapped: blue indicates lower c.c. (worse fits), while red indicates higher c.c. (better fits). 
-        The star denotes the optimal pose. 
-        \textbf{(d)} Histogram of c.c. values. 
-        We uniformly sampled SO(3) rotations and computed the c.c. for each case. 
-        The histogram shows the resulting distribution, and the top-right annotation reports both the maximum c.c. (i.e., at the optimal pose) and the mean c.c. value.
+        \textbf{(a)} Crystal structure of \flhac (PDB ID: 3A5I). The four domains are colored as follows: dark blue, linker; sky blue, \acdi; green, \acdii; yellow, \acdiii; and orange, \acdiv.
+        \textbf{(b)} Comparison of c.c. values between \Model estimations and the crystal structure for various reference images. The color represents the distance between \acdii and \acdiv.
+        \textbf{(c)} Distribution of the \acdii–\acdiv distances suggested by the structures estimated by \Model (plotted in blue). 
+        The distribution was obtained from dynamics corresponding to approximately 13 seconds of observation.
+        In addition, for comparison, the distribution of the \acdii–\acdiv distances extracted from a 140 ns MD simulation is plotted in red. 
+        The structures estimated by \Model cover this distribution.
+        \textbf{(d,g,j)} Reference AFM images selected from real experimental data. 
+        \textbf{(e,h,k)} Crystal structures superposed onto the pseudo-AFM images generated from them.
+        The pose of them were optimized to have the highest correlation values with the experimental AFM images through rigid-body fitting.
+        \textbf{(f,i,l)} Estimated structures by \Model, superposed onto the pseudo-AFM images generated from them. 
+        The pose of them were optimized to have the highest correlation values with the experimental AFM images through rigid-body fitting.
     }
     \label{fig:flhac_results}
 \end{figure}
@@ -169,16 +170,4 @@ This indicates that reweighting the ensemble with an appropriate potential could
 Ideally, conformational prediction itself should be drived by equilibrium distribution, 
 allowing conformations to be generated according to their stability.
 We leave this for future work and will discuss it further in the \cref{sec:discussion}.
-
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=1.0\linewidth]{images/figures-05.png}
-    \caption{
-        \textbf{Statistical results for \flhac}.
-        \textbf{(a)} Crystal structure of \flhac (PDB ID: 3A5I). The four domains are colored as follows: dark blue, linker; sky blue, \acdi; green, \acdii; yellow, \acdiii; and orange, \acdiv.
-        \textbf{(b)} Comparison of cross-correlation (c.c.) values between \Model predictions and the crystal structure for various reference images. The color represents the distance between \acdii and \acdiv.
-        \textbf{(c)} Distribution of the \acdii–\acdiv distances suggested by the structures predicted by \Model. The distribution was obtained from dynamics corresponding to approximately 13 seconds of observation.
-    }
-    \label{fig:flhac_statistic}
-\end{figure}
 
