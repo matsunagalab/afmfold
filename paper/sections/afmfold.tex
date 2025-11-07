@@ -47,9 +47,9 @@ The candidate conformation set generated in the previous step may contain geomet
 \hline
 Criterion & Threshold \\
 \hline
-MolProbity Score & $\leq 10.0$ \\
-Clash Score & $\leq 13.0$ \\
-Ramachandran favored (\%) & $\geq 90.0$ \\
+MolProbity Score & $\leq 4.0$ \\
+Clash Score & $\leq 70.0$ \\
+Ramachandran favored (\%) & $\geq 96.0$ \\
 Rotamer Outlier (\%) & $\leq 50.0$ \\
 \hline
 \end{tabular}
@@ -57,7 +57,7 @@ Rotamer Outlier (\%) & $\leq 50.0$ \\
 
 \paragraph{Pseudo-AFM image rendering.}
 
-In rendering the pseudo-AFM, we used the morphology functions implemented in our previous work \cite{matsunaga2023endtoend}. This function was chosen owing to its torch-based implementation, which facilitates automatic differentiation in the \AFiii steering process. In the rendering process, first, each conformation is randomly rotated and translated such that its minimum $z$-coordinate (orthogonal to the surface stage) is set to $0$ nm (corresponding to the stage height). Then, a morphological dilation is performed by a virtual AFM probe. The specific parameter settings are summarized in \Cref{tab:afm_settings}. It should be noted that for the test case of Adenylate kinase (\AK), we used smaller values for the tip radius and lateral resolution of pseudo-AFM images compared to typical experimental conditions. This choice was made because while \AK is well-studied for structural changes and thus convenient for validation of structure reconstruction, its small molecular size would make conformational differences invisible in AFM images if realistic experimental parameters were used. In the analysis of real AFM images (\flhac), since the precise tip geometry is unknown in experiments, the probe radius $r$ and the apex angle $a$ are sampled uniformly within predefined ranges to make the estimation with g-CNN robust for tip geometry variability. Moreover, the function \verb|skimage.exposure.match_histograms| was applied to calibrate the height-distribution of pseudo-AFM images to that of the experimental frames. For both \AK and \flhac, we used the inter-domain distances (distances between the centers of masses of the domains) as the CVs.
+In rendering the pseudo-AFM, we used the morphology functions implemented in our previous work \cite{matsunaga2023endtoend}. The specific parameter settings are summarized in \Cref{tab:afm_settings}. It should be noted that for the test case of Adenylate kinase (\AK), we used smaller values for the tip radius and fine resolution of pseudo-AFM images compared to typical experimental conditions. On the other hand, for \flhac, since the precise tip geometry is unknown in experiments, the probe radius $r$ was sampled uniformly within a range. Moreover, the height-distribution of pseudo-AFM images was fitted to the real exmerimental images using \verb|skimage.exposure.match_histograms|. For both \AK and \flhac, we used the inter-domain distances (distances between the centers of masses of CA atoms in the domains) as the CVs.
 
 \begin{table}[htbp]
 \centering
@@ -69,14 +69,13 @@ In rendering the pseudo-AFM, we used the morphology functions implemented in our
 \hline
 Lateral resolution [nm/pixel] & 0.3 & 0.98 \\
 Pixel size [pixel $\times$ pixel] & $35 \times 35$ & $35 \times 35$ \\
-Tip radius [nm] & $r \sim \mathrm{Uniform}(1,2)$ & $r \sim \mathrm{Uniform}(2,6)$ \\
+Tip radius [nm] & $r \sim \mathrm{Uniform}(0.3,0.6)$ & $r \sim \mathrm{Uniform}(2.0,6.0)$ \\
 Tip apex angle [degree] & $a \sim \mathrm{Uniform}(10,30)$ & $a \sim \mathrm{Uniform}(10,30)$ \\
-Noise std. dev. [nm] & 0.0 & 0.5 \\
 Histogram matching & --- & \checkmark \\
 Dataset size [frames] & 5M & 5M \\
 Collective variables & Inter-domain distances & Inter-domain distances \\
-                     & (LID--CORE, CORE--AMPbd, & (\acdi--\acdiv, \acdii--\acdiii) \\
-                     & AMPbd--LID)  &   \\
+                     & (LID-CORE, CORE-AMPbd, & (\acdi-\acdiv, \acdii-\acdiii, \\
+                     & AMPbd-LID)  & \acdii-acdiv)  \\
 \hline
 \end{tabular}
 \end{table}
@@ -91,7 +90,7 @@ Here, the training of the g-CNN can be regarded as supervised regression, where 
 \end{equation}
 where $I_i$ denotes the $i$-th input pseudo-AFM image, $\phi_{\text{pred}}(I_i)$ is the CV values by the g-CNN, and $\phi_{\text{true}}(I_i)$ is the corresponding ground-truth CV values. As the g-CNN architecture, we implemented a $(\mathbb{R}^2, +) \rtimes C_8$-invariant CNN (see SI for the detailed implementation).
 
-All models in this paper were trained on a single node equipped with a NVIDIA RTX A6000 GPU (48~GB memory). The training took approximately 5 hours for the \AK dataset, whereas it required about 64 hours for \flhac. The loss convergence for \flhac took significantly longer. Our empirical observation suggests that the training time tends to depend on the range of the tip radius and the noise level.
+All models in this paper were trained on a single node equipped with a NVIDIA RTX A6000 GPU (48~GB memory). The training took approximately 2-3 days for both the \AK and \flhac. 
 
 \subsubsection{Inference}
 \label{subsubsec:afm-inference}
@@ -111,8 +110,8 @@ Computation time for the inference step was extremely short, compared to the fle
 \label{subsubsec:afm-evaluation}
 
 To evaluate the accuracy of the estimated conformation, we computed the Root Mean Square Deviation (RMSD) between the estimated conformation and the ground-truth conformation. 
-Also, to evaluate how well the estimated conformation reproduces the reference image, we performed a rigid-body fitting, comprising 60{,}000 random uniformly sampled rotations from $\mathrm{SO}(3)$. For each rotation $R \in \mathrm{SO}(3)$, we (i) rotated the structure by $R$, (ii) aligned its $xy$ coordinates to the image centroid, and (iii) translated it in both $x$ and $y$ over $[-5,5]$ nm with 0.5 nm increments.
-At each translated pose, we generated a pseudo-AFM image and computed its the correlation coefficient (c.c.) with the reference image, using \Cref{eq:cc}. For each rotation, we recorded the pose with the maximum c.c. over translations. Finally, the pose achieving the overall maximum c.c. across all rotations and translations was taken as the optimal pose. 
+Also, to evaluate how well the estimated conformation reproduces the reference image, we performed a rigid-body fitting, optimizing 3D rotation, translation and tip radius.
+The optimization is evaluated through correlation coefficient (c.c.) with the reference image, using \Cref{eq:cc}, i.e. the pose achieving the overall maximum c.c. across all rotations, translations and tip radii was taken as the optimal pose. 
 \begin{equation}
     \mathrm{c.c.}(R)=
     \frac{\sum_{p \in \text{pixels}} H^{\text{(exp)}}_p H^{\text{(sim)}}_p(R)}
