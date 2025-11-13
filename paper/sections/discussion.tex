@@ -1,24 +1,24 @@
 \section{Discussion and Conclusions}
 
 In this work, we have proposed a computational protocol, \Model, to predict the 3D conformation of biomolecules from AFM images. 
-\Model enables rapid and accurate conformation estimation compared to previous approaches. 
-It has the potential to advance the understanding of biochemical reactions and serve as a powerful tool 
-for exploring biological phenomena in both structural and dynamic aspects.
-
-\paragraph{Merits}
-% Candidates: Advantages, Merits, Benefits
+\Model enables rapid and accurate conformation estimation compared to previous approaches.
 \Model extracts features from AFM images with a group-invariant (symmetry-aware) CNN, reducing computational cost in two ways.
 First, it reduces the amount of required training data, because symmetry-aware representations learn efficiently from limited images \cite{e2cnn}.
 Second, it shortens inference time: guiding \AFiii requires computing $\ptc{\phi_{\text{object}}}{X_t}$; replacing this with $\mathcal{L}_{\text{MSE}}(X_t)$ keeps the computational cost per structure low.
-In our tests, per-structure inference finished within one minute on a single GPU.
+In the estimations of this study, per-frame estimation finished within one minute on a single GPU.
+It has the potential to serve as a powerful tool for interpreting HS-AFM movies comprised of hundreds of frames in both structural and dynamic aspects.
 
-Across our evaluations, \Model delivered competitive prediction accuracy at low computational cost.
-Therefore, \Model can help deepen understanding of biological processes---for example, by quantifying large-scale domain rearrangements along putative pathways and by prioritizing follow-up measurements in single-molecule studies.
+%\paragraph{Merits}
+% Candidates: Advantages, Merits, Benefits
 
+%Across our evaluations, \Model delivered competitive prediction accuracy at low computational cost.
+%Therefore, \Model can help deepen understanding of biological processes---for example, by quantifying large-scale domain rearrangements along putative pathways and by prioritizing follow-up measurements in single-molecule studies.
+
+As a limitation of \Model, it requires the CVs to be estimated from the AFM image, which is a pre-processing step.
 The \Model framework can be readily extended by altering the physical observables it incorporates.
 While we used inter-domain distances here, it can incorporate residue-level distance restraints, enabling AFM-guided reconstructions that capture finer-grained motions without a disproportionate increase in runtime.
 
-\paragraph{Limitations \& Future Work}
+%\paragraph{Limitations \& Future Work}
 % Candidates: Weaknesses, Constraints, Challenges
 \Model infers conformations from a single AFM image and currently does not quantify predictive uncertainty due to image noise or molecular orientation.
 Extending the framework to estimate uncertainty would make the predictions easier to interpret \cite{Kendall2017Uncertainty}.
@@ -34,6 +34,6 @@ text here
 
 \section{Acknowledgements}
 \label{sec:acknowledgements}
-We appreciate Professor Tohru Minamino (The University of Osaka) and Professor Noriyuki Kodera (Kanazawa University) for kindly providing the experimental AFM image data used in this work. 
+We appreciate Professor Tohru Minamino (The University of Osaka) and Professor Noriyuki Kodera (Kanazawa University) for kindly providing the experimental AFM image data used in this work. This work was supported by MEXT as "Program for Promoting Researches on the Supercomputer Fugaku" (Development and application of large-scale simulation-based inferences for biomolecules JPMXP1020230119) and used computational resources of supercomputer Fugaku provided by the RIKEN Center for Computational Science (Project IDs: hp230209 hp240215, hp250233). 
 
 
