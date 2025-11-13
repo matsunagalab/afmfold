@@ -29,17 +29,15 @@ pip install -e .[e2cnn]
 ### Reproducing the Paper Results
 The basic usage is demonstrated in [`notebooks/example.ipynb`](notebooks/example.ipynb). This notebook demonstrates the reproduction of the main results from the paper:
 
-- (A) Conditional structure generation (Fig. 1)
-- (B) Evaluation of estimation error using MD data (Fig. 2-3)
-- (C) Noise robustness (Fig. 3)
-- (D) Comparison with rigid-body fitting (Fig. 4) 
+- (A) Conditional structure generation
+- (B) Evaluation of estimation error using MD data
+- (C) Noise robustness
+- (D) Comparison with rigid-body fitting
+- (E) Guidance scheduling
+- (F) Overviewing training data
 
 ### Training & Inference
-The procedures for training and inference are described in detail in [`scripts/SCRIPTS.md`](scripts/SCRIPTS.md). 
-By following these, you can also reproduce **Fig. 2** of the paper: 
-1. Prepare training datasets with different noise levels and train a CNN model on each of them.  
-2. Generate pseudo-AFM images from the MD trajectory with diverse noise levels.  
-3. Perform inference for all combinations of (1) and (2), and evaluate the results using the evaluation functions explained in [`notebooks/example.ipynb`](notebooks/example.ipynb).
+The procedures for training, inference and rigid-body fitting are described in detail in [`scripts/SCRIPTS.md`](scripts/SCRIPTS.md). 
 
 ## Citation information
 If you use AFM-Fold in your work, please cite as follows:
@@ -53,12 +51,12 @@ If you use AFM-Fold in your work, please cite as follows:
   volume  = {xx},
   number  = {yy},
   pages   = {zz-zz},
-  doi     = {10.0000/xxxx}
+  doi     = {https://doi.org/10.5281/zenodo.17597490}
 }
 ```
 
 ## Acknowledgements
-AFM-Fold relies heavily on the implementation of:  
+AFM-Fold relies heavily on the implementation of:
 - [Protenix](https://github.com/bytedance/Protenix/tree/main)  
 - [e2cnn](https://github.com/QUVA-Lab/e2cnn)  
 
