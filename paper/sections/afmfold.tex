@@ -7,7 +7,7 @@
 
 %In this section, we introduce the concrete procedure of \Model, with a particular focus on the CNN training strategy, which plays a critical role in determining the overall accuracy of the method.
 
-Our \Model framework consists of two main steps as described in the previous subsections: (i) estimation of CVs from AFM images using g-CNN, and (ii) steering the generative process of \AFiii using the estimated CVs. However, additional steps are required for preparing training data for the CNN, training, inference, and evaluation. In this subsection, we describe these steps.
+Our \Model framework consists of two main steps as described in the previous subsections: (i) estimation of CVs from AFM images using g-CNN, and (ii) navigating the generative process of \AFiii using the estimated CVs. However, additional steps are required for preparing training data for the CNN, training, inference, and evaluation. In this subsection, we describe these steps.
 
 \subsubsection{Preparation of training data}
 \label{subsubsec:afm-prep}
@@ -26,7 +26,7 @@ Then, target CV vectors $\{\phi_{\text{perturb}}^{\,i}\}$ are placed on a grid a
     \phi_{\text{perturb},d}^i \in \left[ 0, S \times \phi^i(X_{\text{ref}}) \right], \qquad \forall i,
     \label{eq:target_domain_distance}
 \end{equation}
-where $S$ is the scale factor to specify the range of the CV values. In this study, $S=4.0$ was applied for the inter-domain distances used as the CVs. The grid used a step of $0.6~\mathrm{nm}$ for each axis. Then, the generation with \AFiii is conducted using each $\{\phi_{\text{perturb}}^{\,i}\}$ as the restraints for the steering process.
+where $S$ is the scale factor to specify the range of the CV values. In this study, $S=4.0$ was applied for the inter-domain distances used as the CVs. The grid used a step of $0.6~\mathrm{nm}$ for each axis. Then, the generation with \AFiii is conducted using each $\{\phi_{\text{perturb}}^{\,i}\}$ as the restraints for the navigating process.
 
 %\paragraph{Early rejection criteria and stopping strategy}
 %In the generation step just before, although candidate conformations can span a wide range of $\phi$-space, the number of grid points grows rapidly with the dimensionality (i.e., the number of chosen domain pairs). 
@@ -98,7 +98,7 @@ All models in this paper were trained on a single node equipped with a NVIDIA RT
 
 %An important aspect in reconstructing conformations from AFM images is that the data are inherently time series. By analyzing AFM images as a temporal sequence, one can visualize domain fluctuations and morphing pathways of proteins. This perspective allows them to be interpreted as parts of continuous transitions, and provides the opportunity to establish connections with theoretical frameworks such as molecular simulations or Markov state models. Accordingly, computational efficiency that enables the rapid processing of multiple frames is essential.
 
-Inference step consists of the estimation of CVs from the AFM image by the g-CNN, and the steering of the generative process of \AFiii using the estimated CVs. In this study, we require that the generated structures to achieve the MSE of the g-CNN's below 3~nm, important resolution for distinguishing different conformations for both \AK and \flhac. As will be shown in \Cref{sec:results}, this requirement was met for both systems. 
+Inference step consists of the estimation of CVs from the AFM image by the g-CNN, and the navigating of the generative process of \AFiii using the estimated CVs. In this study, we require that the generated structures to achieve the MSE of the g-CNN's below 3~nm, important resolution for distinguishing different conformations for both \AK and \flhac. As will be shown in \Cref{sec:results}, this requirement was met for both systems. 
 
 Computation time for the inference step was extremely short, compared to the flexible fitting calculations using MD simulations. Indeed, inference time was less than one minuite for both \AK and \flhac.
 

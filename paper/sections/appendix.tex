@@ -7,10 +7,10 @@
 \setcounter{algorithm}{0}
 \renewcommand{\thealgorithm}{S\arabic{algorithm}}
 
-\section{Steering scheduling}
+\section{Navigating scheduling}
 \label{app:guidance_sch}
 
-We investigated how the steering schedule $\eta_t$ in \Cref{eq:af3-guided} affects the steering of \AFiii structure generation. 
+We investigated how the navigating schedule $\eta_t$ in \Cref{eq:af3-guided} affects the navigating of \AFiii structure generation. 
 Here, we represent the reverse process by the reverse-time $\hat{t} = 1 - t \in [0,1]$, which runs from $0$ (start) to $1$ (end),
 
 \begin{equation}
@@ -34,16 +34,16 @@ $\hat{\eta}_{\hat{t}}$ effectively determines the variance $\sigma_t^2$: larger 
 
 Prior work commonly used simple schedules—--e.g., a constant value \cite{maddipatla2025inverse} or a mid-trajectory sigmoid \cite{raghu2025multiscale}—--
 but, to our knowledge, there has not been a systematic quantification of how these choices affect generated structures.
-Here, across different steering schedules, we evaluated the trade-off 
+Here, across different navigating schedules, we evaluated the trade-off 
 between the accuracy of following the target CV values and the physical plausibility of the generated structures, 
-and found an optimal steering parameter set.
+and found an optimal navigating parameter set.
 
 %\subsection{Experimental settings}
 %\label{app:guidance_exp}
 
-\paragraph{Steering family and design of the sweep.}
-We defined steering schedules $\hat{\eta}_{\hat{t}}$ from the sigmoidal family defined in \cref{eq:sigmoid}.
-Specifically, we vary two hyperparameters that determine \emph{when} steering turns on ($\hat{t}_{\text{start}}$) and \emph{how strong} it becomes at the end ($y_{\text{max}}$).
+\paragraph{Navigating family and design of the sweep.}
+We defined navigating schedules $\hat{\eta}_{\hat{t}}$ from the sigmoidal family defined in \cref{eq:sigmoid}.
+Specifically, we vary two hyperparameters that determine \emph{when} navigating turns on ($\hat{t}_{\text{start}}$) and \emph{how strong} it becomes at the end ($y_{\text{max}}$).
 For the two hyperparameters, we select five candidate values each: 
 $\hat{t}_{\text{start}}$ is chosen at evenly spaced points in $[0.4,0.9]$, 
 and $y_{\text{max}}$ is chosen at evenly spaced points in $[0.6,1.6]$. 
@@ -118,7 +118,7 @@ Across both the in-distribution and out-of-distribution targets, three clear pat
         \textbf{(a), (g)} Average MolProbity scores. 
         \textbf{(b), (h)} Mean squared error (MSE). 
         \textbf{(c), (i)} The inter-domain distance of estimated conformations (25 points, each one represents average inter-domain distance of corresponding schedule setting), with point colors representing the MolProbity scores. 
-        The cross point means that of the crystal structures (PDBID: 4AKE (open) and 1AKE (close)), and circle point means that of the target (every estimated structures were generated steered towards this point).
+        The cross point means that of the crystal structures (PDBID: 4AKE (open) and 1AKE (close)), and circle point means that of the target (every estimated structures were generated navigated towards this point).
         \textbf{(d), (e), (f), (j), (k), (l)} Evaluation metrics obtained during MolProbity scoring: clash score, Ramachandran favored rate (\%), and rotamer outlier rate (\%).
         }
     \label{fig:guidance_scheduling_ak}
