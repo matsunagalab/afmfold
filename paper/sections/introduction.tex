@@ -33,13 +33,12 @@ This enables rapid reconstruction of structures from AFM images while reducing c
         \textbf{Schematic overview of \Model and outcome}. AFM-based guidance navigates \AFiii and reproduces the closed and open states of \AK.
         \textbf{(a)} Schematic diagram of \Model. 
         The AFM image, shown at the lower left, serves as the input and is processed as follows: 
-        (1) coordinates in the inter-domain distance space are predicted from the AFM image by a group-invariant CNN; 
-        (2) at diffusion time $t > 0.54$, the mean squared error (MSE) is computed between the predicted coordinates and the generated conformations; 
+        (1) coordinates in the inter-domain distance space are predicted from the AFM image by a group-invariant CNN 
+        (2) during the generative process, where the diffusion time $t$ progresses from 0 to 1, the mean squared error (MSE) between the predicted coordinates and the generated conformations is computed when $t > 0.54$; 
         (3) the gradient of the MSE is used as a correction score to guide the generative process of \AFiii. 
-        \textbf{(b)(c)} Results of structure prediction from pseudo-AFM images of \AK. 
-        In (c), the blue structures (left: close; right: open) represent the reference ground-truth conformations, which were used to generate the two reference images shown at the bottom of (b). 
-        Using these reference images, our method successfully predicted the red structures in (c). 
-        After aligning the predicted conformations to the reference conformations by rigid-body fitting, the resulting pseudo-AFM images are shown at the top of (b), demonstrating good agreement with the reference images.
+        \textbf{(b)(c)} Results of structure prediction from pseudo-AFM images of \AK.
+        In (b), the upper panels show the reference pseudo-AFM images generated from the conformations in the PDB database (close: 1AKE, open: 4AKE). The lower panels show the reproduced pseudo-AFM images generated from the structures estimated by \Model.
+        In (c), the blue structures (left: closed, right: open) represent the reference conformations, which were used to generate upper panels in (b). The red structures are the corresponding structures estimated by \Model.
         }
     \label{fig:overview}
 \end{figure}
