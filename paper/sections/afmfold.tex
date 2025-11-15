@@ -86,7 +86,7 @@ Collective variables & Inter-domain distances & Inter-domain distances \\
 
 Here, the training of the g-CNN can be regarded as supervised regression, where the task is to predict the CVs. As the most straightforward loss function for supervised regression, we adopted the mean squared error (MSE) loss in the CV space:
 \begin{equation}
-    \mathcal{L}_{\text{CNN}} = \mean_{i} \| \phi_{\text{pred}}(I_i) - \phi_{\text{true}}(I_i) \|^2,
+    \mathcal{L}_{\text{CNN}} = \mathrm{mean}_{i} \| \phi_{\text{pred}}(I_i) - \phi_{\text{true}}(I_i) \|^2,
     \label{eq:cnn-mse-loss}
 \end{equation}
 where $I_i$ denotes the $i$-th input pseudo-AFM image, $\phi_{\text{pred}}(I_i)$ is the CV values by the g-CNN, and $\phi_{\text{true}}(I_i)$ is the corresponding ground-truth CV values. As the g-CNN architecture, we implemented a $(\mathbb{R}^2, +) \rtimes C_8$-invariant CNN (see SI for the detailed implementation).
