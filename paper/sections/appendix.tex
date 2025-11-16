@@ -13,26 +13,13 @@
 \label{app:guidance_sch}
 
 We investigated how the navigating schedule $\eta_t$ in \Cref{eq:af3-guided} affects the navigating of \AFiii structure generation. 
-Here, we represent the reverse process by the reverse-time $\hat{t} = 1 - t \in [0,1]$, which runs from $0$ (start) to $1$ (end),
+The conditional generation process we used in this study is formulated as:
 
 \begin{equation}
-    d\hat{X}_{\hat{t}} = 
-    \Bigl(
-        \tfrac{1}{2}\hat{X}_{\hat{t}} + 
-        \nabla_{\hat{X}_{\hat{t}}}\log \hat{p}_{\hat{t}}(\hat{X}_{\hat{t}}) + 
-        \hat{\eta}_{\hat{t}} \nabla_{\hat{X}_{\hat{t}}}\log \hat{p}_{\hat{t}}(\phi_{\text{target}} | \hat{X}_{\hat{t}})
-    \Bigr)
-    \beta_{1 - \hat{t}} \; d\hat{t} + 
-    \sqrt{\beta_{1-\hat{t}}} \; d\widetilde{W}_{\hat{t}},
+    X_{t_{i+1}} = X_{t_i} - \eta (t_{i+1} - \hat{t}_i) \bigl( \nabla_{X_{t_i}} \log p_{t_i}(X_{t_i} | a) - \eta_{t_i} \nabla_{X_{t_i}} \mathcal{L}_{\text{MSE}}(X_{t_i}) \bigr) + \lambda \sqrt{\hat{t}_i^2 - t_i^2} \epsilon,
     \label{eq:af3-guided-hatt}
 \end{equation}
-where $\hat{p}_{\hat{t}} = p_{1-\hat{t}}$, $\hat{\eta}_{\hat{t}} = \eta_{1 - \hat{t}}$ and $\widetilde{W}_{\hat{t}}$ denotes a standard Brownian motion in the forward direction of $\hat{t}$: $\widetilde{W}_{\hat{t}} = \bar{W}_1 - \bar{W}_{\,1-\hat{t}}$. 
-
-Intuitively, the guidance strength $\hat{\eta}_{\hat{t}}$ controls how strongly the generation is pulled toward the target feature $\phi_{\text{target}}$.  
-In terms of the isotropic Gaussian model
-$p_t \big( \phi_{\text{target}} | X_t, a \big) \propto\; 
-\exp \big(-\tfrac{1}{2\sigma_t^2}\|\phi(X_t)-\phi_{\text{object}}\|_2^2\big)$,
-$\hat{\eta}_{\hat{t}}$ effectively determines the variance $\sigma_t^2$: larger values correspond to narrower distributions and thus stronger enforcement.  
+where $i$ propagates from $1$ to $N$ and $\eta_t$ dominates the strength of the navigation. 
 
 Prior work commonly used simple schedules—--e.g., a constant value \cite{maddipatla2025inverse} or a mid-trajectory sigmoid \cite{raghu2025multiscale}—--
 but, to our knowledge, there has not been a systematic quantification of how these choices affect generated structures.
@@ -44,30 +31,30 @@ and found an optimal navigating parameter set.
 %\label{app:guidance_exp}
 
 \paragraph{Navigating family and design of the sweep.}
-We defined navigating schedules $\hat{\eta}_{\hat{t}}$ from the sigmoidal family defined in \Cref{eq:sigmoid}.
-Specifically, we vary two hyperparameters that determine \emph{when} navigating turns on ($\hat{t}_{\text{start}}$) and \emph{how strong} it becomes at the end ($y_{\text{max}}$).
+We defined navigating schedules $\eta_t$ from the sigmoidal family defined in \Cref{eq:sigmoid}.
+Specifically, we vary two hyperparameters that determine \emph{when} navigating turns on ($\tau_{\text{start}}$) and \emph{how strong} it becomes at the end ($y_{\text{max}}$).
 For the two hyperparameters, we select five candidate values each: 
-$\hat{t}_{\text{start}}$ is chosen at evenly spaced points in $[0.4,0.9]$, 
+$\tau_{\text{start}}$ is chosen at evenly spaced points in $[0.4,0.9]$, 
 and $y_{\text{max}}$ is chosen at evenly spaced points in $[0.6,1.6]$. 
 By evaluating all combinations of these choices, we obtained $5\times 5 = 25$ distinct schedule settings in total. 
 For each setting we generated five independent conformations and computed the averages of evaluation metrics of them. 
 
 \begin{equation}
     \begin{split}
-        \eta(\hat{t}) =
+        \eta_{t_i} =
         \frac{y_{\text{max}}}{2}
         \frac{\| \delta \|_2}{\| g \|_2}
         \left(
             1 +
-            \frac{\tanh\!\left( \alpha(\tau - \beta) / 2 \right)}
+            \frac{\tanh\!\left( \alpha(\tau_i - \beta) / 2 \right)}
                  {\tanh\!\left( \alpha\beta / 2 \right)}
         \right),
         \qquad
-        \tau = \frac{\hat{t} - \hat{t}_{\text{start}}}{1 - \hat{t}_{\text{start}}},
+        \tau_i = \frac{i / N - \tau_{\text{start}}}{1 - \tau_{\text{start}}},
         \\[1.5ex]
-        \delta = \nabla_{\hat{X}_{\hat{t}}}\log \hat{p}_{\hat{t}}(\hat{X}_{\hat{t}}),
+        \delta = \nabla_{X_{t_i}}\log p_{t_i}(X_{t_i}),
         \quad
-        g = \nabla_{\hat{X}_{\hat{t}}}\log \hat{p}_{\hat{t}}(\phi_{\text{object}} | \hat{X}_{\hat{t}}),
+        g = - \nabla_{X_{t_i}} \mathcal{L}_{\text{MSE}}(X_{t_i}),
         \quad
         \alpha = 10.0,
         \quad
@@ -89,16 +76,17 @@ We conducted two types of experiments for these proteins:
 (ii) \textbf{out-of-distribution targets}, which represent physically implausible inter-domain distances not observed in MD simulations. In this case, $(1.21\,\mathrm{nm},\,1.51,\mathrm{nm},\,0.53,\mathrm{nm})$ was chosen for \AK and $(2.0\,\mathrm{nm},\,3.0,\mathrm{nm})$ for \flhac.
 
 
+
 %\subsection{Results}
 %\label{app:guidance_results}
 
 Across both the in-distribution and out-of-distribution targets, three clear patterns emerge.  
 
 \begin{itemize}
-    \item First, there is a dividing line in the MSE landscape, approximately connecting $(\hat{t}_{\text{start}}, y_{\text{max}})=(0.65,\,0.60)$ and $(0.73,\,1.60)$ (see  \Cref{fig:guidance_scheduling_ak} (b, h) and \Cref{fig:guidance_scheduling_flhac} (b, h)).
-        On the right side of this line (i.e., with later $\hat{t}_{\text{start}}$ and smaller $y_{\text{max}}$), the MSE between the target CVs and the generated conformation's CVs rises sharply. 
-    \item Second, the MolProbity-score contours are roughly circular, centered near $(\hat{t}_{\text{start}}, y_{\text{max}})=(0.40,\,1.60)$, rather than linear (see \Cref{fig:guidance_scheduling_ak} (a, g) and \Cref{fig:guidance_scheduling_flhac} (a, g)).
-    \item Third, combining these two observations, we find that starting the guidance early (small $\hat{t}_{\text{start}}$) and keeping the restraint weak (low $y_{\text{max}}$) enables the application of constraints 
+    \item First, there is a dividing line in the MSE landscape, approximately connecting $(\tau_{\text{start}}, y_{\text{max}})=(0.65,\,0.60)$ and $(0.73,\,1.60)$ (see  \Cref{fig:guidance_scheduling_ak} (b, h) and \Cref{fig:guidance_scheduling_flhac} (b, h)).
+        On the right side of this line (i.e., with later $\tau_{\text{start}}$ and smaller $y_{\text{max}}$), the MSE between the target CVs and the generated conformation's CVs rises sharply. 
+    \item Second, the MolProbity-score contours are roughly circular, centered near $(\tau_{\text{start}}, y_{\text{max}})=(0.40,\,1.60)$, rather than linear (see \Cref{fig:guidance_scheduling_ak} (a, g) and \Cref{fig:guidance_scheduling_flhac} (a, g)).
+    \item Third, combining these two observations, we find that starting the guidance early (small $\tau_{\text{start}}$) and keeping the restraint weak (low $y_{\text{max}}$) enables the application of constraints 
         without substantially compromising the physical plausibility of the generated structures.
 \end{itemize}
 
@@ -106,8 +94,8 @@ Across both the in-distribution and out-of-distribution targets, three clear pat
     \centering
     \includegraphics[width=0.9\linewidth]{images/figures-05.png}
     \caption{
-        All guidance schedules evaluated in this study. 
-        The setting used in our main experiments, $\hat{t}_{\text{start}}=0.6$ and $y_{\text{max}}=0.6$, is highlighted with a thick red line. 
+        All navigating schedulings evaluated in this study. 
+        The setting used in our main experiments, $\tau_{\text{start}}=0.6$ and $y_{\text{max}}=0.6$, is highlighted with a thick red line.
         }
     \label{fig:guidance_scheduling}
 \end{figure}
