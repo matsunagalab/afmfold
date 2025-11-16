@@ -42,6 +42,5 @@ In this work, we replace the guidance score by the gradient of a squared-error l
     \nabla_{X_t} \log \ptc{\phi_{\text{target}}}{X_t} \approx - \eta_t \nabla_{X_t} \mathcal{L}_{\text{MSE}}(X_t),
 \end{equation}
 which is consistent with an isotropic Gaussian model $p_t \bigl( \phi_{\text{object}} | X_t,a \bigr) \propto \exp \big( - \| \phi(X_t) - \phi_{\text{object}} \|_2^2 / ( 2 \sigma_t^2 ) \big)$, in which case $\eta_t = 1/(2\sigma_t^2)$. 
-The optimal select of $\eta_t$ is analyzed in SI. 
+The optimal select of $\eta_t$ is analyzed in SI section S1. 
 %Supporting Information \Cref{app:guidance_sch}.
-

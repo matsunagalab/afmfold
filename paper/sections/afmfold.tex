@@ -96,7 +96,7 @@ As the most straightforward loss function for supervised regression, we adopted 
     \mathcal{L}_{\text{CNN}} = \mathrm{mean}_{i} \| \phi_{\text{pred}}(I_i) - \phi_{\text{true}}(I_i) \|^2,
     \label{eq:cnn-mse-loss}
 \end{equation}
-where $I_i$ denotes the $i$-th input pseudo-AFM image, $\phi_{\text{pred}}(I_i)$ is the CV values by the g-CNN, and $\phi_{\text{true}}(I_i)$ is the corresponding ground-truth CV values. As the g-CNN architecture, we implemented a $(\mathbb{R}^2, +) \rtimes C_8$-invariant CNN (see SI for the detailed implementation).
+where $I_i$ denotes the $i$-th input pseudo-AFM image, $\phi_{\text{pred}}(I_i)$ is the CV values by the g-CNN, and $\phi_{\text{true}}(I_i)$ is the corresponding ground-truth CV values. As the g-CNN architecture, we implemented a $(\mathbb{R}^2, +) \rtimes C_8$-invariant CNN (see SI section S2 for the implementation details).
 
 All models in this paper were trained on a single node equipped with a NVIDIA RTX A6000 GPU (48~GB memory). The training took approximately 2-3 days for both the \AK and \flhac. 
 
