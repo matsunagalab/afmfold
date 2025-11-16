@@ -1,8 +1,8 @@
 \subsection{Navigating \AFiii with inter-domain distance restraints}
 \label{subsec:guided-diffusion}
 
-Next, we describe a method for imposing a restraint on the generative process of \AFiii so that the CVs approaches a user-specified target values. 
-Specifically, while \AFiii employs Denoising Diffusion Probabilistic Models (DDPMs) following the variance-preserving (VP) formulation, we compute the likelihood of the generated structure with respect to the specified CVs and add to the original \AFiii score as a driving force that increases this likelihood. With this modified score, the generated structures becomes explicitly conditioned on the CVs.
+Next, we describe a method for imposing a restraint on the generative process of \AFiii so that the CVs approach user-specified target values. 
+Specifically, while \AFiii employs Denoising Diffusion Probabilistic Models (DDPMs) following the variance-preserving (VP) formulation, we compute the likelihood of the generated structure with respect to the specified CVs and add it to the original \AFiii score as a driving force that increases this likelihood. With this modified score, the generated structures become explicitly conditioned on the CVs.
 
 Let $a$ denote an amino acid sequence and $X=(x_1,\ldots,x_m)$ the 3D coordinates of all atoms, where $x_i\in\mathbb{R}^3$.
 We write $X_{t_i}$ for the state at diffusion time $t_i$ ($T > t_1 > t_2 > \dots > t_N > 0$).
@@ -14,7 +14,7 @@ Sampling the generative process of \AFiii can be written as the stochastic EDM s
     \end{split}
     \label{eq:af3-sde}
 \end{equation}
-Here, $\hat{t}_i$ denotes a time slightly later than $t_i$, defined as $\hat{t}i = (1 + \gamma_i)t_i$, with a parameter $\gamma_i$ that is set to $0.8$ when $t{i+1} > 1.0$, and $0$ otherwise. 
+Here, $\hat{t}_i$ denotes a time slightly later than $t_i$, defined as $\hat{t}_i = (1 + \gamma_i)t_i$, with a parameter $\gamma_i$ that is set to $0.8$ when $t_{i+1} > 1.0$, and $0$ otherwise. 
 The coefficients $\eta$ and $\lambda$ are hyperparameters called the \textit{noise scale} and \textit{step scale}, respectively, and are set to $\eta = 1.5$ and $\lambda = 1.003$. 
 $\text{Denoiser}(\cdot | a)$ represents a denoiser conditioned by coevolutionary information about $a$.
 
@@ -42,5 +42,5 @@ In this work, we replace the guidance score by the gradient of a squared-error l
     \nabla_{X_t} \log \ptc{\phi_{\text{target}}}{X_t} \approx - \eta_t \nabla_{X_t} \mathcal{L}_{\text{MSE}}(X_t),
 \end{equation}
 which is consistent with an isotropic Gaussian model $p_t \bigl( \phi_{\text{object}} | X_t,a \bigr) \propto \exp \big( - \| \phi(X_t) - \phi_{\text{object}} \|_2^2 / ( 2 \sigma_t^2 ) \big)$, in which case $\eta_t = 1/(2\sigma_t^2)$. 
-The optimal select of $\eta_t$ is analyzed in SI section S1. 
+The optimal selection of $\eta_t$ is analyzed in SI section S1. 
 %Supporting Information \Cref{app:guidance_sch}.

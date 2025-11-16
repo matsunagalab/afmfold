@@ -15,7 +15,7 @@ It has the potential to serve as a powerful tool for interpreting HS-AFM movies 
 %Therefore, \Model can help deepen understanding of biological processes---for example, by quantifying large-scale domain rearrangements along putative pathways and by prioritizing follow-up measurements in single-molecule studies.
 
 A limitation of \Model is that it requires a priori definition of CVs as features to be estimated from the AFM image. If it is challenging to define appropriate CVs a priori, one could first perform structural sampling using methods such as AlphaFlow \cite{jing2024alphaflow}, BioEmu \cite{bioemu2025}, or \AFii with MSA subsampling \cite{delAlamo2022sampling}, and then identify meaningful CVs by applying dimensionality reduction techniques like PCA to extract important features. 
-The \Model framework is general, and as long as the chosen CVs are differentiable with respect to atomic Cartesian coordinates and can be used for guiding \AFiii, a wide variety of CV types can be incorporated. For example, we focused on inter-domain distances as CVs in this work, ohter CVs, such as residue-level distance restraints can be used, to enable AFM-guided reconstruction of finer-grained motions without a significant increase in computational cost. 
+The \Model framework is general, and as long as the chosen CVs are differentiable with respect to atomic Cartesian coordinates and can be used for guiding \AFiii, a wide variety of CV types can be incorporated. For example, although we focused on inter-domain distances as CVs in this work, other CVs, such as residue-level distance restraints, can be used to enable AFM-guided reconstruction of finer-grained motions without a significant increase in computational cost. 
 
 %\paragraph{Limitations \& Future Work}
 % Candidates: Weaknesses, Constraints, Challenges
@@ -23,16 +23,16 @@ Another limitation of \Model is that it infers conformations from a single AFM i
 Extending the framework to estimate uncertainty would make the predictions easier to interpret \cite{Kendall2017Uncertainty}.
 Moreover, AFM image sequences constitute time-series data in which poses change only slightly between adjacent frames; incorporating temporal dependencies---for example, with TimeSformer \cite{Bertasius2021TimeSformer} or non-local networks \cite{Wang2018NonLocalNetworks}---could further improve fidelity.
 
-Finally, in this work we navigated \AFiii's sampling only using AFM images; consequently, neither structural stability nor explicit physical priors is incorporated. 
+Finally, in this work we navigated \AFiii's sampling only using AFM images; consequently, neither structural stability nor explicit physical priors are incorporated. 
 In the future, conditioning the prior (such as Boltz-2's custom potentials \cite{passaro2025boltz2}) of an ensemble generative model should enable integrated modeling that unifies experimental measurements, physical priors, and computational inference. 
 
 \section{Code Availability Statement}
 The code of \Model is publicly available at http://github.com/matsunagalab/afmfold.
 
 \section{Data Availability Statement}
-Notebooks, scripts, and datasets to reproduce the results of this paper are publicly available at Zenodo \cite{kawai_dataset_nodate}. HS-AFM data of \flhac are available upon reasonable request to corresponding author and with the permission of the original authors \cite{inoue_structural_2019}. 
+Notebooks, scripts, and datasets to reproduce the results of this paper are publicly available at Zenodo \cite{kawai_dataset_nodate}. HS-AFM data of \flhac are available upon reasonable request to the corresponding author and with the permission of the original authors \cite{inoue_structural_2019}. 
 
 \section{Acknowledgements}
 \label{sec:acknowledgements}
-We appreciate Tohru Minamino (The University of Osaka) and Noriyuki Kodera (Kanazawa University) for kindly providing the experimental AFM image data used in this work. 
-This work was by JSPS KAKENHI (Grant number: 23H03412), and partly supported by MEXT as "Program for Promoting Researches on the Supercomputer Fugaku" (Development and application of large-scale simulation-based inferences for biomolecules JPMXP1020230119) and used computational resources of supercomputer Fugaku provided by the RIKEN Center for Computational Science (Project IDs: hp230209 hp240215, hp250233). 
+We appreciate Tohru Minamino (Osaka University) and Noriyuki Kodera (Kanazawa University) for kindly providing the experimental AFM image data used in this work. 
+This work was supported by JSPS KAKENHI (Grant number: 23H03412), and partly supported by MEXT as "Program for Promoting Researches on the Supercomputer Fugaku" (Development and application of large-scale simulation-based inferences for biomolecules JPMXP1020230119) and used computational resources of supercomputer Fugaku provided by the RIKEN Center for Computational Science (Project IDs: hp230209, hp240215, hp250233). 
