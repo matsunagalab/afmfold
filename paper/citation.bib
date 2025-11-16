@@ -31,6 +31,7 @@
 @string{JMolRecognit = "J. Mol. Recognit."}
 @string{PLoSCompBiol = "PLoS Comput. Biol."}
 @string{JPhysChemB = "J. Phys. Chem. B"}
+@string{JPhysChemLett = "J. Phys. Chem. Lett."}
 @string{NatMethods = "Nat. Methods"}
 @string{JChemPhys = "J. Chem. Phys."}
 @string{Springer = "Springer"}
@@ -742,3 +743,89 @@
   publisher = {Curran Associates, Inc.},
   url       = {https://proceedings.neurips.cc/paper_files/paper/2022/file/a98846e9d9cc01cfb87eb694d946ce6b-Abstract.html}
 }
+
+@article{dasgupta_reconstruction_2020,
+	series = {Novel measurement techniques for visualizing 'live' protein molecules},
+	title = {Reconstruction of low-resolution molecular structures from simulated atomic force microscopy images},
+	volume = {1864},
+	issn = {0304-4165},
+	url = {https://www.sciencedirect.com/science/article/pii/S0304416519302065},
+	doi = {10.1016/j.bbagen.2019.129420},
+	abstract = {Background
+Atomic Force Microscopy (AFM) is an experimental technique to study structure-function relationship of biomolecules. AFM provides images of biomolecules at nanometer resolution. High-speed AFM experiments produce a series of images following dynamics of biomolecules. To further understand biomolecular functions, information on three-dimensional (3D) structures is beneficial.
+Method
+We aim to recover 3D information from an AFM image by computational modeling. The AFM image includes only low-resolution representation of a molecule; therefore we represent the structures by a coarse grained model (Gaussian mixture model). Using Monte-Carlo sampling, candidate models are generated to increase similarity between AFM images simulated from the models and target AFM image.
+Results
+The algorithm was tested on two proteins to model their conformational transitions. Using a simulated AFM image as reference, the algorithm can produce a low-resolution 3D model of the target molecule. Effect of molecular orientations captured in AFM images on the 3D modeling performance was also examined and it is shown that similar accuracy can be obtained for many orientations.
+Conclusions
+The proposed algorithm can generate 3D low-resolution protein models, from which conformational transitions observed in AFM images can be interpreted in more detail.
+General significance
+High-speed AFM experiments allow us to directly observe biomolecules in action, which provides insights on biomolecular function through dynamics. However, as only partial structural information can be obtained from AFM data, this new AFM based hybrid modeling method would be useful to retrieve 3D information of the entire biomolecule.},
+	number = {2},
+	urldate = {2024-07-04},
+	journal = {BBA--Gen.\ Subjects},
+	author = {Dasgupta, Bhaskar and Miyashita, Osamu and Tama, Florence},
+	month = feb,
+	year = {2020},
+	keywords = {Gaussian mixture model, Atomic force microscopy, Computational modeling, Monte-Carlo sampling},
+	pages = {129420},
+	file = {ScienceDirect Full Text PDF:/Users/yasu/Zotero/storage/EKUZ3UJ2/Dasgupta et al. - 2020 - Reconstruction of low-resolution molecular structures from simulated atomic force microscopy images.pdf:application/pdf;ScienceDirect Snapshot:/Users/yasu/Zotero/storage/UIY5TNW7/S0304416519302065.html:text/html},
+}
+
+@article{dasgupta_reconstruction_2021,
+	title = {Reconstruction of {Three}-{Dimensional} {Conformations} of {Bacterial} {ClpB} from {High}-{Speed} {Atomic}-{Force}-{Microscopy} {Images}},
+	volume = {8},
+	issn = {2296-889X},
+	url = {https://www.frontiersin.org/journals/molecular-biosciences/articles/10.3389/fmolb.2021.704274/full},
+	doi = {10.3389/fmolb.2021.704274},
+	abstract = {{\textless}p{\textgreater}ClpB belongs to the cellular disaggretase machinery involved in rescuing misfolded or aggregated proteins during heat or other cellular shocks. The function of this protein relies on the interconversion between different conformations in its native condition. A recent high-speed-atomic-force-microscopy (HS-AFM) experiment on ClpB from {\textless}italic{\textgreater}Thermus thermophilus{\textless}/italic{\textgreater} shows four predominant conformational classes, namely, open, closed, spiral, and half-spiral. Analyses of AFM images provide only partial structural information regarding the molecular surface, and thus computational modeling of three-dimensional (3D) structures of these conformations should help interpret dynamical events related to ClpB functions. In this study, we reconstruct 3D models of ClpB from HS-AFM images in different conformational classes. We have applied our recently developed computational method based on a low-resolution representation of 3D structure using a Gaussian mixture model, combined with a Monte-Carlo sampling algorithm to optimize the agreement with target AFM images. After conformational sampling, we obtained models that reflect conformational variety embedded within the AFM images. From these reconstructed 3D models, we described, in terms of relative domain arrangement, the different types of ClpB oligomeric conformations observed by HS-AFM experiments. In particular, we highlighted the slippage of the monomeric components around the seam. This study demonstrates that such details of information, necessary for annotating the different conformational states involved in the ClpB function, can be obtained by combining HS-AFM images, even with limited resolution, and computational modeling.{\textless}/p{\textgreater}},
+	language = {English},
+	urldate = {2024-07-04},
+	journal = {Front.\ Mol.\ Biosci.},
+	author = {Dasgupta, Bhaskar and Miyashita, Osamu and Uchihashi, Takayuki and Tama, Florence},
+	month = aug,
+	year = {2021},
+	note = {Publisher: Frontiers},
+	keywords = {3D modeling, AFM image analysis, clpB, Gaussian mixture model, Monte-Carlo Sampling},
+	file = {Full Text:/Users/yasu/Zotero/storage/DBA6RJZ3/Dasgupta et al. - 2021 - Reconstruction of Three-Dimensional Conformations of Bacterial ClpB from High-Speed Atomic-Force-Mic.pdf:application/pdf},
+}
+
+@article{maier_ff14sb_2015,
+	title = {{ff14SB}: {Improving} the {Accuracy} of {Protein} {Side} {Chain} and {Backbone} {Parameters} from {ff99SB}},
+	volume = {11},
+	issn = {1549-9618},
+	shorttitle = {{ff14SB}},
+	url = {https://doi.org/10.1021/acs.jctc.5b00255},
+	doi = {10.1021/acs.jctc.5b00255},
+	abstract = {Molecular mechanics is powerful for its speed in atomistic simulations, but an accurate force field is required. The Amber ff99SB force field improved protein secondary structure balance and dynamics from earlier force fields like ff99, but weaknesses in side chain rotamer and backbone secondary structure preferences have been identified. Here, we performed a complete refit of all amino acid side chain dihedral parameters, which had been carried over from ff94. The training set of conformations included multidimensional dihedral scans designed to improve transferability of the parameters. Improvement in all amino acids was obtained as compared to ff99SB. Parameters were also generated for alternate protonation states of ionizable side chains. Average errors in relative energies of pairs of conformations were under 1.0 kcal/mol as compared to QM, reduced 35\% from ff99SB. We also took the opportunity to make empirical adjustments to the protein backbone dihedral parameters as compared to ff99SB. Multiple small adjustments of φ and ψ parameters were tested against NMR scalar coupling data and secondary structure content for short peptides. The best results were obtained from a physically motivated adjustment to the φ rotational profile that compensates for lack of ff99SB QM training data in the β-ppII transition region. Together, these backbone and side chain modifications (hereafter called ff14SB) not only better reproduced their benchmarks, but also improved secondary structure content in small peptides and reproduction of NMR χ1 scalar coupling measurements for proteins in solution. We also discuss the Amber ff12SB parameter set, a preliminary version of ff14SB that includes most of its improvements.},
+	number = {8},
+	urldate = {2025-11-16},
+	journal = JChemTheoryComput,
+	author = {Maier, James A. and Martinez, Carmenza and Kasavajhala, Koushik and Wickstrom, Lauren and Hauser, Kevin E. and Simmerling, Carlos},
+	month = aug,
+	year = {2015},
+	note = {Publisher: American Chemical Society},
+	pages = {3696--3713},
+	file = {Accepted Version:/Users/yasu/Zotero/storage/PQ6GJL8K/Maier et al. - 2015 - ff14SB Improving the Accuracy of Protein Side Chain and Backbone Parameters from ff99SB.pdf:application/pdf},
+}
+
+@article{wang_building_2014,
+	title = {Building {Force} {Fields}: {An} {Automatic}, {Systematic}, and {Reproducible} {Approach}},
+	volume = {5},
+	shorttitle = {Building {Force} {Fields}},
+	url = {https://doi.org/10.1021/jz500737m},
+	doi = {10.1021/jz500737m},
+	abstract = {The development of accurate molecular mechanics force fields is a significant challenge that must be addressed for the continued success of molecular simulation. We developed the ForceBalance method to automatically derive accurate force field parameters using flexible combinations of experimental and theoretical reference data. The method is demonstrated in the parametrization of two rigid water models, yielding new parameter sets (TIP3P-FB and TIP4P-FB) that accurately describe many physical properties of water.},
+	number = {11},
+	urldate = {2025-11-16},
+	journal = JPhysChemLett, 
+	author = {Wang, Lee-Ping and Martinez, Todd J. and Pande, Vijay S.},
+	month = jun,
+	year = {2014},
+	note = {Publisher: American Chemical Society},
+	pages = {1885--1891},
+	file = {Submitted Version:/Users/yasu/Zotero/storage/6SUM9SMF/Wang et al. - 2014 - Building Force Fields An Automatic, Systematic, and Reproducible Approach.pdf:application/pdf},
+}
+
+
+

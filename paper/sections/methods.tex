@@ -1,14 +1,14 @@
 \section{Methods}
 \label{sec:methods}
 
-Our \Model framework leverages \AFiii (here, we used the open-sourced Protenix model \cite{bytedance2025protenix}, a PyTorch reimplementation of \AFiii) to estimate the underlying 3D conformation from a given AFM image. To generate 3D structures consistent with AFM images using \AFiii, we follow two main steps: (i) First, we estimate low-dimensional collective variables (CVs) for the target molecule from the given AFM image using a pre-trained convolutional neural network (CNN). For CVs, we consider the use of inter-domain distances, assuming multi-domain proteins as a typical case. (ii) Next, we use the estimated CVs to add restraints to \AFiii during structure generation, producing 3D structures that are consistent with the AFM image (see \Cref{fig:overview}a).
+Our \Model framework leverages \AFiii (here, we used the open-sourced Protenix model \cite{bytedance2025protenix}, a PyTorch reimplementation of \AFiii) to estimate the underlying 3D conformation from a given AFM image. To generate 3D structures consistent with AFM images using \AFiii, we follow two main steps: (i) First, we estimate low-dimensional collective variables (CVs) for the target molecule from the given AFM image using a pre-trained CNN. For CVs, we here use inter-domain distances, assuming multi-domain proteins as a typical case. (ii) Next, we use the estimated CVs to add restraints to \AFiii during structure generation, producing 3D structures that are consistent with the AFM image (see \Cref{fig:overview}a).
 
 %First, the reference AFM image is fed into a convolutional neural network (CNN), which predicts the inter-domain distances of the molecule captured in the image. 
 %Then, by incorporating these predicted distances as restraints into the generation process of \AFiii, a structure consistent with the reference AFM image is obtained (see \cref{fig:overview} (a)).
 
 In this section, we present our methodology in three parts. 
-In \cref{subsec:se2cnn}, we review the group-invariant CNN used to estimate the CVs from AFM images. 
-In \cref{subsec:guided-diffusion}, we explain how we add restraints in the diffusion process of \AFiii using the estimated CVs. 
+In \cref{subsec:se2cnn}, we sumamrize the group-invariant CNN used to estimate the CVs from AFM images. 
+In \cref{subsec:guided-diffusion}, we describe how we add restraints in the diffusion process of \AFiii using the estimated CVs. 
 Finally in \cref{subsec:afm-guidance}, the overall computational protocol of our \Model framework is given.
 
 \input{sections/cnn.tex}
