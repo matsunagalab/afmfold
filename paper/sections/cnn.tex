@@ -13,7 +13,7 @@ In this case, higher-resolution image reproduction is expected, but on the other
 Therefore, instead of relying on image-to-image correlation, it was necessary to construct a comparison measure that is robust to in-plane rotations and translations of AFM images. In particular, to handle a large number of AFM frames, the similarity between the generated intermediate structures and the images needed to be computed efficiently.
 %Therefore, in this study, we decided that our g-CNN model estimates low-dimensional CVs (such as inter-domain distances in the case of multi-domain proteins) and uses them for structure generation in \AFiii.
 
-With this motivation in mind, we summarize the theory of \gcnn \cite{CohenWelling2016_GCNN, CohenWelling2017_SteerableCNNs, e2cnn, WeilerEtAl2018_3DSteerableCNNs}, and describe how it enables efficient estimation of CVs from AFM images. A standard CNN is naturally \emph{translation equivariant} but not rotation equivariant. In contrast, \gcnn modifies feature indexing and kernel weight sharing so that the entire network becomes equivariant with respect to a chosen rotation group. With this architecture, the same physical state yields an identical representation regardless of its placement on the image plane, thereby reducing the need for extensive data augmentation and shortening training time. Consequently, we employ the \gcnn to estimate CVs from a single AFM image.
+With this motivation in mind, we summarize the theory of \gcnn \cite{CohenWelling2016_GCNN, CohenWelling2017_SteerableCNNs, e2cnn, WeilerEtAl2018_3DSteerableCNNs}, and describe how it enables efficient estimation of CVs from AFM images. A standard CNN is naturally \emph{translation equivariant} but not rotation equivariant. In contrast, \gcnn modifies feature indexing and kernel weight sharing so that the entire network becomes equivariant with respect to a chosen rotation group. Utilizing this architecture, the same physical state yields an identical representation regardless of its placement on the image plane, thereby reducing the need for extensive data augmentation and shortening training time. Consequently, we employ the \gcnn to estimate CVs from a single AFM image.
 
 %\paragraph{Translation equivariance}
 We model an AFM image as a single-channel (scalar) field $I:\mathbb{R}^2\to\mathbb{R}$ with pixel coordinate $x=(x_1,x_2)\in\mathbb{R}^2$. 
@@ -29,7 +29,7 @@ In practice, the integral is implemented as a finite sum over pixels; we keep th
 % --- Group and action for standard fields ---
 Here, we consider the planar motion group $\R^2 \rtimes C_N$, where $C_N=\{e,r,\dots,r^{N-1}\}\subset \mathrm{SO}(2)$ is a finite rotation subgroup.
 For scalar or standard $c$-channel fields (without group indexing that we later explain), 
-the action $\pi(t,g)$ of translation $t\in\R^2$ and rotation $g\in C_N$ is $(\pi(t,g)u)(x)\;:=\;u\big(g^{-1}(x-t)\big)$.
+the action $\pi(t,g)$ of translation $t\in\R^2$ and rotation $g\in C_N$ for the field $u$ is $(\pi(t,g)u)(x)\;:=\;u\big(g^{-1}(x-t)\big)$.
 
 Because convolution commutes with translations, a standard CNN is translation-equivariant. 
 For a single convolution with a (matrix-valued) kernel $k(y)\in\R^{c_{\mathrm{out}}\times c_{\mathrm{in}}}$,
