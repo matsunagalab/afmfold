@@ -575,12 +575,14 @@ def plot_inter_domain_distance(
     subplots=None,
     domain_pair_labels=None,
     cmap="viridis",
+    basecolor="black",
     fontsize=14,
+    marker="o",
     xlim=None,
     ylim=None,
     title=None,
     ):
-    assert all(isinstance(axistype, (int, np.ndarray)) for axistype in [xtype, ytype, ztype])
+    assert all(axistype is None or isinstance(axistype, (int, np.ndarray)) for axistype in [xtype, ytype, ztype])
     if domain_pair_labels is not None:
         assert len(domain_pair_labels) == len(domain_pairs)
     
@@ -641,6 +643,9 @@ def plot_inter_domain_distance(
             zlabel = zlabel
         else:
             zlabel = None
+    elif ztype is None:
+        z = None
+        zlabel = None
     else:
         raise NotImplementedError
     
@@ -651,9 +656,9 @@ def plot_inter_domain_distance(
         fig, ax = subplots
     
     if z is None:
-        sc = ax.scatter(x, y)
+        sc = ax.scatter(x, y, marker=marker, c=basecolor)
     else:
-        sc = ax.scatter(x, y, c=z, cmap=cmap)
+        sc = ax.scatter(x, y, c=z, cmap=cmap, marker=marker)
         cbar = plt.colorbar(sc, ax=ax)
         if zlabel is not None:
             cbar.set_label(zlabel, fontdict={"fontsize": fontsize})
