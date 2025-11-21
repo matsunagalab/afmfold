@@ -1,0 +1,129 @@
+\documentclass{article}
+\usepackage[english]{babel}
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+\usepackage{amsmath, amsfonts, amssymb}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{xspace}
+\usepackage{gensymb}
+\usepackage{float}
+\usepackage{appendix}
+\usepackage{caption}
+\captionsetup[table]{skip=3pt}
+\usepackage{wrapfig}
+\setlength{\columnsep}{1.5em}
+\usepackage{comment}
+
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage[capitalize]{cleveref}
+\usepackage{xr-hyper}
+
+\crefname{figure}{fig.}{figs.}
+\Crefname{figure}{Fig.}{Figs.}
+\crefname{equation}{eq.}{eqs.}
+\Crefname{equation}{Eq.}{Eqs.}
+\crefname{table}{table}{tables}
+\Crefname{table}{Table}{Tables}
+\crefname{algorithm}{alg.}{algs.}
+\Crefname{algorithm}{Alg.}{Algs.}
+\usepackage{authblk}
+
+% 定理環境
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{proposition}[theorem]{Proposition}
+
+\renewcommand{\appendixpagename}{Supplementary Information}
+\renewcommand{\appendixtocname}{Supplementary Information}
+
+% カスタムコマンド（既存）
+\input{commands}
+
+% Reference
+\usepackage{csquotes}
+\usepackage[
+    style=numeric-comp,
+    backend=biber,
+    sorting=none,
+    date=year,natbib,
+    maxnames=10,
+    minnames=1,
+    doi=true,
+    url=true
+]{biblatex}
+
+\DeclareFieldFormat{labelnumberwidth}{#1.}
+\DeclareFieldFormat{shorthandwidth}{#1.}
+\setlength{\biblabelsep}{0.5em}
+
+\addbibresource{citation_biophysj.bib}
+
+\DeclareDelimFormat{finalnamedelim}{\addspace and\space}
+\DeclareDelimFormat{multinamedelim}{\addcomma\space}
+
+\AtEveryBibitem{
+  \iffieldundef{doi}
+    {}
+    {\clearfield{url}}
+}
+\usepackage{fontspec}
+\setmainfont{Helvetica}
+\pagestyle{empty}
+
+\externaldocument{biophysj}
+
+\begin{document}
+
+\begin{comment}
+% ========== Title page ==========
+\begin{titlepage}
+\vspace*{2em}
+
+% Main heading for SI
+\noindent{\LARGE AFM-Fold: Rapid Reconstruction of Protein Conformations from AFM Images\par}
+
+\vspace{2.5em}
+
+% Authors
+\noindent{\normalsize
+\textit{Tsuyoshi Kawai}\textsuperscript{1},\;
+\textit{Yasuhiro Matsunaga}\textsuperscript{*,1,2}\par}
+
+\vspace{1.0em}
+
+% Affiliations
+{\small
+\noindent\textsuperscript{1}Graduate School of Science and Engineering, Saitama University\par
+\noindent\textsuperscript{2}RIKEN Center for Computational Science\par}
+
+\vspace{1.0em}
+
+% Corresponding authors (edit as needed)
+\noindent{\small
+\textit{* Corresponding author:} 
+\href{mailto:ymatsunaga@riken.jp}{\underline{ymatsunaga@riken.jp}}\par}
+
+\vspace{2.0em}
+
+\noindent{\small\bfseries Supporting Materials\par}
+
+\vfill
+
+% Optional bottom line like the sample (“Supporting Materials”)
+\end{titlepage}
+% ========== End of title page ==========
+\end{comment}
+
+\input{sections/appendix}
+
+\printbibliography
+
+\end{document}
