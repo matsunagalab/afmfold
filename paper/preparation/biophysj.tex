@@ -1,0 +1,75 @@
+\documentclass[lineno,twocolumn,endfloat,biblatex]{biophys-new}
+%\documentclass{biophys-new}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage[colorlinks,allcolors=cyan!70!black]{hyperref}
+\usepackage{xspace}
+\usepackage{xr-hyper}
+\usepackage[capitalize]{cleveref}
+\input{commands}
+\externaldocument{biophysj_SI}
+\AtEveryBibitem{
+  \iffieldundef{doi}
+    {}
+    {\clearfield{url}}
+}
+\usepackage{xurl}
+
+% Uncomment if using biblatex
+\addbibresource{citation_biophysj.bib}
+
+\AtEveryBibitem{%
+  \iffieldundef{lastnote}
+    {}
+    {\setunit{\addspace}\printfield{lastnote}}%
+}
+
+\usepackage{lipsum}
+
+\title{AFM-Fold: Rapid Reconstruction of Protein Conformations from AFM Images}
+\runningtitle{Protein Conformation from AFM Images} %% For page header
+
+\author[1]{Tsuyoshi Kawai}
+\author[1,2,*]{Yasuhiro Matsunaga}
+\runningauthor{Tsuyoshi Kawai and Yasuhiro Matsunaga} %% For page header
+
+\affil[1]{
+      Graduate School of Science and Engineering, Saitama University,
+      255 Shimo-Okubo, Sakura-ku, Saitama-shi,
+      Saitama 338-8570, Japan
+      }
+\affil[2]{
+      RIKEN Center for Computational Science,
+      7-1-26 Minatojima-minami-machi, Chuo-ku, Kobe, 
+      Hyogo 650-0047, Japan
+}
+
+\corrauthor[*]{\href{ymatsunaga@riken.jp}{ymatsunaga@riken.jp}}
+
+% \papertype{Letters}
+\papertype{Article}
+% \papertype{Computational Tools}
+
+
+\begin{document}
+
+\begin{frontmatter}
+
+\input{sections_ver2/abstract.tex}
+\input{sections_ver2/significance.tex}
+
+\end{frontmatter}
+
+\input{sections_ver2/introduction.tex}
+\input{sections_ver2/methods.tex}
+\input{sections_ver2/results}
+\input{sections_ver2/discussion}
+
+\sloppy
+\printbibliography
+
+\section*{Supplementary Material}
+
+An online supplement to this article can be found by visiting BJ Online at \url{http://www.biophysj.org}.
+
+\end{document}
