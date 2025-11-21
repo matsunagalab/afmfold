@@ -130,8 +130,8 @@ was taken as the optimal pose.
 \begin{equation}
     \mathrm{c.c.}(R)=
     \frac{\sum_{p \in \text{pixels}} H^{\text{(exp)}}_p H^{\text{(sim)}}_p(R)}
-         {\sqrt{\sum_{p \in \text{pixels}} \left(H^{\text{(exp)}}_p\right)^2}
-          \sqrt{\sum_{p \in \text{pixels}} \left(H^{\text{(sim)}}_p(R)\right)^2}}
+         {{\Bigl[ \sum_{p \in \text{pixels}} \left(H^{\text{(exp)}}_p\right)^2 \Bigr]}^{1/2}
+          {\Bigl[ \sum_{p \in \text{pixels}} \left(H^{\text{(sim)}}_p(R)\right)^2 \Bigr]}^{1/2}}
     \label{eq:cc}
 \end{equation}
 where $H^{\text{(exp)}}_p$ and $H^{\text{(sim)}}_p(R)$ denote the heights (i.e., the $z$-coordinates) of the given and generated image pixels (transformed by $R$), respectively, and the summation runs over all pixels $p$.

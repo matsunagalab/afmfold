@@ -9,7 +9,7 @@ We write $X_{t_i}$ for the state at diffusion time $t_i$ ($T > t_1 > t_2 > \dots
 Sampling the generative process of \AFiii can be written as the stochastic EDM sampler:
 \begin{equation}
     \begin{split}
-        &X_{t_{i+1}} = X_{t_i} - \eta (t_{i+1} - \hat{t}_i) \nabla_{X_{t_i}} \log p_{t_i}(X_{t_i} | a) + \lambda \sqrt{\hat{t}_i^2 - t_i^2} \epsilon, \\
+        &X_{t_{i+1}} = X_{t_i} - \eta (t_{i+1} - \hat{t}_i) \nabla_{X_{t_i}} \log p_{t_i}(X_{t_i} | a) + \lambda {\big(\hat{t}_i^2 - t_i^2 \big)}^{1/2} \epsilon, \\
         &\nabla_{X_{t_i}} \log p_{t_i}(X_{t_i} | a) \approx - \bigl( X_{t_i} - \text{Denoiser}(X_{t_i} | a) \bigr) / \hat{t}_i,
     \end{split}
     \label{eq:af3-sde}
@@ -29,7 +29,7 @@ By Bayes’ rule, the conditional score decomposes as
 Therefore, we can bias the stochastic sampler by adding the guidance term:
 
 \begin{equation}
-    X_{t_{i+1}} = X_{t_i} - \eta (t_{i+1} - \hat{t}_i) \bigl( \nabla_{X_{t_i}} \log p_{t_i}(X_{t_i} | a) + \nabla_{X_{t_i}} \log p_{t_i}(\phi_{\text{target}} | X_{t_i}, a) \bigr) + \lambda \sqrt{\hat{t}_i^2 - t_i^2} \epsilon
+    X_{t_{i+1}} = X_{t_i} - \eta (t_{i+1} - \hat{t}_i) \bigl( \nabla_{X_{t_i}} \log p_{t_i}(X_{t_i} | a) + \nabla_{X_{t_i}} \log p_{t_i}(\phi_{\text{target}} | X_{t_i}, a) \bigr) + \lambda {\bigl( \hat{t}_i^2 - t_i^2 \bigr)}^{1/2} \epsilon
     \label{eq:af3-guided}
 \end{equation}
 so that the process is guided toward $\phi(X_{t_N}) \approx \phi_{\text{target}}$, where $\phi: \R^{3m} \to \R^{D}$ is a differentiable mapping from structures to this feature space.

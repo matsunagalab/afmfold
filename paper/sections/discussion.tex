@@ -1,4 +1,4 @@
-\section{Discussion and Conclusions}
+\section{Discussion}
 
 In this work, we have proposed a computational protocol, \Model, to predict the 3D conformation of biomolecules from AFM images. 
 \Model enables rapid and accurate conformation estimation compared to previous approaches.
@@ -26,12 +26,17 @@ Moreover, AFM image sequences constitute time-series data in which poses change 
 Finally, in this work we navigated \AFiii's sampling only using AFM images; consequently, neither structural stability nor explicit physical priors are incorporated. 
 In the future, conditioning the prior (such as Boltz-2's custom potentials \cite{passaro2025boltz2}) of an ensemble generative model should enable integrated modeling that unifies experimental measurements, physical priors, and computational inference. 
 
-\section{Data and Software Availability}
+\section{Data availability}
 The code of \Model is publicly available at \url{http://github.com/matsunagalab/afmfold}.
 Notebooks, scripts, and datasets to reproduce the results of this paper are publicly available at Zenodo \url{https://zenodo.org/records/17597490} \cite{kawai_dataset_nodate}. 
 %HS-AFM data of \flhac are available upon reasonable request to the corresponding author and with the permission of the original authors \cite{inoue_structural_2019}. 
 
+\section{Declaration of generative AI and AI-assisted technologies in the writing process}
+During the preparation of this work the authors used ChatGPT in order to assist with language refinement and editing. 
+After using this service, the authors reviewed and edited the content as needed and take full responsibility for the content of the publication.
+
 \section{Acknowledgements}
 \label{sec:acknowledgements}
+A preliminary version of this work, \url{https://doi.org/10.1101/2025.11.17.688836}, was deposited in bioRxiv on November 17, 2025.
 We appreciate Tohru Minamino (The University of Osaka) and Noriyuki Kodera (Kanazawa University) for kindly providing the experimental AFM image data used in this work. 
 This work was supported by JSPS KAKENHI (Grant number: 23H03412), and partly supported by MEXT as "Program for Promoting Researches on the Supercomputer Fugaku" (Development and application of large-scale simulation-based inferences for biomolecules JPMXP1020230119) and used computational resources of supercomputer Fugaku provided by the RIKEN Center for Computational Science (Project IDs: hp230209, hp240215, hp250233). 
