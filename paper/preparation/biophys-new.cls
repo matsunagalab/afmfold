@@ -139,9 +139,60 @@
 \fi
 
 \if@biblatex
-  \RequirePackage[style=numeric-comp,backend=biber,sorting=none,maxbibnames=10,date=year,natbib]{biblatex}
+  \RequirePackage[
+    style=numeric-comp,
+    backend=biber,
+    sorting=none,
+    maxbibnames=10,
+    date=year,
+    natbib,
+    giveninits=true,
+    ]{biblatex}
+  \AtBeginDocument{%
+    \DeclareNameAlias{author}{family-given}% = last-first
+    \DeclareNameAlias{editor}{family-given}%
+  }
   \DeclareFieldFormat{labelnumberwidth}{#1.}
   \DeclareFieldFormat{shorthandwidth}{#1.}
+  \DeclareNameAlias{default}{last-first}
+  \DeclareFieldFormat[article]{title}{#1}
+  \DeclareBibliographyDriver{article}{%
+    \usebibmacro{author}%
+    \setunit{\addcomma\space}% 著者, 年
+    \printfield{year}%
+    \setunit{\addperiod\space}%
+    \printfield[title]{title}%
+    \setunit{\addperiod\space}%
+    \printfield{journaltitle}%
+    \setunit{\addspace}%
+    \printfield{volume}%
+    \setunit{\addcolon}%
+    \printfield{pages}%
+    \addperiod
+    \iffieldundef{doi}
+      {}
+      {%
+        \setunit{\addspace}%
+        \printfield{doi}%
+        \addperiod
+      }
+    \iffieldundef{doi}{%
+      \iffieldundef{url}
+        {}%
+        {%
+          \setunit{\addspace}%
+          \printfield{url}%
+          \addperiod
+        }%
+    }{}%
+    \iffieldundef{note}
+      {}%
+      {%
+        \setunit{\addspace}%
+        \printfield{note}%
+        \addperiod
+      }
+  }
   \setlength{\biblabelsep}{0.5em}
   % drastic; but fastest way to get parentheses for cites.
   \renewrobustcmd{\mkbibbrackets}{\mkbibparens}
