@@ -23,8 +23,11 @@ We sampled diverse conformations by \AFiii, broadly covering the CV space specif
 To do this, first, we obtain a reference structure $X_{\text{ref}}$ with \AFiii with no restraints.
 Then, target CV vectors $\{\phi_{\text{perturb}}^{\,i}\}$ are placed on a grid around $\phi(X_{\text{ref}})$ such that, for each dimension $i$,
 \begin{equation}
-    \phi_{\text{perturb},d}^i \in \left[ \min(0.0~\mathrm{nm}, \phi^i(X_{\text{ref}}) - 5.0~\mathrm{nm}), \phi^i(X_{\text{ref}}) + 5.0~\mathrm{nm} \right], \qquad \forall i.
-    \label{eq:target_domain_distance}
+    \begin{split}
+        &\phi_{\text{perturb},d}^i \\
+        &\in \left[ \min(0.0~\mathrm{nm}, \phi^i(X_{\text{ref}}) - 5.0~\mathrm{nm}), \phi^i(X_{\text{ref}}) + 5.0~\mathrm{nm} \right].
+        \label{eq:target_domain_distance}
+    \end{split}
 \end{equation}
 The grid used a step of $0.5~\mathrm{nm}$ for each axis. Then, the generation with \AFiii is conducted using each $\{\phi_{\text{perturb}}^{\,i}\}$ as the restraints for the navigating process.
 
