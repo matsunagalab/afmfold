@@ -82,48 +82,93 @@
 
 \begin{document}
 
-\begin{comment}
-% ========== Title page ==========
-\begin{titlepage}
-\vspace*{2em}
+\setcounter{section}{0}
+\renewcommand{\thesection}{S\arabic{section}}
+\setcounter{equation}{0}
+\renewcommand{\theequation}{S\arabic{equation}}
+\setcounter{figure}{0}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\setcounter{table}{0}
+\renewcommand{\thetable}{S\arabic{table}}
+\setcounter{algorithm}{0}
+\renewcommand{\thealgorithm}{S\arabic{algorithm}}
 
-% Main heading for SI
-\noindent{\LARGE AFM-Fold: Rapid Reconstruction of Protein Conformations from AFM Images\par}
+% figures and legends
+\section{Supplementary figures}
 
-\vspace{2.5em}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{images/figures-09.png}
+    \caption{
+        \textbf{Selected candidate conformations for \AK and MolProbity evaluation for them}.
+        \textbf{(a)} Projection of the candidate conformations into the inter-domain distance space. 
+        The following panels shows
+        \textbf{(b)} MolProbity score,
+        \textbf{(c)} Clash score,
+        \textbf{(d)} Ramachandran favored rate (\%), and
+        \textbf{(e)} Rotamer outlier rate (\%) of the candidate conformations.
+        }
+    \label{fig:ak_selection}
+\end{figure}
 
-% Authors
-\noindent{\normalsize
-\textit{Tsuyoshi Kawai}\textsuperscript{1},\;
-\textit{Yasuhiro Matsunaga}\textsuperscript{*,1,2}\par}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.0\linewidth]{images/figures-10.png}
+    \caption{
+        \textbf{Selected candidate conformations for \flhac and MolProbity evaluation for them}.
+        \textbf{(a)} Projection of the candidate conformations into the inter-domain distance space. 
+        The following panels shows
+        \textbf{(b)} MolProbity score, 
+        \textbf{(c)} Clash score,
+        \textbf{(d)} Ramachandran favored rate (\%), and
+        \textbf{(e)} Rotamer outlier rate (\%) of the candidate conformations.
+        }
+    \label{fig:flhac_selection}
+\end{figure}
 
-\vspace{1.0em}
 
-% Affiliations
-{\small
-\noindent\textsuperscript{1}Graduate School of Science and Engineering, Saitama University\par
-\noindent\textsuperscript{2}RIKEN Center for Computational Science\par}
+% supplemental tables
+\section{Supplementary tables}
 
-\vspace{1.0em}
+\begin{table}[hbt!]
+    \centering
+    \caption{Settings for training pseudo-AFM images.}
+    \label{tab:afm_settings}
+    \begin{tabular}{|l|c|c|}
+        \hline
+         & \AK & \flhac \\
+        \hline
+        Lateral resolution [nm/pixel] & 0.3 & 0.98 \\
+        Pixel size [pixel $\times$ pixel] & $35 \times 35$ & $35 \times 35$ \\
+        Tip radius [nm] & $r \sim \mathrm{Uniform}(0.3,0.6)$ & $r \sim \mathrm{Uniform}(2.0,6.0)$ \\
+        Tip apex angle [degree] & $a \sim \mathrm{Uniform}(10,30)$ & $a \sim \mathrm{Uniform}(10,30)$ \\
+        Noise std. dev. [nm] & 0.0 & 0.5 \\
+        Histogram matching & --- & \checkmark \\
+        Dataset size [frames] & 5M & 5M \\
+        Collective variables & Inter-domain distances & Inter-domain distances \\
+                             & (LID-CORE, CORE-AMPbd, & (\acdi-\acdiv, \acdii-\acdiii, \\
+                             & AMPbd-LID)  & \acdii-\acdiv)  \\
+        \hline
+    \end{tabular}
+\end{table}
 
-% Corresponding authors (edit as needed)
-\noindent{\small
-\textit{* Corresponding author:} 
-\href{mailto:ymatsunaga@riken.jp}{\underline{ymatsunaga@riken.jp}}\par}
+\begin{table}[hbt!]
+    \centering
+    \caption{MolProbity score thresholds used for geometric sanitization.}
+    \label{tab:score_thresholds}
+    \begin{tabular}{|l|c|}
+        \hline
+        Criterion & Threshold \\
+        \hline
+        MolProbity Score & $\leq 4.0$ \\
+        Clash Score & $\leq 70.0$ \\
+        Ramachandran favored (\%) & $\geq 90.0$ \\
+        Rotamer Outlier (\%) & $\leq 50.0$ \\
+        \hline
+    \end{tabular}
+\end{table}
 
-\vspace{2.0em}
-
-\noindent{\small\bfseries Supporting Materials\par}
-
-\vfill
-
-% Optional bottom line like the sample (“Supporting Materials”)
-\end{titlepage}
-% ========== End of title page ==========
-\end{comment}
-
-\input{sections/appendix}
-
+% supporting references
 \printbibliography
 
 \end{document}

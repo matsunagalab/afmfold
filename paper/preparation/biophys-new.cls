@@ -148,26 +148,76 @@
     natbib,
     giveninits=true,
     ]{biblatex}
+
+  %\AtBeginDocument{%
+  %  \DeclareNameAlias{author}{family-given}% = last-first 
+  %  \DeclareNameAlias{editor}{family-given}% 
+  %  }
+  \DeclareNameFormat{family-given/given-family}{%
+    \ifnumequal{\value{listcount}}{1}
+      {%
+        % First author: family-given
+        \ifgiveninits
+          {%
+            \usebibmacro{name:family-given}
+              {\namepartfamily}
+              {\namepartgiveni}
+              {\namepartprefix}
+              {\namepartsuffix}%
+          }
+          {%
+            \usebibmacro{name:family-given}
+              {\namepartfamily}
+              {\namepartgiven}
+              {\namepartprefix}
+              {\namepartsuffix}%
+          }%
+      }
+      {%
+        % Others: given-family
+        \ifgiveninits
+          {%
+            \usebibmacro{name:given-family}
+              {\namepartfamily}
+              {\namepartgiveni}
+              {\namepartprefix}
+              {\namepartsuffix}%
+          }
+          {%
+            \usebibmacro{name:given-family}
+              {\namepartfamily}
+              {\namepartgiven}
+              {\namepartprefix}
+              {\namepartsuffix}%
+          }%
+      }%
+    % et al.
+    \usebibmacro{name:andothers}%
+  }
   \AtBeginDocument{%
-    \DeclareNameAlias{author}{family-given}% = last-first
+    \DeclareNameAlias{author}{family-given/given-family}%
     \DeclareNameAlias{editor}{family-given}%
   }
+  
   \DeclareFieldFormat{labelnumberwidth}{#1.}
   \DeclareFieldFormat{shorthandwidth}{#1.}
-  \DeclareNameAlias{default}{last-first}
   \DeclareFieldFormat[article]{title}{#1}
+  
   \DeclareBibliographyDriver{article}{%
     \usebibmacro{author}%
-    \setunit{\addcomma\space}% 著者, 年
+    \setunit{\addcomma\space}%
     \printfield{year}%
     \setunit{\addperiod\space}%
     \printfield[title]{title}%
     \setunit{\addperiod\space}%
-    \printfield{journaltitle}%
-    \setunit{\addspace}%
+    \printfield{booktitle}%
+    \setunit{\addperiod\space}%
     \printfield{volume}%
-    \setunit{\addcolon}%
+    \setunit{\addperiod\space}%
+    \printfield{journaltitle}%
+    \setunit{\addperiod\space}%
     \printfield{pages}%
+    \setunit{\addperiod\space}%
     \addperiod
     \iffieldundef{doi}
       {}
@@ -196,6 +246,11 @@
   \setlength{\biblabelsep}{0.5em}
   % drastic; but fastest way to get parentheses for cites.
   \renewrobustcmd{\mkbibbrackets}{\mkbibparens}
+  \AtEveryBibitem{
+    \iffieldundef{doi}
+      {}
+      {\clearfield{url}}
+  }
 \else
   \RequirePackage[numbers,sort&compress,round]{natbib}
   \bibliographystyle{biophysj}

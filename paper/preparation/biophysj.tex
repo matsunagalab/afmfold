@@ -1,28 +1,23 @@
-\documentclass[lineno,twocolumn,endfloat,biblatex]{biophys-new}
-%\documentclass{biophys-new}
+\documentclass[lineno,biblatex]{biophys-new}
+%\documentclass[bibtex]{biophys-new}
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
 \usepackage[colorlinks,allcolors=cyan!70!black]{hyperref}
 \usepackage{xspace}
 \usepackage{xr-hyper}
 \usepackage[capitalize]{cleveref}
+\usepackage{comment}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
 \input{commands}
+
 \externaldocument{biophysj_SI}
-\AtEveryBibitem{
-  \iffieldundef{doi}
-    {}
-    {\clearfield{url}}
-}
+
 \usepackage{xurl}
 
 % Uncomment if using biblatex
 \addbibresource{citation_biophysj.bib}
-
-\AtEveryBibitem{%
-  \iffieldundef{lastnote}
-    {}
-    {\setunit{\addspace}\printfield{lastnote}}%
-}
 
 \usepackage{lipsum}
 
@@ -64,9 +59,15 @@
 \input{sections/methods.tex}
 \input{sections/results}
 \input{sections/discussion}
+\input{sections/appendix.tex}
+\input{sections/endmatter.tex}
 
+% Uncomment if using biblatex
 \sloppy
 \printbibliography
+
+% Uncomment if using bibtex
+%\bibliography{citation_biophysj}
 
 \section*{Supplementary Material}
 
