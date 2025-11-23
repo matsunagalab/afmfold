@@ -74,7 +74,7 @@ We conducted two types of experiments for these proteins:
 A close examination of the MSE and MolProbity-score landscapes for each scheduling setting reveals that, for both the in-distribution and out-of-distribution targets, the two landscapes exhibit clearly distinct behaviors. 
 Notably, in the lower-left region of the parameter space, the relationship between the two metrics does not follow the simple rule that high MSE corresponds to low MolProbity-score (or vice versa). 
 Instead, when the navigation is initiated early (small $\tau_{\text{start}}$) and the maximum guidance strength is kept low (small $y_{\text{max}}$), both the MSE and the MolProbity-score tend to take low values. 
-This indicates the presence of a regime in which constraints can be applied without substantially degrading the geometric quality of the generated structures.
+This indicates the presence of a regime in which restraints can be applied without substantially degrading the geometric quality of the generated structures.
 Based on these observations, in our study we adopt $\tau_{\text{start}}=0.6$ and $y_{\text{max}}=0.6$ that allow effective navigation without substantially degrading structural quality.
 
 \begin{figure}[H]
