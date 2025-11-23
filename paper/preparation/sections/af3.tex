@@ -22,8 +22,8 @@ Let $\phi_{\text{target}} \in \mathbb{R}^D$ denote the estimated coordinate in t
 By Bayes’ rule, the conditional score decomposes as
 \begin{equation}
     \begin{split}
-        &\nabla_{X_t} \log p_t \bigl(X_t \big| \phi_{\text{target}}, a \bigr) \\
-        &= \nabla_{X_t} \log \pt{X_t} + \nabla_{X_t} \log \ptc{\phi_{\text{target}}}{X_t}.
+        \nabla_{X_t} \log p_t \bigl(X_t \big| \phi_{\text{target}}, a \bigr) 
+        = \nabla_{X_t} \log \pt{X_t} + \nabla_{X_t} \log \ptc{\phi_{\text{target}}}{X_t}.
     \end{split}
     \label{eq:score-decomp}
 \end{equation}
@@ -32,8 +32,8 @@ Therefore, we can bias the stochastic sampler by adding the guidance term:
 
 \begin{equation}
     \begin{split}
-        X_{t_{i+1}} &= X_{t_i} - \eta (t_{i+1} - \hat{t}_i) \bigl( \nabla_{X_{t_i}} \log p_{t_i}(X_{t_i} | a) \\
-        &+ \nabla_{X_{t_i}} \log p_{t_i}(\phi_{\text{target}} | X_{t_i}, a) \bigr) + \lambda {\bigl( \hat{t}_i^2 - t_i^2 \bigr)}^{1/2} \epsilon
+        X_{t_{i+1}} = X_{t_i} - \eta (t_{i+1} - \hat{t}_i) \bigl( \nabla_{X_{t_i}} \log p_{t_i}(X_{t_i} | a) 
+        + \nabla_{X_{t_i}} \log p_{t_i}(\phi_{\text{target}} | X_{t_i}, a) \bigr) + \lambda {\bigl( \hat{t}_i^2 - t_i^2 \bigr)}^{1/2} \epsilon
     \end{split}
     \label{eq:af3-guided}
 \end{equation}
