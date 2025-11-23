@@ -83,7 +83,7 @@ def main(args):
     elif os.path.exists(args.label_path) and args.label_path.endswith(".npy"):
         labels = np.load(args.label_path)
     else:
-        raise NotImplementedError(args.label_path)
+        labels = None
     
     # Extract the corresponding trajectory
     if os.path.exists(args.dcd_path) and os.path.exists(args.pdb_path):
