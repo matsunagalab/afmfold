@@ -85,7 +85,7 @@ we systematically varied the noise levels added to both the training and the ``e
 \label{subsec:flhac_results}
 
 FlhA is a key component of the flagellar protein export system, and its C-terminal domain, \flhac, helps transport proteins by assisting their binding to the exporter. 
-Structurally, it comprises four domains (\acdi, \acdii, \acdiii, and \acdiv) and a linker to the transmembrane domain (FlhA\textsubscript{TM}) (\Cref{fig:flhac_statistic}~(a)). 
+Structurally, it comprises four domains (\acdi, \acdii, \acdiii, and \acdiv) and a linker to the transmembrane domain (FlhA\textsubscript{TM}) (\Cref{fig:flhac_results}~(a)). 
 Previous studies using X-ray crystallography and mutational analysis indicate that hinge motions among these domains influence transport activity and motility \cite{saijo-hamano2010flha}. 
 %Here, we applied \Model to real experimental AFM images of \flhac to evaluate its ability to reconstruct the 3D structure of \flhac from AFM images. 
 
@@ -153,7 +153,7 @@ There are three possible explanations for why \Model tends to estimate more open
 To verify the third possibility (large estimation errors in \Model), 
 we investigated the time-series of the estimated structures by \Model (\Cref{fig:flhac_statistic}~(c)). 
 Since the 159 AFM images are a set of consecutive frames as time-series data, we can expect some temporal correlations in the estimated structures if the estimation errors are small. 
-Among the inter-domain distances shown in \Cref{fig:flhac_statistic}~(b), the distance between \acdii and \acdiv serves as a key indicator distinguishing between open and closed conformations. Examination of the time-series reveals that there are periods where this distance is large and others where it is small, 
+Among the inter-domain distances shown in \Cref{fig:flhac_statistic}~(c), the distance between \acdii and \acdiv serves as a key indicator distinguishing between open and closed conformations. Examination of the time-series reveals that there are periods where this distance is large and others where it is small, 
 %indicating that the estimated structures fluctuate between more open and more closed states over time. 
 Importantly, this temporal pattern suggests the presence of time correlation in the estimated structures. Despite the fact that \Model estimates each frame independently without considering temporal information, the observed time correlation in estimated inter-domain distances implies that the estimation errors are smaller than the scale of the observed fluctuations. 
 %This consistency supports the reliability of our \Model estimations and suggests that the structural changes identified reflect genuine molecular motions captured in the AFM sequence, rather than just noise or random estimation error.  
