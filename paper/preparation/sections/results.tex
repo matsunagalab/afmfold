@@ -97,7 +97,7 @@ The g-CNN was trained on the training data to learn the relationship between AFM
         \textbf{\flhac structure and estimated structures compared with the crystal structure}.
         \textbf{(a)} Crystal structure of \flhac (PDB ID: 3A5I). 
         The four domains are colored as follows: dark blue, linker; sky blue, \acdi; green, \acdii; yellow, \acdiii; and orange, \acdiv. 
-        \textbf{(b,e,h)} Experimental AFM images selected from real experimental data. 
+        \textbf{(b,e,h)} Experimental AFM images selected from real experimental data. (b) shows the case where $c.c._{\text{AFMFold}} - c.c._{\text{Crystal}}$ is maximal, panel (e) shows the case where it is at the median value, and panel (h) shows the case where it is minimal.
         \textbf{(c,f,i)} Crystal structures fitted to the corresponding experimental AFM images through rigid-body fitting maximizing the c.c. value. Pseudo-AFM images generated from them are shown in the background.
         \textbf{(d,g,j)} Estimated structures by \Model, fitted to the corresponding experimental AFM images through rigid-body fitting maximizing the c.c. value. Pseudo-AFM images generated from them are shown in the background.
     }
@@ -109,11 +109,13 @@ The g-CNN was trained on the training data to learn the relationship between AFM
 As a comparison, we performed the same fitting procedure for the crystal structure (PDB ID: 3A5I) of \flhac to the three AFM images (also shown in \Cref{fig:flhac_results}). 
 %rigid-body fitting for both structures estimated by \Model and the PDB database structure.
 %For all cases, \Model reproduced more sililar images with reference images than the PDB database structure (see \cref{fig:flhac_statistic} (b)).
-Although it is difficult to distinguish by visual inspection alone, in all three cases, the c.c. value between the pseudo-AFM image and the real AFM image was consistently higher for the estimated structure than for the crystal structure. It should be noted, however, that the improvement in c.c. is only slight. This is because the overall c.c. value is largely dominated by whether the molecule is correctly positioned at the center of the image, while the influence of finer structural details such as subtle surface features is relatively minor in comparison, as already shown in the previous verification for \AK. 
+Although it is difficult to distinguish by visual inspection alone, the three rows respectively represent cases where \Model performed most clearly better than rigid fitting using the crystal structure (top), a typical, median case (middle), and a case where \Model did not outperform the crystal-structure-based rigid fitting (bottom).
+In most cases, the c.c. value between the pseudo-AFM image and the real AFM image was consistently higher for the estimated structure than for the crystal structure, although this difference is often subtle. This is because the overall c.c. value is strongly influenced by whether the molecule is correctly centered in the image, whereas the contribution of finer structural features—such as subtle surface height variations—is comparatively minor, as shown previously for \AK.
+Cases in which \Model failed to reproduce the reference images were often associated with poor image resolution or measurement noise, which made the apparent size of the molecule in the real AFM image very small. 
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.9\linewidth]{images/figures-05.png}
+    \includegraphics[width=0.9\linewidth]{images/figures-04.2.png}
     \caption{
         \textbf{Analysis of the estimated structures by \Model}.
         \textbf{(a)} 
@@ -130,10 +132,10 @@ Although it is difficult to distinguish by visual inspection alone, in all three
     \label{fig:flhac_statistic}
 \end{figure}
 
-Next, we evaluated the estimated conformations by \Model using the total 159 images. \Cref{fig:flhac_statistic}~(b) shows the comparison of the c.c. values between the estimated structures by \Model and the crystal structure with the real AFM images. Again, in almost all cases, the c.c. value for the estimated structure was higher than that for the crystal structure. Interestingly, some of the c.c. values of \Model take higher values when the estimated structures have more open conformations in \Cref{fig:flhac_statistic}~(b) (measured by the distance between \acdii and \acdiv, which serves as a useful indicator to distinguish between open and closed conformations). This might suggest that the flexibility of the inter-domain motions of \flhac is well captured by \Model.
+Next, we evaluated the estimated conformations by \Model using the total 159 images. \Cref{fig:flhac_statistic}~(a) shows the comparison of the c.c. values between the estimated structures by \Model and the crystal structure with the real AFM images. Again, in almost all cases, the c.c. value for the estimated structure was higher than that for the crystal structure. Interestingly, some of the c.c. values of \Model take higher values when the estimated structures have more open conformations in \Cref{fig:flhac_statistic}~(a) (measured by the distance between \acdii and \acdiv, which serves as a useful indicator to distinguish between open and closed conformations). This might suggest that the flexibility of the inter-domain motions of \flhac is well captured by \Model.
 %This is because the open conformation has more surface features that are more easily captured by the AFM images.
 
-To quantify the flexibility of the inter-domain motions captured by \Model, we computed the distribution density of the inter-domain distance between \acdii and \acdiv for all the estimated structures (\Cref{fig:flhac_statistic}(c)). 
+To quantify the flexibility of the inter-domain motions captured by \Model, we computed the distribution density of the inter-domain distance between \acdii and \acdiv for all the estimated structures (\Cref{fig:flhac_statistic}(b)). 
 For comparison, we also generated conformations using AI-based structure generation models, AlphaFlow \cite{jing2024alphaflow}, BioEmu \cite{bioemu2025}, and \AFii with MSA subsampling \cite{delAlamo2022sampling}. 
 These methods are expected to approximate long-time behaviors of \flhac that are not accessible by brute-force MD simulations. 
 Interestingly, compared with these models, \Model tends to estimate more open conformational states. 
