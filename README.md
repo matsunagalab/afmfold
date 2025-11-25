@@ -16,7 +16,7 @@ git clone https://github.com/matsunagalab/afmfold.git
 cd afmfold
 
 # Unzip the released data
-wget https://zenodo.org/records/17597490/files/afmfold.zip
+wget https://zenodo.org/records/17714204/files/afmfold.zip
 unzip afmfold.zip
 ls results
 
