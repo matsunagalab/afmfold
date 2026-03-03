@@ -18,7 +18,7 @@ Here, $\hat{t}_i$ denotes a time larger than $t_i$, defined as $\hat{t}_i = (1 +
 The coefficients $\eta$ and $\lambda$ are hyperparameters called the \textit{noise scale} and \textit{step scale}, respectively, and are set to $\eta = 1.5$ and $\lambda = 1.003$. 
 $\text{Denoiser}(\cdot | a)$ represents a denoiser conditioned by coevolutionary information about $a$.
 
-Let $\phi_{\text{target}} \in \mathbb{R}^D$ denote the estimated coordinate in the CV space, where $D$ is the dimension of the CVs.
+Let $\phi_{\text{target}} \in \mathbb{R}^D$ denote the target CV coordinate, where $D$ is the dimension of the CVs.
 By Bayes’ rule, the conditional score decomposes as
 \begin{equation}
     \begin{split}
