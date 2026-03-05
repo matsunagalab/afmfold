@@ -3,6 +3,7 @@
 
 The estimation pipeline of \Model operates as follows: given an input AFM image, the trained g-CNN directly predicts the CV values (inter-domain distances) from the image; these predicted CV values are then used as restraints to navigate the generative process of \AFiii, which produces a 3D conformation consistent with the input AFM image.
 Because the g-CNN is invariant to in-plane rotations and translations, the same conformation yields the same CV estimate regardless of how the molecule is oriented or positioned in the image, eliminating the need for explicit image alignment.
+Note that, because the CVs and the training conformational ensemble are specific to each target protein, the g-CNN must be trained separately for each protein system of interest.
 
 \subsection{Verification using pseudo-AFM images: adenylate kinase}
 \label{subsec:ak_results}
@@ -11,7 +12,7 @@ Adenylate kinase (\AK) is a well-studied monomeric enzyme known for its large-sc
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.5\linewidth]{images/figure-2.png}
+    \includegraphics[width=0.75\linewidth]{images/figure-2.png}
     \caption{
         \textbf{Training data and estimation accuracy of \Model}.
         \textbf{(a)} Projection of training data into the inter-domain distance space. The two cross marks represent the open (4AKE) and closed (1AKE) crystal structures from PDB, respectively.
@@ -27,26 +28,30 @@ Adenylate kinase (\AK) is a well-studied monomeric enzyme known for its large-sc
 \paragraph{Training data generation and g-CNN accuracy}
 We generated a conformational ensemble by navigating \AFiii to target collective variable (CV) values---defined as the inter-domain distances for all domain pairs (LID--CORE, CORE--AMPbd, and AMPbd--LID)---
 sampled on a regular grid (see SI section S1 for details of the navigation schedule).
+The generated ensembles are shown with their MolProbity scores in \Cref{fig:ak_selection}.
 The resulting ensemble adequately covers the broad conformational space of \AK, encompassing both the closed (PDB ID: 1AKE) and open (PDB ID: 4AKE) crystal structures (\Cref{fig:ak_cnn_training}~(a,b)).
 We then trained the g-CNN on this ensemble and evaluated its prediction accuracy using pseudo-AFM images generated from randomly selected MD conformations (see \Cref{tab:afm_settings} for the image settings).
 The mean root squared error in the CV space is 0.254~nm (\Cref{fig:ak_cnn_training}~(c)), apart from a few outliers exceeding 0.500~nm---sufficiently small to resolve the intermediate conformational states between the open and closed forms of \AK.
 
 \paragraph{Accuracy of conformations estimated by \Model}
 We first applied \Model to pseudo-AFM images of the closed and open crystal structures of \AK (\Cref{fig:overview}~(b,c)).
+Note that these pseudo-AFM images were generated under idealized imaging conditions (small tip radius, fine resolution, no noise; see Methods), so the accuracy reported here represents an upper bound on what can be achieved; the impact of more realistic conditions is assessed in the robustness analysis below.
 The RMSDs between the reconstructed and ground-truth conformations were 0.216~nm (closed) and 0.176~nm (open), both well below the 0.715~nm RMSD separating the two crystal structures, confirming that \Model clearly distinguishes between the two states.
 Accordingly, the pseudo-AFM images generated from the estimated conformations are visually similar from the input images, with correlation coefficients (c.c.; \Cref{eq:cc}) of 0.997 (closed) and 0.998 (open).
 
 We next assessed reconstruction accuracy over a broader range of conformations using pseudo-AFM images generated from randomly selected MD snapshots.
+Note that these MD conformations span a continuous distribution across the open--closed landscape and are not classified into discrete states; the RMSD and CV errors reported below therefore reflect accuracy over this continuum.
 Most RMSDs are distributed around the mean of 0.281~nm, with a small number of outliers (\Cref{fig:ak_cnn_training}~(d,e)).
 Inspection of the outlier cases revealed two contributing factors (\Cref{fig:ak_cnn_training}~(d)).
 First, depending on how the molecule is oriented on the stage (i.e., which face of the protein contacts the surface), the resulting AFM image may look similar regardless of whether the conformation is open or closed.
 Because the g-CNN is trained on pseudo-AFM images rendered from uniformly sampled 3D orientations, it must learn to predict CVs from all possible views; however, certain out-of-plane orientations produce nearly degenerate images for structurally distinct conformations, making it inherently difficult for the g-CNN to estimate the correct inter-domain distances from such views.
 Second, even when the predicted CV values are accurate, the reconstructed RMSD can still be elevated because the CV--structure mapping is not unique: 
 distinct domain arrangements---such as hinge-bending versus shear-like motions---can yield similar inter-domain distances while producing structurally different conformations.
+Indeed, \Cref{fig:ak_cnn_training}~(d) shows that several data points with small CV errors nonetheless exhibit elevated RMSDs, confirming that the CV--structure degeneracy---rather than CV prediction inaccuracy---is the dominant source of reconstruction error in these cases.
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.5\linewidth]{images/figure-3.png}
+    \includegraphics[width=0.75\linewidth]{images/figure-3.png}
     \caption{
         \textbf{Robustness against noise and imaging conditions}.
         \textbf{(a)} Examples of pseudo-AFM images with Gaussian noise at various standard deviations (0.1--0.4~nm), generated from randomly selected MD conformations.
@@ -81,7 +86,7 @@ indicating that \Model is relatively robust to tip broadening effects.
 \paragraph{Correlation coefficient as an evaluation metric}
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.5\linewidth]{images/figure-4.png}
+    \includegraphics[width=0.75\linewidth]{images/figure-4.png}
     \caption{
         \textbf{Variability of the correlation coefficient and its dependence on fitting parameters}.
         \textbf{(a)} Distribution of correlation coefficients (c.c.) between the ``experimental'' pseudo-AFM images and pseudo-AFM images generated from the estimated conformations after rigid-body fitting. The dashed line indicates the mean value (0.998).
@@ -106,6 +111,7 @@ The c.c.\ was highly sensitive to the translation grid step: a coarse translatio
 In contrast, the c.c.\ was relatively insensitive to the probe radius grid step. 
 For the rotational search, the c.c.\ converged in most cases by approximately 5,000 rotation steps (\Cref{fig:cc}~(f--h)). 
 Based on these results, we adopted a translation step of 0.7~nm, a probe radius step of 1~nm (2~nm -- 6~nm for \flhac), a tip angle of $20^{\circ}$, and 10,000 rotation steps for all subsequent analyses, which we consider sufficient for reliable c.c.\ evaluation.
+With these settings, the rigid-body fitting takes approximately 3 minutes per structure on a single GPU.
 
 \subsection{Application to real experimental AFM images: a flagellar protein \flhac}
 
@@ -114,9 +120,11 @@ Structurally, it comprises four domains (\acdi, \acdii, \acdiii, and \acdiv) and
 Previous studies using X-ray crystallography and mutational analysis indicate that hinge motions among these domains influence transport activity and motility \cite{saijo-hamano2010flha}. 
 %Here, we applied \Model to real experimental AFM images of \flhac to evaluate its ability to reconstruct the 3D structure of \flhac from AFM images. 
 
-Here, to evaluate the applicability of \Model to real AFM data \cite{inoue_structural_2019}, we estimated the conformations of \flhac using \Model from 159 HS-AFM images of the \flhac monomer.
-It should be noted that, whereas conventional flexible fitting methods for capturing structural changes typically require hours to days of computation per AFM image even with a coarse-grained model \cite{Niina2020}, 
-\Model allows estimation of conformations from each AFM image in approximately one minute on a single GPU (considering training time, total computation time is less than the conventional flexible fitting methods). 
+Here, to evaluate the applicability of \Model to real AFM data, we used HS-AFM images of \flhac acquired by Inoue et al.\ \cite{inoue_structural_2019}.
+The images were recorded with a spatial resolution of approximately 1.0~nm/pixel (59 $\times$ 59~nm$^2$ field of view, 60 $\times$ 60 pixels) and a frame interval of 66~ms, with the sample immobilized on mica in a buffer containing 20~mM NaCl and 10~mM Tris-HCl (pH~8.0).
+We estimated the conformations of \flhac using \Model from 159 HS-AFM images of the \flhac monomer.
+It should be noted that, whereas conventional flexible fitting methods for capturing structural changes typically require hours to days of computation per AFM image even with a coarse-grained model \cite{Niina2020},
+\Model allows estimation of conformations from each AFM image in approximately one minute on a single GPU once the g-CNN has been trained (see Conclusion for a discussion of the training cost).
 This enabled, for the first time, the processing of as many as 159 AFM images in this study.
 
 \paragraph{Training of the g-CNN and ResNet-18}
@@ -141,7 +149,7 @@ images that are close in the embedding space can be regarded as depicting simila
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.5\linewidth]{images/figure-5.png}
+    \includegraphics[width=0.75\linewidth]{images/figure-5.png}
     \caption{
         \textbf{Embedding representations learned by ResNet-18}.
         \textbf{(a--c)} UMAP projections of the 256-dimensional ResNet-18 embeddings for the training pseudo-AFM images and the experimental AFM images (red). Each scatter plot is colored by a different inter-domain distance: \acdii--\acdiv (a), \acdii--\acdiii (b), and \acdi--\acdiv (c). Different inter-domain distances correspond to distinct gradient directions in the embedding space.
@@ -169,7 +177,7 @@ Nevertheless, the fact that \Model consistently outperforms the crystal structur
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.5\linewidth]{images/figure-6.png}
+    \includegraphics[width=0.75\linewidth]{images/figure-6.png}
     \caption{
         \textbf{Comparison of \Model estimations and the crystal structure for \flhac}.
         \textbf{(a)} Crystal structure of \flhac (PDB ID: 3A5I). The four domains are colored as follows: dark blue, linker; sky blue, \acdi; green, \acdii; yellow, \acdiii; and orange, \acdiv.
@@ -177,8 +185,8 @@ Nevertheless, the fact that \Model consistently outperforms the crystal structur
         \textbf{(c,d)} Pseudo-AFM images generated from the crystal structure (c) and the \Model estimation (d) after rigid-body fitting based on the L2 distance in the embedding space. Predicted domain positions are overlaid.
         \textbf{(e,f)} Pseudo-AFM images generated from the crystal structure (e) and the \Model estimation (f) after rigid-body fitting based on the c.c.\ value. Predicted domain positions are overlaid.
         \textbf{(g,h)} UMAP projections of the ResNet-18 embeddings, showing the positions of the fitted pseudo-AFM images (blue in (g), green in (h)) relative to the training data (gray) and experimental images (red), for the \Model estimations (g) and the crystal structure (h).
-        \textbf{(i)} Scatter plot comparing the L2 distances from the experimental image to the \Model estimation ($y$-axis) and to the crystal structure ($x$-axis). Points below the diagonal indicate cases where \Model achieves a closer match.
-        \textbf{(j)} Bland--Altman plot of the c.c.\ values. The $x$-axis shows the mean of $\mathrm{c.c._{AFMFold}}$ and $\mathrm{c.c._{Crystal}}$, and the $y$-axis shows their difference. Points are colored by the \acdii--\acdiv inter-domain distance. The dashed line indicates the mean difference.
+        \textbf{(i)} Scatter plot comparing the L2 distances from the experimental image to the \Model estimation ($y$-axis) and to the crystal structure ($x$-axis). Points below the diagonal indicate cases where \Model achieves a closer match. Marginal histograms on the top and right axes show the distributions of L2 distances for the crystal structure and \Model, respectively.
+        \textbf{(j)} Bland--Altman plot of the c.c.\ values. The $x$-axis shows the mean of $\mathrm{c.c._{AFMFold}}$ and $\mathrm{c.c._{Crystal}}$, and the $y$-axis shows their difference. Points are colored by the \acdii--\acdiv inter-domain distance. The dashed line indicates the mean difference. The marginal histogram on the right shows the distribution of c.c.\ differences (improvement of \Model over the crystal structure).
     }
     \label{fig:flhac_results}
 \end{figure}
@@ -186,7 +194,7 @@ Nevertheless, the fact that \Model consistently outperforms the crystal structur
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.9\linewidth]{images/figure-7.png}
+    \includegraphics[width=0.75\linewidth]{images/figure-7.png}
     \caption{
         \textbf{Conformational dynamics of \flhac estimated by \Model}.
         \textbf{(a)} Distribution of the \acdii--\acdiv inter-domain distance estimated by \Model (red shaded) compared with AI-based structure generation models: AlphaFlow \cite{jing2024alphaflow}, BioEmu \cite{bioemu2025}, and \AFii with MSA subsampling \cite{delAlamo2022sampling}.
@@ -201,7 +209,7 @@ To characterize the conformational dynamics captured by \Model, we computed the 
 For comparison, we also generated conformational ensembles using AI-based structure generation models: AlphaFlow \cite{jing2024alphaflow}, BioEmu \cite{bioemu2025}, and \AFii with MSA subsampling \cite{delAlamo2022sampling}, which are expected to approximate long-time behaviors of \flhac that are not accessible by brute-force MD simulations.
 Interestingly, \Model tends to estimate more open conformational states than these AI-based models.
 There are three possible explanations for this tendency.
-First, HS-AFM captures molecular dynamics on a timescale of 1~ms per frame, which may reflect longer-timescale motions than those sampled by AlphaFlow or BioEmu, thereby enabling the observation of more open structures.
+First, HS-AFM captures molecular dynamics with a frame interval of 66~ms, which may reflect longer-timescale motions than those sampled by AlphaFlow or BioEmu, thereby enabling the observation of more open structures.
 Second, interactions between the molecule and the stage during AFM imaging may stabilize conformations with larger contact surface areas, thus favoring more open structures.
 Third, estimation errors in \Model could lead to an overrepresentation of highly open conformations with large conformational entropy.
 
@@ -211,6 +219,6 @@ Indeed, the time series exhibits clear oscillatory behavior, with the distances 
 Crucially, \Model estimates each frame independently without any temporal information, yet the estimated inter-domain distances display pronounced time correlations, implying that the estimation errors are smaller than the scale of the observed fluctuations.
 
 This temporal correlation was quantified by the auto-correlation function (\Cref{fig:flhac_statistic}~(c)).
-The auto-correlations from \Model estimations (solid lines) show a pronounced positive correlation for lag times up to 2.0~ms and oscillatory behavior at longer lag times.
+The auto-correlations from \Model estimations (solid lines) show a pronounced positive correlation for lag times up to 400~ms and oscillatory behavior at longer lag times.
 In contrast, the auto-correlations from temporally shuffled surrogate data (dashed lines) remain low (within $\pm$0.2) across all lag times, confirming that the observed correlations are not artifacts of the estimation procedure.
 Overall, these results demonstrate that \Model effectively captures conformational dynamics from the time series of HS-AFM images.
