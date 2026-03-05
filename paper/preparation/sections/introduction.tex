@@ -1,6 +1,3 @@
-\section*{Introduction}
-\label{sec:intro}
-
 High-speed atomic force microscopy (HS-AFM) enables direct visualization of biomolecular dynamics in solution under near-physiological conditions, providing unprecedented insights into the relationship between biomolecular conformational dynamics and biological function \cite{ando_high-speed_2008, ando_high-speed_2022}. 
 However, AFM measurements are inherently limited to surface topography, and the achievable spatial resolution is fundamentally constrained by the finite size of the cantilever tip \cite{villarrubia_algorithms_1997, matsunaga2023endtoend}. 
 To address these limitations, there is a compelling need for computational modeling approaches that can integrate experimental AFM data with atomic-resolution three-dimensional structural models.
@@ -14,9 +11,10 @@ In recent years, methods have been proposed that utilize MD or Monte Carlo (MC) 
 For example, in flexible fitting \cite{Niina2020, ngo2025atomic}, the agreement with an AFM image is defined as an additional potential energy function $V_{\mathrm{AFM}}$, and MD simulations are driven to minimize it. 
 In flexible fitting, sampling is often trapped in local minima, making optimization slow when separated by high barriers. 
 If the global minimum is desired, prohibitively long simulations must be performed to ensure adequate sampling of the conformational space. 
-To reduce the computational cost of MD, NMFF-AFM \cite{Wu2024, amyot_flexible_2025} and AFMFit \cite{Vuillemot2025AFMfit, ngo2025simhs} use a subset of normal modes to find conformations consistent with AFM images. 
-In this case, however, the conformational space is fundamentally limited to capturing only harmonic fluctuations around a single reference structure. 
-Although those approach offers a computationally efficient way to model transitions, it still requires repeated normal mode calculations and careful selection of modes for each frame. 
+Normal-mode-based approaches achieve substantially faster per-frame processing on standard hardware. 
+NMFF-AFM \cite{Wu2024} employs an iterative scheme in which the linear normal-mode response is consecutively applied to gradually changing conformations, enabling the reconstruction of large-amplitude anharmonic transitions. 
+AFMFit \cite{Vuillemot2025AFMfit} takes a different strategy, combining FFT-based pose search with the nonlinear NMA method NOLB to avoid structural distortions inherent in linear extrapolation and to efficiently process hundreds of molecular images into a conformational ensemble.
+However, these approaches rely on MD force fields or elastic-network-derived normal-mode bases, so the accessible conformational space is shaped by the choice of model parameterization and the number of modes retained.
 Another approach is to use a 3D Gaussian mixture model combined with MC sampling to estimate 3D low-resolution protein structures with conformational flexibility \cite{dasgupta_reconstruction_2020, dasgupta_reconstruction_2021}.
 
 In the field of AI-based structure modeling or prediction, sequence-to-structure models such as \AFii \cite{jumper2021highly, ahdritz2024openfold, mirdita2022colabfold}, \AFiii \cite{Abramson2024}, and \Boltzi \cite{wohlwend2024boltz1} have demonstrated unprecedented precision in predicting the 3D fold of a protein. 
@@ -33,11 +31,11 @@ confirmed that it predicts conformations more consistent with AFM images than th
 Furthermore, we confirmed that \Model captures the time-correlated domain motions that reflect underlying conformational dynamics.
 
 A distinctive feature of our framework, \Model, is that all steps—from training data generation, model training, and inference, to structure generation—are integrated within a single unified pipeline, without relying on time-consuming processes such as molecular dynamics simulations. 
-This enables rapid reconstruction of structures from AFM images while reducing computational cost, allowing the observation of structural dynamics from hundreds of consecutive HS-AFM images. \Model provides a powerful framework for observing conformational transitions and functional mechanisms underlying HS-AFM images. 
+This enables rapid reconstruction of structures from AFM images while reducing computational cost, allowing the observation of structural dynamics from hundreds of consecutive HS-AFM images. \Model provides a framework for observing conformational transitions and functional mechanisms underlying HS-AFM images.
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.5\linewidth]{images/figure-1.png}
+    \includegraphics[width=0.75\linewidth]{images/figure-1.png}
     \caption{
         \textbf{Schematic overview of \Model and outcome}.
         \textbf{(a)} The \Model framework consists of two phases.
