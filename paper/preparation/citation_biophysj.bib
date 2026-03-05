@@ -36,6 +36,7 @@
 @string{BBAgenSubj = "BBA--Gen. Subjects"}
 @string{JMLR = "J. Mach. Learn. Res."}
 @string{PNAS = "Proc. Natl. Acad. Sci. U.S.A."}
+@string{ACSNano = "ACS Nano"}
 
 % --- References ---
 
@@ -64,7 +65,7 @@
 }
 
 @article{Niina2020,
-  author    = {Niina, Takuya and Fuchigami, Sotaro and Takada, Shoji},
+  author    = {Niina, Toru and Fuchigami, Sotaro and Takada, Shoji},
   title     = {Flexible Fitting of Biomolecular Structures to Atomic Force Microscopy Images via Biased Molecular Simulations},
   journal   = JCTC,
   year      = {2020},
@@ -97,7 +98,7 @@
 	doi = {10.1021/acsnano.5c10073},
 	abstract = {High-speed atomic force microscopy (HS-AFM) experiments allow direct observation of biomolecular dynamics at the single-molecule level, acquiring a large amount of topographic imaging data that visualizes changes in the molecular surface during functional activity over an extended period of time. Since images have no atomistic resolution, a major challenge has been to develop post-experimental computational methods to infer atomistic information from measurements. The recently developed NMFF-AFM flexible fitting method provides a computationally efficient approach promising to infer atomistic-precision models of conformational dynamics from resolutionlimited AFM imaging data. We report the software integration of this method into the well-established BioAFMviewer platform and demonstrate its first applications to experimental HS-AFM imaging data. To facilitate applications, we developed a direct workflow from raw experimental AFM data to the visualization and analysis of fitting results. The presented applications to experimental data of a single protein domain, a protein complex, and a megadalton-sized protein filament demonstrate the versatility of NMFF-AFM modeling to reproduce large-amplitude conformational motions of biomolecular dynamics from HS-AFM imaging. As a first step toward automated large-scale analysis of AFM imaging data, we furthermore demonstrate reconstruction of an atomistic molecular movie of protein dynamics, involving large-amplitude conformational transitions, from a measured HS-AFM movie sequence. Implementation of flexible fitting within the stand-alone user-friendly interactive BioAFMviewer software provides the opportunity for a broad range of applications to facilitate the understanding of resolution-limited HS-AFM measurements.},
 	number = {38},
-	journal = {ACS Nano},
+	journal = ACSNano,
 	author = {Amyot, Romain and Miyashita, Osamu and Wu, Xuan and Takeda, Kazusa and Kodera, Noriyuki and Konno, Hiroki and Tama, Florence and Flechsig, Holger},
 	month = sep,
 	year = {2025},
@@ -106,25 +107,14 @@
 }
 
 @article{Vuillemot2025AFMfit,
-  author       = {R{\'e}mi Vuillemot and Jean{-}Luc Pellequer and Sergei Grudinin},
-  title        = {Deciphering conformational dynamics in AFM data using fast nonlinear NMA and FFT-based search with AFMFit},
-  journal      = CommBiol,
-  year         = {2025},
-  volume       = {8},
-  number       = {1},
-  pages        = {1--13},
-  doi          = {10.1038/s42003-025-08365-5},
-  url          = {https://doi.org/10.1038/s42003-025-08365-5}
-}
-
-@article{ngo2025simhs,
-  title        = {SimHS-AFMfit-MD: An Integrative Approach to Deciphering Alpha-Actinin Atomic Conformational Dynamics},
-  author       = {Ngo, Kien Xuan and Sumikama, Takashi and Vuillemot, Rémi and Nguyen, Han Gia and Le, Ngan Thi Phuong and Grudinin, Sergei},
-  journal      = bioRxiv,
-  year         = {2025},
-  doi          = {10.1101/2025.04.06.647477},
-  url          = {https://doi.org/10.1101/2025.04.06.647477},
-  note         = {(preprint posted May 8, 2025)}
+  author  = {Vuillemot, R{\'e}mi and Pellequer, Jean-Luc and Grudinin, Sergei},
+  title   = {Deciphering conformational dynamics in AFM data using fast nonlinear NMA and FFT-based search with AFMFit},
+  journal = CommBiol,
+  year    = {2025},
+  volume  = {8},
+  pages   = {1381},
+  doi     = {10.1038/s42003-025-08365-5},
+  url     = {https://doi.org/10.1038/s42003-025-08365-5}
 }
 
 @article{ngo2025atomic,
@@ -205,7 +195,7 @@
 
 @article{raghu2025multiscale,
   title     = {Multiscale guidance of AlphaFold3 with heterogeneous cryo-EM data},
-  author    = {Raghu, Rishwanth and Levy, Axel and Wetzstein, Gordon and D. Zhong, Ellen},
+  author    = {Raghu, Rishwanth and Levy, Axel and Wetzstein, Gordon and Zhong, Ellen D.},
   journal   = arXiv,
   year      = {2025},
   url       = {https://arxiv.org/abs/2506.04490},
@@ -213,20 +203,23 @@
 }
 
 @article{levy2025solving,
-  title  = {Solving Inverse Problems in Protein Space Using Diffusion-Based Priors},
-  author = {Axel Levy and Eric Ryan Chan and Sara Fridovich-Keil and Frederic P Poitevin and Ellen D Zhong and Gordon Wetzstein},
-  year   = {2025},
-  url    = {https://openreview.net/forum?id=UYZRaUCLAg},
-  note   = {(preprint posted Sep 26, 2024)}
+  title   = {Solving Inverse Problems in Protein Space Using Diffusion-Based Priors},
+  author  = {Levy, Axel and Chan, Eric R. and Fridovich-Keil, Sara and Poitevin, Fr{\'e}d{\'e}ric and Zhong, Ellen D. and Wetzstein, Gordon},
+  journal = arXiv,
+  year    = {2024},
+  doi     = {10.48550/arXiv.2406.04239},
+  url     = {https://arxiv.org/abs/2406.04239}
 }
 
 @inproceedings{CohenWelling2016_GCNN,
   author    = {Cohen, Taco S. and Welling, Max},
   title     = {Group Equivariant Convolutional Networks},
-  booktitle = NeurIPS,
+  booktitle = ICML,
+  series    = PMLR,
   volume    = {48},
   pages     = {2990--2999},
   year      = {2016},
+  publisher = {PMLR},
   url       = {https://proceedings.mlr.press/v48/cohenc16.html}
 }
 
@@ -354,10 +347,11 @@
   author    = {Jing, Bowen and Berger, Bonnie and Jaakkola, Tommi},
   booktitle = ICML,
   series    = PMLR,
-  year      = {2024},
-  volume    = {896},
+  volume    = {235},
   pages     = {22277--22303},
-  url       = {https://arxiv.org/abs/2402.04845},
+  year      = {2024},
+  publisher = {PMLR},
+  url       = {https://proceedings.mlr.press/v235/jing24a.html}
 }
 
 @article{Zheng2024_DiG_NatMachIntell,
@@ -381,13 +375,13 @@
   note    = {(preprint posted Aug 23, 2024)}
 }
 
-@inproceedings{Jing2024mdgen,
-  author    = {Jing, Bowen and St{\"a}rk, Hannes and Jaakkola, Tommi and Berger, Bonnie},
+@inproceedings{jing2024mdgen,
   title     = {Generative Modeling of Molecular Dynamics Trajectories},
+  author    = {Jing, Bowen and St{\"a}rk, Hannes and Jaakkola, Tommi and Berger, Bonnie},
   booktitle = NeurIPS,
+  volume    = {38},
   year      = {2024},
-  volume    = {37},
-  pages     = {40534--40564},
+  publisher = {Curran Associates, Inc.},
   url       = {https://proceedings.neurips.cc/paper_files/paper/2024/file/478b06f60662d3cdc1d4f15d4587173a-Paper-Conference.pdf}
 }
 
@@ -404,7 +398,7 @@
 
 @article{bioemu2025,
   title     = {Scalable emulation of protein equilibrium ensembles with generative deep learning},
-  author    = {Lewis, Sarah and Hempel, Tim and Jim{\'e}nez-Luna, Jos{\'e} and Gastegger, Michael and Xie, Yu and Foong, Andrew YK and Satorras, Victor Garc{\'\i}a and Abdin, Osama and Veeling, Bastiaan S and Zaporozhets, Iryna and Chen, Yaoyi and Yang, Soojung and Foster, Adam E. and Schneuing, Arne and Nigam, Jigyasa and Barbero, Federico and Stimper Vincent and  Campbell, Andrew and Yim, Jason and Lienen, Marten and Shi, Yu and Zheng, Shuxin and Schulz, Hannes and Munir, Usman and Sordillo, Roberto and Tomioka, Ryota and Clementi, Cecilia and No{\'e},  Frank},
+  author    = {Lewis, Sarah and Hempel, Tim and Jim{\'e}nez-Luna, Jos{\'e} and Gastegger, Michael and Xie, Yu and Foong, Andrew YK and Satorras, Victor Garc{\'\i}a and Abdin, Osama and Veeling, Bastiaan S and Zaporozhets, Iryna and Chen, Yaoyi and Yang, Soojung and Foster, Adam E. and Schneuing, Arne and Nigam, Jigyasa and Barbero, Federico and Stimper, Vincent and  Campbell, Andrew and Yim, Jason and Lienen, Marten and Shi, Yu and Zheng, Shuxin and Schulz, Hannes and Munir, Usman and Sordillo, Roberto and Tomioka, Ryota and Clementi, Cecilia and No{\'e},  Frank},
   journal   = Science,
   pages     = {eadv9817},
   year      = {2025},
@@ -420,15 +414,6 @@
   volume  = {3},
   pages   = {023013},
   doi     = {10.1103/PRXLife.3.023013}
-}
-
-@article{Liu2024_EGDiff,
-  author  = {Liu, Yikai and Sahoo, Abhilash and Yu, Zongxin and Lin, Guang and Chen, Ming and Hanson, Sonya M.},
-  title   = {EGDiff: An Experiment-Guided Diffusion Model for Protein Conformational Ensemble Generation},
-  journal = bioRxiv,
-  year    = {2024},
-  doi     = {10.1101/2024.10.04.616517},
-  note    = {(preprint posted Oct 4, 2024)}
 }
 
 @article{matsunaga2023endtoend,
@@ -452,13 +437,15 @@
   url       = {https://proceedings.neurips.cc/paper/2017/hash/2650d6089a6d640c5e85b2b88265dc2b-Abstract.html}
 }
 
-@article{Bertasius2021TimeSformer,
+@inproceedings{Bertasius2021TimeSformer,
   title        = {Is Space-Time Attention All You Need for Video Understanding?},
   author       = {Bertasius, Gedas and Wang, Heng and Torresani, Lorenzo},
-  journal      = PMLR,
+  booktitle    = ICML,
+  series       = PMLR,
   year         = {2021},
   volume       = {139},
   pages        = {813--824},
+  publisher    = {PMLR},
   url          = {https://proceedings.mlr.press/v139/bertasius21a.html}
 }
 
@@ -705,37 +692,6 @@
 	file = {Full Text PDF:/Users/yasu/Zotero/storage/WBLPJ5N4/Eastman et al. - 2024 - OpenMM 8 Molecular Dynamics Simulation with Machi.pdf:application/pdf},
 }
 
-@article{huang_charmm36m_2017,
-	title = {{CHARMM36m}: an improved force field for folded and intrinsically disordered proteins},
-	volume = {14},
-	issn = {1548-7091, 1548-7105},
-	shorttitle = {{CHARMM36m}},
-	url = {http://www.nature.com/articles/nmeth.4067},
-	doi = {10.1038/nmeth.4067},
-	number = {1},
-	journal = NatMethods,
-	author = {Huang, Jing and Rauscher, Sarah and Nawrocki, Grzegorz and Ran, Ting and Feig, Michael and de Groot, Bert L and Grubmüller, Helmut and MacKerell, Alexander D},
-	month = jan,
-	year = {2017},
-	pages = {71--73},
-	file = {Full Text:/Users/yasu/Zotero/storage/8ELXX732/Huang et al. - 2017 - CHARMM36m an improved force field for folded and .pdf:application/pdf},
-}
-
-@article{jorgensen_comparison_1983,
-	title = {Comparison of simple potential functions for simulating liquid water},
-	volume = {79},
-	issn = {0021-9606},
-	url = {https://aip.scitation.org/doi/10.1063/1.445869},
-	doi = {10.1063/1.445869},
-	number = {2},
-	journal = JChemPhys,
-	author = {Jorgensen, William L. and Chandrasekhar, Jayaraman and Madura, Jeffry D. and Impey, Roger W. and Klein, Michael L.},
-	month = jul,
-	year = {1983},
-	pages = {926--935},
-	file = {Full Text PDF:/Users/yasu/Zotero/storage/EXRK5EPW/Jorgensen et al. - 1983 - Comparison of simple potential functions for simul.pdf:application/pdf},
-}
-
 @inproceedings{karras2022elucidating,
   title     = {Elucidating the Design Space of Diffusion-Based Generative Models},
   author    = {Karras, Tero and Aittala, Miika and Aila, Timo and Laine, Samuli},
@@ -856,7 +812,7 @@ High-speed AFM experiments allow us to directly observe biomolecules in action, 
   title        = {A Simple Framework for Contrastive Learning of Visual Representations},
   author       = {Chen, Ting and Kornblith, Simon and Norouzi, Mohammad and Hinton, Geoffrey},
   booktitle    = ICML,
-  series       = {Proceedings of Machine Learning Research},
+  series       = PMLR,
   volume       = {119},
   pages        = {1597--1607},
   year         = {2020},
