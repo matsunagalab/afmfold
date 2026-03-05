@@ -1,24 +1,42 @@
 \section*{Conclusion}
 
 In this work, we have proposed a computational protocol, \Model, to predict the 3D conformation of biomolecules from AFM images. 
-\Model enables rapid and accurate conformation estimation compared to previous approaches.
 \Model extracts features from AFM images with a group-invariant (symmetry-aware) CNN, reducing computational cost in two ways.
 First, it reduces the amount of required training data, because symmetry-aware representations learn efficiently from limited images \cite{e2cnn}.
 Second, it shortens inference time: guiding \AFiii requires computing $\ptc{\phi_{\text{object}}}{X_t}$; replacing this with $\mathcal{L}_{\text{MSE}}(X_t)$ keeps the computational cost per structure low.
 In the estimations of this study, per-frame estimation finished within one minute on a single GPU.
-It has the potential to serve as a powerful tool for interpreting HS-AFM movies comprised of hundreds of frames in both structural and dynamic aspects.
+It has the potential to serve as a useful tool for interpreting HS-AFM movies comprised of hundreds of frames in both structural and dynamic aspects.
 
-%\paragraph{Merits}
-% Candidates: Advantages, Merits, Benefits
-
-%Across our evaluations, \Model delivered competitive prediction accuracy at low computational cost.
-%Therefore, \Model can help deepen understanding of biological processes---for example, by quantifying large-scale domain rearrangements along putative pathways and by prioritizing follow-up measurements in single-molecule studies.
+\Model circumvents molecular dynamics simulations entirely, which fundamentally changes the computational cost structure compared with existing flexible fitting approaches.
+In conventional flexible fitting \cite{Niina2020, ngo2025atomic}, each AFM frame requires an independent MD simulation lasting hours to days, making the analysis of large image sequences prohibitive.
+Normal-mode-based approaches such as NMFF-AFM \cite{Wu2024} and AFMFit \cite{Vuillemot2025AFMfit} achieve even faster per-frame processing (tens of seconds per frame on standard hardware) through iterative application of normal-mode linear response, and can capture large-amplitude anharmonic motions \cite{amyot_flexible_2025}.
+However, these methods rely on normal-mode bases derived from a given force field, so the accessible conformational space is shaped by the choice of force field and the number of modes retained.
+In contrast, \Model leverages the co-evolutionary information embedded in \AFiii to generate conformations without depending on MD force fields or normal-mode bases, offering a complementary approach.
 
 A limitation of \Model is that it requires a priori definition of CVs as features to be estimated from the AFM image. If it is challenging to define appropriate CVs a priori, one could first perform structural sampling using methods such as AlphaFlow \cite{jing2024alphaflow}, BioEmu \cite{bioemu2025}, or \AFii with MSA subsampling \cite{delAlamo2022sampling}, and then identify meaningful CVs by applying dimensionality reduction techniques like PCA to extract important features. 
-The \Model framework is general, and as long as the chosen CVs are differentiable with respect to atomic Cartesian coordinates and can be used for guiding \AFiii, a wide variety of CV types can be incorporated. For example, although we focused on inter-domain distances as CVs in this work, other CVs, such as residue-level distance restraints, can be used to enable AFM-guided reconstruction of finer-grained motions without a significant increase in computational cost. 
+The \Model framework is general, and as long as the chosen CVs are differentiable with respect to atomic Cartesian coordinates and can be used for guiding \AFiii, a wide variety of CV types can be incorporated. For example, although we focused on inter-domain distances as CVs in this work, other CVs, such as residue-level distance restraints, can be used to enable AFM-guided reconstruction of finer-grained motions without a significant increase in computational cost.
+The choice of CVs also determines the resolution at which structural degeneracy can be resolved.
+As demonstrated in the \AK analysis (\Cref{fig:ak_cnn_training}~(d)), inter-domain distances alone cannot distinguish domain arrangements that differ in relative orientation (e.g., hinge-bending versus shear-like motions) but yield similar center-of-mass separations.
+When the target protein exhibits such degenerate modes of motion, incorporating additional CVs---for example, inter-domain angles or residue-level distance restraints---would be necessary to lift the degeneracy and improve reconstruction fidelity.
 
-%\paragraph{Limitations \& Future Work}
-% Candidates: Weaknesses, Constraints, Challenges
+Another limitation is that the g-CNN must be trained separately for each protein system, because the CVs and the training conformational ensemble are defined on a per-protein basis.
+This per-protein preparation is not negligible: generating pseudo-AFM images for training takes some minutes, and training the g-CNN requires 2--3 days on a single GPU with 48~GB memory.
+However, once trained, \Model estimates a conformation from each AFM image in approximately one minute, enabling rapid processing of tens to hundreds of frames.
+More broadly, the per-protein setup of \Model currently involves several steps that require user decisions: the definition of CVs, the generation of training conformations via \AFiii, and the selection of guidance scheduling parameters.
+Among these, the guidance scheduling was systematically evaluated in this work (see SI section S1), and the results provide practical guidelines that can be reused across systems, reducing the need for exhaustive per-protein tuning.
+The GPU hardware requirement (48~GB memory in this study) may also present a barrier for some experimental laboratories; however, cloud-based GPU services offer an increasingly accessible alternative.
+These per-protein setup costs are one-time investments: once completed, the trained model can be applied to all frames of a given HS-AFM movie without further intervention.
+
+It is also important to consider the intrinsic limitations of AFM imaging when interpreting the reconstructed structures.
+First, each HS-AFM frame is acquired by raster scanning over a finite time (66~ms in the \flhac data set); if the molecule undergoes conformational changes during this interval, the resulting image represents a temporal average rather than an instantaneous snapshot, which could blur the distinction between neighboring conformational states.
+Second, the lateral resolution is fundamentally limited by the convolution of the probe tip geometry with the molecular surface; as demonstrated in our robustness analysis (\Cref{fig:noise_robustness}~(e,f)), coarser resolution and larger tip radii degrade conformational discrimination.
+For the \flhac data, the spatial resolution of $\sim$1.0~nm/pixel and estimated tip radius of 2--6~nm imply that sub-nanometer domain rearrangements may fall below the effective resolving power.
+These factors set a practical lower bound on the conformational differences that \Model can reliably detect from experimental images and should be kept in mind when interpreting the modest numerical margins observed in the c.c.\ and embedding-distance comparisons (\Cref{fig:flhac_results}~(i,j)).
+
+More broadly, the reliance on simulated pseudo-AFM images for training introduces an inherent distribution mismatch with respect to real experimental data: the precise origins and statistics of experimental noise, tip--sample interactions, and imaging artifacts are difficult to reproduce exactly in simulation.
+In this work, we adopted histogram matching as a simple and transparent adjustment, but achieving a fully realistic sim-to-real mapping remains an open challenge.
+Future work could address this more systematically, for example by incorporating domain adaptation techniques that explicitly account for differences between simulated and experimental data distributions.
+
 Another limitation of \Model is that it infers conformations from a single AFM image and currently does not quantify predictive uncertainty due to image noise or molecular orientation. 
 Extending the framework to estimate uncertainty would make the predictions easier to interpret \cite{Kendall2017Uncertainty}.
 Moreover, AFM image sequences constitute time-series data in which poses change only slightly between adjacent frames; incorporating temporal dependencies---for example, with TimeSformer \cite{Bertasius2021TimeSformer} or non-local networks \cite{Wang2018NonLocalNetworks}---could further improve fidelity.
