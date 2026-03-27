@@ -1,4 +1,5 @@
-\subsection*{Group-equivariant CNNs}
+\subsection{Group-equivariant CNNs}
+\label{subsec:gcnn}
 
 In AFM image analysis, similar to single-particle analysis in cryo-EM, the orientation of the molecule on the surface is unknown.
 Determining the correspondence between a 2D image and the underlying 3D structure therefore requires an exhaustive search over possible poses, which is computationally expensive.
@@ -6,13 +7,13 @@ Furthermore, any misalignment directly degrades the accuracy of the structural e
 In cryo-EM, this issue is mitigated by averaging over a large number of micrographs, but in HS-AFM, where we aim to estimate the structure from each individual frame to capture conformational dynamics, even small alignment errors are unacceptable.
 
 Before describing our approach, we first discuss a more conventional alternative that we chose not to adopt.
-In rigid-body fitting, a candidate 3D structure is placed in a trial orientation, a simulated image is rendered from it, and the pixel-wise similarity (e.g., correlation coefficient) between this rendered image and the observed AFM image is computed; the pose and structure are then iteratively updated to maximize this similarity.
+In rigid-body fitting, a candidate 3D structure is placed in a trial orientation, a simulated image is rendered from it, and the pixel-wise similarity (e.g., correlation coefficient (c.c.)) between this rendered image and the observed AFM image is computed; the pose and structure are then iteratively updated to maximize this similarity.
 One could apply the same strategy within the generation process of \AFiii, scoring each intermediate structure against the reference AFM image at every step.
 While this pixel-level comparison could in principle yield more detailed image reconstructions than our CV-based approach, we empirically found that it tends to trap structures in local minima.
 This happens because the image similarity landscape is highly multimodal and extremely sensitive to small translational and rotational shifts; under a feasible amount of alignment search, the optimization receives inaccurate gradients that mislead the generation process.
 
 To avoid these problems, we need a comparison measure between AFM images and 3D structures that is robust to in-plane rotations and translations, and that can be evaluated efficiently across many AFM frames.
-Our strategy is to use a \emph{group-equivariant} CNN (g-CNN) \cite{CohenWelling2016_GCNN, CohenWelling2017_SteerableCNNs, e2cnn, WeilerEtAl2018_3DSteerableCNNs} that estimates low-dimensional, structure-related collective variables (CVs)---such as distances between protein domains---directly from each AFM image, bypassing the need for explicit alignment altogether.
+Our strategy is to use a \emph{group-equivariant} CNN (g-CNN) \cite{CohenWelling2016_GCNN, CohenWelling2017_SteerableCNNs, e2cnn, WeilerEtAl2018_3DSteerableCNNs} that estimates low-dimensional, structure-related CVs---such as distances between protein domains---directly from each AFM image, bypassing the need for explicit alignment altogether.
 
 A standard CNN is equivariant to translations (shifting the input shifts the output in the same way), but not to rotations.
 A g-CNN extends this to rotations by modifying feature indexing and kernel weight sharing so that the network becomes equivariant under a chosen discrete rotation group \cite{CohenWelling2016_GCNN, e2cnn}.

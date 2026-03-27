@@ -1,4 +1,4 @@
-\section*{Conclusion}
+\section{Conclusion}
 
 In this work, we have proposed a computational protocol, \Model, to predict the 3D conformation of biomolecules from AFM images. 
 \Model extracts features from AFM images with a group-invariant (symmetry-aware) CNN, reducing computational cost in two ways.
@@ -23,7 +23,7 @@ Another limitation is that the g-CNN must be trained separately for each protein
 This per-protein preparation is not negligible: generating pseudo-AFM images for training takes some minutes, and training the g-CNN requires 2--3 days on a single GPU with 48~GB memory.
 However, once trained, \Model estimates a conformation from each AFM image in approximately one minute, enabling rapid processing of tens to hundreds of frames.
 More broadly, the per-protein setup of \Model currently involves several steps that require user decisions: the definition of CVs, the generation of training conformations via \AFiii, and the selection of guidance scheduling parameters.
-Among these, the guidance scheduling was systematically evaluated in this work (see SI section S1), and the results provide practical guidelines that can be reused across systems, reducing the need for exhaustive per-protein tuning.
+Among these, the guidance scheduling was systematically evaluated in this work (see \Cref{sec:nav_scheduling}), and the results provide practical guidelines that can be reused across systems, reducing the need for exhaustive per-protein tuning.
 The GPU hardware requirement (48~GB memory in this study) may also present a barrier for some experimental laboratories; however, cloud-based GPU services offer an increasingly accessible alternative.
 These per-protein setup costs are one-time investments: once completed, the trained model can be applied to all frames of a given HS-AFM movie without further intervention.
 
@@ -31,7 +31,7 @@ It is also important to consider the intrinsic limitations of AFM imaging when i
 First, each HS-AFM frame is acquired by raster scanning over a finite time (66~ms in the \flhac data set); if the molecule undergoes conformational changes during this interval, the resulting image represents a temporal average rather than an instantaneous snapshot, which could blur the distinction between neighboring conformational states.
 Second, the lateral resolution is fundamentally limited by the convolution of the probe tip geometry with the molecular surface; as demonstrated in our robustness analysis (\Cref{fig:noise_robustness}~(e,f)), coarser resolution and larger tip radii degrade conformational discrimination.
 For the \flhac data, the spatial resolution of $\sim$1.0~nm/pixel and estimated tip radius of 2--6~nm imply that sub-nanometer domain rearrangements may fall below the effective resolving power.
-These factors set a practical lower bound on the conformational differences that \Model can reliably detect from experimental images and should be kept in mind when interpreting the modest numerical margins observed in the c.c.\ and embedding-distance comparisons (\Cref{fig:flhac_results}~(i,j)).
+These factors set a practical lower bound on the conformational differences that \Model can reliably detect from experimental images and should be kept in mind when interpreting the modest numerical margins observed in the c.c.\ and embedding-distance comparisons (\Cref{fig:resnet_embeddings}~(b,c)).
 
 More broadly, the reliance on simulated pseudo-AFM images for training introduces an inherent distribution mismatch with respect to real experimental data: the precise origins and statistics of experimental noise, tip--sample interactions, and imaging artifacts are difficult to reproduce exactly in simulation.
 In this work, we adopted histogram matching as a simple and transparent adjustment, but achieving a fully realistic sim-to-real mapping remains an open challenge.
