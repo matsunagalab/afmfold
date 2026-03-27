@@ -17,9 +17,9 @@
 \setlength{\columnsep}{1.5em}
 \usepackage{comment}
 
+\usepackage{xr-hyper}
 \usepackage[colorlinks=true, allcolors=blue]{hyperref}
 \usepackage[capitalize]{cleveref}
-\usepackage{xr-hyper}
 
 \crefname{figure}{fig.}{figs.}
 \Crefname{figure}{Fig.}{Figs.}
@@ -93,80 +93,7 @@
 \setcounter{algorithm}{0}
 \renewcommand{\thealgorithm}{S\arabic{algorithm}}
 
-% figures and legends
-\section{Supplementary figures}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\linewidth]{images/figures-09.png}
-    \caption{
-        \textbf{Selected candidate conformations for \AK and MolProbity evaluation for them}.
-        \textbf{(a)} Projection of the candidate conformations into the inter-domain distance space. 
-        The following panels shows
-        \textbf{(b)} MolProbity score,
-        \textbf{(c)} Clash score,
-        \textbf{(d)} Ramachandran favored rate (\%), and
-        \textbf{(e)} Rotamer outlier rate (\%) of the candidate conformations.
-        }
-    \label{fig:ak_selection}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=1.0\linewidth]{images/figures-10.png}
-    \caption{
-        \textbf{Selected candidate conformations for \flhac and MolProbity evaluation for them}.
-        \textbf{(a)} Projection of the candidate conformations into the inter-domain distance space. 
-        The following panels shows
-        \textbf{(b)} MolProbity score, 
-        \textbf{(c)} Clash score,
-        \textbf{(d)} Ramachandran favored rate (\%), and
-        \textbf{(e)} Rotamer outlier rate (\%) of the candidate conformations.
-        }
-    \label{fig:flhac_selection}
-\end{figure}
-
-
-% supplemental tables
-\section{Supplementary tables}
-
-\begin{table}[hbt!]
-    \centering
-    \caption{Settings for training pseudo-AFM images.}
-    \label{tab:afm_settings}
-    \begin{tabular}{|l|c|c|}
-        \hline
-         & \AK & \flhac \\
-        \hline
-        Lateral resolution [nm/pixel] & 0.3 & 0.98 \\
-        Pixel size [pixel $\times$ pixel] & $35 \times 35$ & $35 \times 35$ \\
-        Tip radius [nm] & $r \sim \mathrm{Uniform}(0.3,0.6)$ & $r \sim \mathrm{Uniform}(2.0,6.0)$ \\
-        Tip apex angle [degree] & $a \sim \mathrm{Uniform}(10,30)$ & $a \sim \mathrm{Uniform}(10,30)$ \\
-        Noise std. dev. [nm] & 0.0 & 0.5 \\
-        Histogram matching & --- & \checkmark \\
-        Dataset size [frames] & 5M & 5M \\
-        Collective variables & Inter-domain distances & Inter-domain distances \\
-                             & (LID-CORE, CORE-AMPbd, & (\acdi-\acdiv, \acdii-\acdiii, \\
-                             & AMPbd-LID)  & \acdii-\acdiv)  \\
-        \hline
-    \end{tabular}
-\end{table}
-
-\begin{table}[hbt!]
-    \centering
-    \caption{MolProbity score thresholds used for geometric sanitization.}
-    \label{tab:score_thresholds}
-    \begin{tabular}{|l|c|}
-        \hline
-        Criterion & Threshold \\
-        \hline
-        MolProbity Score & $\leq 4.0$ \\
-        Clash Score & $\leq 70.0$ \\
-        Ramachandran favored (\%) & $\geq 90.0$ \\
-        Rotamer Outlier (\%) & $\leq 50.0$ \\
-        \hline
-    \end{tabular}
-\end{table}
+\input{sections/appendix.tex}
 
 % supporting references
 \printbibliography
