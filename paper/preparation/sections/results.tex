@@ -5,7 +5,7 @@ The estimation pipeline of \Model operates as follows: given an input AFM image,
 Because the g-CNN is invariant to in-plane rotations and translations, the same conformation yields the same CV estimate regardless of how the molecule is oriented or positioned in the image, eliminating the need for explicit image alignment.
 Note that, because the CVs and the training conformational ensemble are specific to each target protein, the g-CNN must be trained separately for each protein system of interest.
 
-\subsection{Verification using pseudo-AFM images: adenylate kinase}
+\subsection{Verification using pseudo-AFM images: Adenylate kinase}
 \label{subsec:ak_results}
 
 Adenylate kinase (\AK) is a well-studied monomeric enzyme known for its large-scale conformational transitions. It is composed of three relatively rigid domains: the central CORE domain (residues 1–29, 68–117, and 161–214), the AMP-binding domain (AMPbd; residues 30–67), and the lid-like ATP-binding domain (LID; residues 118–167). Experimental and computational studies have suggested that upon ligand binding, the enzyme undergoes a transition from an inactive open conformation to an active closed conformation (see \Cref{fig:overview}~(c)). Here, we evaluated how accurately \Model reconstructs 3D conformations of \AK from artificially created pseudo ``experimental'' AFM images. 
@@ -104,6 +104,7 @@ The c.c.\ values are concentrated in a narrow range of 0.995--0.999, with a mean
 Despite this narrow distribution, a clear negative correlation exists between the c.c.\ and the RMSD (\Cref{fig:cc}~(b)), confirming that the c.c.\ is indeed a meaningful indicator of structural agreement. 
 Notably, however, even a modest difference of $\sim$0.01 in c.c.\ can correspond to a wide range of RMSD values (\Cref{fig:cc}~(b)), implying that small improvements in c.c.\ often reflect substantial differences in structural accuracy. 
 This observation underscores the importance of precise c.c.\ evaluation: the metric is reliable, but the structurally relevant signal resides in very small numerical differences.
+This inherent compression of structural information into numerically small differences motivates the introduction of a complementary embedding-based metric, described below, in which conformational differences are encoded as interpretable spatial distances.
 
 We next investigated how sensitively the c.c.\ depends on the parameters of the rigid-body fitting procedure. 
 Using a single experimental AFM image and the crystal structure of \flhac (discussed in the next section) as the target, we performed repeated fitting trials in which the structure was randomly rotated and then optimized over translation and probe tip radius at various grid step sizes (\Cref{fig:cc}~(c--e)). 
@@ -142,8 +143,9 @@ However, the improvement margins are modest.
 This reflects an intrinsic degeneracy in AFM imaging: distinct 3D conformations can yield similar AFM images due to the convolution effects of the probe tip, finite resolution, and measurement noise.
 Under realistic imaging conditions, even the closed crystal structure can produce pseudo-AFM images of comparable similarity to those of open conformations.
 Moreover, the c.c.\ is dominated by the overall molecular envelope and is inherently insensitive to fine internal structural rearrangements, as demonstrated for \AK (\Cref{fig:cc}~(a)); consequently, even meaningful conformational differences manifest as only small numerical changes in c.c.\ values.
+This fundamental insensitivity of the c.c.\ to conformational detail necessitates a complementary metric that directly encodes structural similarity.
 
-To further validate the estimated conformations with a metric that is more sensitive to structural differences, we trained a separate ResNet-18 model \cite{He2016} that maps AFM images into an embedding space in which structurally similar images are located nearby (see \Cref{subsubsec:evaluation} for training details).
+To overcome this limitation, we validated the estimated conformations using a metric that directly encodes structural similarity: we trained a separate ResNet-18 model \cite{He2016} that maps AFM images into an embedding space in which structurally similar images are located nearby (see \Cref{subsubsec:evaluation} for training details).
 Because this model was trained independently of \Model, agreement in the embedding space constitutes an external validation of the estimated conformations.
 Using the embedding-based fitting described above, we projected the 256-dimensional embedding vectors onto two dimensions (\Cref{fig:resnet_embeddings}~(a)).
 The $x$-axis is the structural feature axis, computed by regressing the \acdii--\acdiv inter-domain distance onto the embedding vectors (correlation $r = 0.898$).
@@ -157,6 +159,7 @@ We further verified empirical rotation invariance of the embeddings (\Cref{fig:r
 In this structural feature space, the \Model predictions (blue dots in \Cref{fig:resnet_embeddings}~(a, left)) cluster more closely around the experimental images (red stars) than the crystal structure does (green dots in \Cref{fig:resnet_embeddings}~(a, right)).
 This is particularly noteworthy because \Model does not use the ResNet-18 model at all---it relies solely on the \gcnn for CV estimation---yet its predictions are independently validated by the ResNet-18 embedding space.
 Quantitatively, the mean geodesic distance between experimental images and \Model predictions was $0.101 \pm 0.044$, compared with $0.125 \pm 0.046$ for the crystal structure (\Cref{fig:resnet_embeddings}~(b)).
+This separation is substantially more interpretable than the corresponding c.c.\ difference, because the embedding distances are directly anchored to structural similarity by construction.
 
 \Cref{fig:resnet_embeddings}~(e--g) present representative cases in which the \Model estimation differs visibly from the crystal structure: (e) and (f) adopt more open conformations, while (g) is more closed.
 Overall, both the c.c.\ and the embedding-based evaluation consistently indicate that \Model captures genuine conformational features present in the experimental AFM images more accurately than the static crystal structure.
