@@ -1,7 +1,7 @@
 \subsection{\Model computational protocol}
 \label{subsec:protocol}
 
-Our \Model framework consists of two main steps as described in the previous subsections: (i) estimation of CVs from AFM images using a \gcnn, and (ii) navigating the generative process of \AFiii using the estimated CVs. However, additional steps are still required for preparing training data for the \gcnn, training, inference, and evaluation. In this subsection, we describe these steps.
+Our \Model framework consists of two main steps: (i) estimation of CVs from AFM images using a group-equivariant CNN (g-CNN; \Cref{subsec:gcnn}), and (ii) navigating the generative process of \AFiii using the estimated CVs (\Cref{subsec:navigating_af3}). However, additional steps are still required for preparing training data for the g-CNN, training, inference, and evaluation. In this subsection, we describe these steps.
 
 \subsubsection{Step 1: Preparation of training data}
 
