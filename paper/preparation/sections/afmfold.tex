@@ -38,7 +38,8 @@ Prior to analysis, the experimental AFM images were preprocessed as follows:
 \subsubsection{Step 2: Training}
 \label{subsubsec:training}
 
-Here, the training of the g-CNN can be regarded as supervised regression, where the task is to predict the CV values from a given AFM image. 
+Here, the training of the g-CNN can be regarded as supervised regression, where the task is to predict the CV values from a given AFM image.
+Note that, because the CVs and the training conformational ensemble are specific to each target protein, the g-CNN must be trained separately for each protein system of interest.
 As the most straightforward loss function for supervised regression, we adopted the mean squared error (MSE) loss in the CV space:
 \begin{equation}
     \mathcal{L}_{\text{CNN}} = \mathrm{Mean}_{i} \| \phi_{\text{pred}}(I_i) - \phi_{\text{true}, i} \|^2,

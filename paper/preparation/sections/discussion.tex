@@ -7,12 +7,6 @@ Second, it shortens inference time: guiding \AFiii requires computing $\ptc{\phi
 In the estimations of this study, per-frame estimation finished within one minute on a single GPU.
 It has the potential to serve as a useful tool for interpreting HS-AFM movies comprised of hundreds of frames in both structural and dynamic aspects.
 
-\Model circumvents molecular dynamics simulations entirely, which fundamentally changes the computational cost structure compared with existing flexible fitting approaches.
-In conventional flexible fitting \cite{Niina2020, ngo2025atomic}, each AFM frame requires an independent MD simulation lasting hours to days, making the analysis of large image sequences prohibitive.
-Normal-mode-based approaches such as NMFF-AFM \cite{Wu2024} and AFMFit \cite{Vuillemot2025AFMfit} achieve even faster per-frame processing (tens of seconds per frame on standard hardware) through iterative application of normal-mode linear response, and can capture large-amplitude anharmonic motions \cite{amyot_flexible_2025}.
-However, these methods rely on normal-mode bases derived from a given force field, so the accessible conformational space is shaped by the choice of force field and the number of modes retained.
-In contrast, \Model leverages the co-evolutionary information embedded in \AFiii to generate conformations without depending on MD force fields or normal-mode bases, offering a complementary approach.
-
 A limitation of \Model is that it requires a priori definition of CVs as features to be estimated from the AFM image. If it is challenging to define appropriate CVs a priori, one could first perform structural sampling using methods such as AlphaFlow \cite{jing2024alphaflow}, BioEmu \cite{bioemu2025}, or \AFii with MSA subsampling \cite{delAlamo2022sampling}, and then identify meaningful CVs by applying dimensionality reduction techniques like PCA to extract important features. 
 The \Model framework is general, and as long as the chosen CVs are differentiable with respect to atomic Cartesian coordinates and can be used for guiding \AFiii, a wide variety of CV types can be incorporated. For example, although we focused on inter-domain distances as CVs in this work, other CVs, such as residue-level distance restraints, can be used to enable AFM-guided reconstruction of finer-grained motions without a significant increase in computational cost.
 The choice of CVs also determines the resolution at which structural degeneracy can be resolved.

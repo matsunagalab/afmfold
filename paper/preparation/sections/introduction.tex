@@ -14,7 +14,7 @@ For example, in flexible fitting \cite{Niina2020, ngo2025atomic}, the agreement 
 In flexible fitting, sampling is often trapped in local minima, making optimization slow when separated by high barriers. 
 If the global minimum is desired, prohibitively long simulations must be performed to ensure adequate sampling of the conformational space. 
 Normal-mode-based approaches achieve substantially faster per-frame processing on standard hardware. 
-NMFF-AFM \cite{Wu2024} employs an iterative scheme in which the linear normal-mode response is consecutively applied to gradually changing conformations, enabling the reconstruction of large-amplitude anharmonic transitions. 
+NMFF-AFM \cite{Wu2024, amyot_flexible_2025} employs an iterative scheme in which the linear normal-mode response is consecutively applied to gradually changing conformations, enabling the reconstruction of large-amplitude anharmonic transitions. 
 AFMFit \cite{Vuillemot2025AFMfit} takes a different strategy, combining FFT-based pose search with a nonlinear normal-mode method to avoid structural distortions inherent in linear extrapolation and to efficiently process hundreds of molecular images into a conformational ensemble.
 However, these approaches rely on MD force fields or elastic-network-derived normal-mode bases, so the accessible conformational space is shaped by the choice of model parameterization and the number of modes retained.
 Another approach is to use a 3D Gaussian mixture model combined with MC sampling to estimate 3D low-resolution protein structures with conformational flexibility \cite{dasgupta_reconstruction_2020, dasgupta_reconstruction_2021}.

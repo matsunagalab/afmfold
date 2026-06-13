@@ -200,7 +200,7 @@ To characterize the conformational dynamics captured by \Model, we computed the 
 For comparison, we also generated conformational ensembles using AI-based structure generation models: AlphaFlow \cite{jing2024alphaflow}, BioEmu \cite{bioemu2025}, and \AFii with MSA subsampling \cite{delAlamo2022sampling}, which are expected to approximate long-time behaviors of \flhac that are not accessible by brute-force MD simulations.
 Interestingly, \Model tends to estimate more open conformational states than these AI-based models.
 There are three possible explanations for this tendency.
-First, HS-AFM captures molecular dynamics with a frame interval of 66~ms, which may reflect longer-timescale motions than those sampled by AlphaFlow or BioEmu, thereby enabling the observation of more open structures.
+First, HS-AFM captures molecular dynamics with a frame interval of 66~ms, corresponding to a longer timescale than that of the training data of AlphaFlow or BioEmu, thereby enabling the observation of more open structures.
 Second, interactions between the molecule and the stage during AFM imaging may stabilize conformations with larger contact surface areas, thus favoring more open structures.
 Third, estimation errors in \Model could lead to an overrepresentation of highly open conformations with large conformational entropy.
 
