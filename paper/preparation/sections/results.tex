@@ -69,8 +69,7 @@ measurement noise and imaging conditions (image resolution and probe tip radius)
 We first examined the effect of noise by systematically varying the Gaussian noise levels added to both the training and ``experimental'' pseudo-AFM images (\Cref{fig:noise_robustness}~(a)).
 The heat maps of the mean RMSD (\Cref{fig:noise_robustness}~(b)) and the inter-domain distance MSE (\Cref{fig:noise_robustness}~(c)) reveal that, while noise in the input (``experimental'') images is the dominant factor degrading accuracy, the accuracy for a given input is highest when the training images carry a comparable noise level.
 In particular, when the input images are noisy, training on nearly noise-free images yields the worst performance (lower-left corner), whereas matching the training noise to the input noise largely restores accuracy.
-Importantly, this degradation grows only gradually with the mismatch, so \Model still tolerates a moderate difference between the training and input noise levels.
-These results indicate that it is important to add noise to the training images at a level comparable to that in the experimental images, although exact matching is not required.
+These results indicate that adding noise to the training images at a level comparable to that in the experimental images is important, although the degradation grows only gradually with the mismatch, so that exact matching is not required.
 
 We next assessed the influence of imaging conditions by varying the image resolution $R_{\rm res}$ and the probe tip radius $R_{\rm probe}$ (\Cref{fig:noise_robustness}~(d)).
 The heat maps of the mean RMSD (\Cref{fig:noise_robustness}~(e)) and the inter-domain distance MSE (\Cref{fig:noise_robustness}~(f)) show that image resolution is the dominant factor governing prediction accuracy.
