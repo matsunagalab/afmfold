@@ -56,6 +56,8 @@ but our goal is to provide a concrete reference point that can serve as a guidel
 
 In this experiments, we investigated the relationship between the navigation strength and the physical plausibility of the generated structures for both \AK (214 residues) and \flhac (346 residues).
 The choice of CVs used for applying the navigation was, for \AK, LID–CORE, CORE–AMPbd, and AMPbd–LID, and for \flhac, \acdi–\acdiv and \acdii–\acdiii.
+For \flhac, this schedule sweep deliberately used only these two CVs as a reduced subset to keep the parameter scan tractable; the final inference reported in the main text (and the full CV set listed in \Cref{tab:afm_settings}) additionally includes \acdii–\acdiv, for three CVs in total.
+Because the guidance schedule controls the overall restraint strength rather than the specific CV set, we adopted the same schedule parameters ($\tau_{\text{start}}=0.6$, $y_{\text{max}}=0.6$) for the three-CV final inference.
 As a reference, under navigation-free conditions, \AFiii predicts structures with inter-domain distances of $(2.85~\mathrm{nm},$ $2.19~\mathrm{nm},$ $3.45~\mathrm{nm})$ for \AK, and $(3.47~\mathrm{nm},$ $4.38~\mathrm{nm})$ for \flhac.
 We conducted two types of experiments for these proteins:
 (i) \textbf{in-distribution targets}, which correspond to physically plausible inter-domain distances observed in MD simulations. Specifically, $(2.41~\mathrm{nm},$ $2.01~\mathrm{nm},$$2.68~\mathrm{nm})$ was chosen for \AK and $(2.5~\mathrm{nm},$$4.5~\mathrm{nm})$ for \flhac.
@@ -71,7 +73,7 @@ All evaluated schedules are shown in \Cref{fig:guidance_scheduling}, and the det
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\linewidth]{images/figure-7.png}
+    \includegraphics[width=0.9\linewidth]{images/figure-7.pdf}
     \caption{
         All navigating schedulings evaluated in this study.
         The setting used in our main experiments, $\tau_{\text{start}}=0.6$ and $y_{\text{max}}=0.6$, is highlighted with a thick red line.
@@ -81,7 +83,7 @@ All evaluated schedules are shown in \Cref{fig:guidance_scheduling}, and the det
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.9\linewidth]{images/figure-8.png}
+    \includegraphics[width=0.9\linewidth]{images/figure-8.pdf}
     \caption{
         \textbf{Results for \AK}. The upper 6 panels ((a)--(f)) shows results for the in-distribution target, and the lower 6 panels ((g)--(l)) shows results for the out-of-distribution target.
         \textbf{(a), (g)} Average MolProbity scores.
@@ -95,7 +97,7 @@ All evaluated schedules are shown in \Cref{fig:guidance_scheduling}, and the det
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.9\linewidth]{images/figure-9.png}
+    \includegraphics[width=0.9\linewidth]{images/figure-9.pdf}
     \caption{
         \textbf{Results for \flhac}. As before, the upper 6 panels ((a)--(f)) shows results for the in-distribution target, and the lower 6 panels ((g)--(l)) shows results for the out-of-distribution target.
         \textbf{(a), (g)} Average MolProbity scores.
@@ -110,7 +112,7 @@ All evaluated schedules are shown in \Cref{fig:guidance_scheduling}, and the det
 \section{Model implementation details}
 
 \begin{algorithm}[H]
-\caption{\textsc{Forward function of $(\R^2, +) \rtimes C_8$ invariant CNN}}
+\caption{\textsc{Forward function of the $(\R^2, +) \rtimes C_8$-equivariant CNN}}
 \label{alg:cnscnn}
 \begin{algorithmic}
 \State \textbf{Input:} $I \in \mathbb{R}^{B \times D \cdot N \times H \times W}$, $D=1$, $N=8$, $H=W=35$; \\
@@ -239,7 +241,7 @@ $N_{\text{hidden-layers}} = 3$, $D_{\text{hidden}} = 64$, $D_{\text{out}} = N_{\
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\linewidth]{images/figure-12.png}
+    \includegraphics[width=0.8\linewidth]{images/figure-12.pdf}
     \caption{
         \textbf{Empirical rotation invariance of ResNet-18 embeddings}.
         For each molecular pose, simulated AFM images were generated at 8 in-plane rotation angles,
@@ -255,7 +257,7 @@ $N_{\text{hidden-layers}} = 3$, $D_{\text{hidden}} = 64$, $D_{\text{out}} = N_{\
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\linewidth]{images/figure-10.png}
+    \includegraphics[width=\linewidth]{images/figure-10.pdf}
     \caption{
         \textbf{Selected candidate conformations for \AK and MolProbity evaluation for them}.
         \textbf{(a)} Projection of the candidate conformations into the inter-domain distance space.
@@ -270,7 +272,7 @@ $N_{\text{hidden-layers}} = 3$, $D_{\text{hidden}} = 64$, $D_{\text{out}} = N_{\
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1.0\linewidth]{images/figure-11.png}
+    \includegraphics[width=1.0\linewidth]{images/figure-11.pdf}
     \caption{
         \textbf{Selected candidate conformations for \flhac and MolProbity evaluation for them}.
         \textbf{(a)} Projection of the candidate conformations into the inter-domain distance space.
