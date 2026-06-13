@@ -1,7 +1,7 @@
 \subsection{\Model computational protocol}
 \label{subsec:protocol}
 
-Our \Model framework consists of two main steps as described in the previous subsections: (i) estimation of CVs from AFM images using a \gcnn, and (ii) navigating the generative process of \AFiii using the estimated CVs. However, additional steps are still required for preparing training data for the \gcnn, training, inference, and evaluation. In this subsection, we describe these steps.
+Our \Model framework consists of two main steps: (i) estimation of CVs from AFM images using a group-equivariant CNN (g-CNN; \Cref{subsec:gcnn}), and (ii) navigating the generative process of \AFiii using the estimated CVs (\Cref{subsec:navigating_af3}). However, additional steps are still required for preparing training data for the g-CNN, training, inference, and evaluation. In this subsection, we describe these steps.
 
 \subsubsection{Step 1: Preparation of training data}
 
@@ -38,14 +38,13 @@ Prior to analysis, the experimental AFM images were preprocessed as follows:
 \subsubsection{Step 2: Training}
 \label{subsubsec:training}
 
-Here, the training of the g-CNN can be regarded as supervised regression, where the task is to predict the CV values from a given AFM image.
-Note that, because the CVs and the training conformational ensemble are specific to each target protein, the g-CNN must be trained separately for each protein system of interest.
+Here, the training of the g-CNN can be regarded as supervised regression, where the task is to estimate the CV values from a given AFM image. 
 As the most straightforward loss function for supervised regression, we adopted the mean squared error (MSE) loss in the CV space:
 \begin{equation}
-    \mathcal{L}_{\text{CNN}} = \mathrm{Mean}_{i} \| \phi_{\text{pred}}(I_i) - \phi_{\text{true}, i} \|^2,
+    \mathcal{L}_{\text{CNN}} = \mathrm{Mean}_{i} \| \phi_{\text{est}}(I_i) - \phi_{\text{true}}(I_i) \|^2,
     \label{eq:cnn-mse-loss}
 \end{equation}
-where $I_i$ denotes the $i$-th input pseudo-AFM image, $\phi_{\text{pred}}(I_i)$ is the CV values predicted by the g-CNN, and $\phi_{\text{true}, i}$ is the corresponding ground-truth CV values. As the g-CNN architecture, we implemented a $(\mathbb{R}^2, +) \rtimes C_8$-equivariant CNN whose group-pooled output is invariant to in-plane rotations and translations (see \Cref{alg:cnscnn} for the implementation details).
+where $I_i$ denotes the $i$-th input pseudo-AFM image, $\phi_{\text{est}}(I_i)$ is the CV values estimated by the g-CNN, and $\phi_{\text{true}}(I_i)$ is the corresponding ground-truth CV values. As the g-CNN architecture, we implemented a $(\mathbb{R}^2, +) \rtimes C_8$-invariant CNN (see \Cref{alg:cnscnn} for the implementation details).
 
 All models in this paper were trained for 20 epochs with a batch size of 32, using the Adam optimizer with a learning rate of $10^{-4}$, on a single node equipped with an NVIDIA RTX A6000 GPU (48~GB memory). 
 The training took approximately 2--3 days for both \AK and \flhac.
@@ -53,7 +52,7 @@ The training took approximately 2--3 days for both \AK and \flhac.
 \subsubsection{Step 3: Inference}
 
 The inference step consists of the estimation of CVs (inter-domain distances) from the AFM image by the g-CNN, and the navigation of the generative process of \AFiii using the estimated CVs. 
-In this study, we require that the MSE of the g-CNN for the generated structures be below sub-\AA{}, 
+In this study, we require that the MSE of the g-CNN for the generated structures be at the sub-\AA{} level, 
 which is an important resolution for distinguishing different conformations for both \AK and \flhac. 
 
 The computation time for the inference step was extremely short 
@@ -83,7 +82,7 @@ The imaging parameters---3D rotation, translation, and tip radius---are varied t
 where $H^{\text{(exp)}}_p$ and $H^{\text{(sim)}}_p(R)$ denote the heights of the experimental and simulated image pixels, respectively. 
 However, the c.c.\ is largely dominated by the global translation and rotation,
 so that subtle differences in internal molecular structure manifest only as numerically small changes in the score.
-Moreover, the absolute value of c.c.\ depends on conditions such as the noise level, the number of pixels, the tip size, the molucule size and conformation of the molecule;
+Moreover, the absolute value of c.c.\ depends on conditions such as the noise level, the number of pixels, the tip size, the molecule size and conformation of the molecule;
 consequently, a given numerical improvement in c.c.\ cannot be directly translated into a quantitative statement about how much the underlying molecular shape has improved.
 While an increase in c.c.\ qualitatively indicates a better structural description, the lack of a universal mapping between c.c.\ differences and structural accuracy makes the metric difficult to interpret in practice.
 

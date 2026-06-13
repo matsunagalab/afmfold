@@ -936,85 +936,6 @@
       \verb https://pubs.acs.org/doi/full/10.1021/acs.jpcb.4c04189
       \endverb
     \endentry
-    \entry{amyot_flexible_2025}{article}{}{}
-      \name{author}{8}{}{%
-        {{hash=0002d22db7517712e6b0fb69f42693b3}{%
-           family={Amyot},
-           familyi={A\bibinitperiod},
-           given={Romain},
-           giveni={R\bibinitperiod}}}%
-        {{hash=81d29b1db35bc6bad05be19e9be120a9}{%
-           family={Miyashita},
-           familyi={M\bibinitperiod},
-           given={Osamu},
-           giveni={O\bibinitperiod}}}%
-        {{hash=431c664e2c605c579f2c08e762d39206}{%
-           family={Wu},
-           familyi={W\bibinitperiod},
-           given={Xuan},
-           giveni={X\bibinitperiod}}}%
-        {{hash=7dca2c8435bcae43c496c39b0a293a6c}{%
-           family={Takeda},
-           familyi={T\bibinitperiod},
-           given={Kazusa},
-           giveni={K\bibinitperiod}}}%
-        {{hash=e2d8820e7fac3928f0d83cf97ec87efe}{%
-           family={Kodera},
-           familyi={K\bibinitperiod},
-           given={Noriyuki},
-           giveni={N\bibinitperiod}}}%
-        {{hash=cc2a083455c9ccaa2adcd842ceb0c984}{%
-           family={Konno},
-           familyi={K\bibinitperiod},
-           given={Hiroki},
-           giveni={H\bibinitperiod}}}%
-        {{hash=648079a9a14ad09ebd4627c6b0108cb0}{%
-           family={Tama},
-           familyi={T\bibinitperiod},
-           given={Florence},
-           giveni={F\bibinitperiod}}}%
-        {{hash=a05e866bb7dbe87481243698695a25b5}{%
-           family={Flechsig},
-           familyi={F\bibinitperiod},
-           given={Holger},
-           giveni={H\bibinitperiod}}}%
-      }
-      \strng{namehash}{47308600b45eedf82eb904df89f7916e}
-      \strng{fullhash}{89029dac4ac3c8aa21b821a63b8c92c3}
-      \strng{fullhashraw}{89029dac4ac3c8aa21b821a63b8c92c3}
-      \strng{bibnamehash}{89029dac4ac3c8aa21b821a63b8c92c3}
-      \strng{authorbibnamehash}{89029dac4ac3c8aa21b821a63b8c92c3}
-      \strng{authornamehash}{47308600b45eedf82eb904df89f7916e}
-      \strng{authorfullhash}{89029dac4ac3c8aa21b821a63b8c92c3}
-      \strng{authorfullhashraw}{89029dac4ac3c8aa21b821a63b8c92c3}
-      \field{extraname}{2}
-      \field{sortinit}{5}
-      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{abstract}{High-speed atomic force microscopy (HS-AFM) experiments allow direct observation of biomolecular dynamics at the single-molecule level, acquiring a large amount of topographic imaging data that visualizes changes in the molecular surface during functional activity over an extended period of time. Since images have no atomistic resolution, a major challenge has been to develop post-experimental computational methods to infer atomistic information from measurements. The recently developed NMFF-AFM flexible fitting method provides a computationally efficient approach promising to infer atomistic-precision models of conformational dynamics from resolutionlimited AFM imaging data. We report the software integration of this method into the well-established BioAFMviewer platform and demonstrate its first applications to experimental HS-AFM imaging data. To facilitate applications, we developed a direct workflow from raw experimental AFM data to the visualization and analysis of fitting results. The presented applications to experimental data of a single protein domain, a protein complex, and a megadalton-sized protein filament demonstrate the versatility of NMFF-AFM modeling to reproduce large-amplitude conformational motions of biomolecular dynamics from HS-AFM imaging. As a first step toward automated large-scale analysis of AFM imaging data, we furthermore demonstrate reconstruction of an atomistic molecular movie of protein dynamics, involving large-amplitude conformational transitions, from a measured HS-AFM movie sequence. Implementation of flexible fitting within the stand-alone user-friendly interactive BioAFMviewer software provides the opportunity for a broad range of applications to facilitate the understanding of resolution-limited HS-AFM measurements.}
-      \field{issn}{1936-0851, 1936-086X}
-      \field{journaltitle}{ACS Nano}
-      \field{month}{9}
-      \field{number}{38}
-      \field{title}{Flexible {Fitting} to {Infer} {Atomistic}-{Precision} {Models} of {Large}-{Amplitude} {Conformational} {Dynamics} in {Biomolecules} from {High}-{Speed} {Atomic} {Force} {Microscopy} {Imaging}}
-      \field{volume}{19}
-      \field{year}{2025}
-      \field{pages}{34065\bibrangedash 34079}
-      \range{pages}{15}
-      \verb{doi}
-      \verb 10.1021/acsnano.5c10073
-      \endverb
-      \verb{file}
-      \verb PDF:/Users/yasu/Zotero/storage/MY3SU8X7/Amyot et al. - 2025 - Flexible Fitting to Infer Atomistic-Precision Models of Large-Amplitude Conformational Dynamics in B.pdf:application/pdf
-      \endverb
-      \verb{urlraw}
-      \verb https://pubs.acs.org/doi/10.1021/acsnano.5c10073
-      \endverb
-      \verb{url}
-      \verb https://pubs.acs.org/doi/10.1021/acsnano.5c10073
-      \endverb
-    \endentry
     \entry{Vuillemot2025AFMfit}{article}{}{}
       \name{author}{3}{}{%
         {{hash=db6bd6bf60b74af28d061b1e73d28c7b}{%
@@ -2485,186 +2406,6 @@
       \verb https://www.biorxiv.org/content/early/2025/01/11/2025.01.08.631967
       \endverb
     \endentry
-    \entry{CohenWelling2016_GCNN}{inproceedings}{}{}
-      \name{author}{2}{}{%
-        {{hash=edf134d8390d35f2ca53bbf823ba961e}{%
-           family={Cohen},
-           familyi={C\bibinitperiod},
-           given={Taco\bibnamedelima S.},
-           giveni={T\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
-        {{hash=53d2880ad8047b61cdae2c6b2803e763}{%
-           family={Welling},
-           familyi={W\bibinitperiod},
-           given={Max},
-           giveni={M\bibinitperiod}}}%
-      }
-      \list{publisher}{1}{%
-        {PMLR}%
-      }
-      \strng{namehash}{ba57870691c10a3c8dd30e5878eb9108}
-      \strng{fullhash}{ba57870691c10a3c8dd30e5878eb9108}
-      \strng{fullhashraw}{ba57870691c10a3c8dd30e5878eb9108}
-      \strng{bibnamehash}{ba57870691c10a3c8dd30e5878eb9108}
-      \strng{authorbibnamehash}{ba57870691c10a3c8dd30e5878eb9108}
-      \strng{authornamehash}{ba57870691c10a3c8dd30e5878eb9108}
-      \strng{authorfullhash}{ba57870691c10a3c8dd30e5878eb9108}
-      \strng{authorfullhashraw}{ba57870691c10a3c8dd30e5878eb9108}
-      \field{extraname}{1}
-      \field{sortinit}{1}
-      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{booktitle}{Proc. Int. Conf. Mach. Learn.}
-      \field{series}{Proc. Mach. Learn. Res.}
-      \field{title}{Group Equivariant Convolutional Networks}
-      \field{volume}{48}
-      \field{year}{2016}
-      \field{pages}{2990\bibrangedash 2999}
-      \range{pages}{10}
-      \verb{urlraw}
-      \verb https://proceedings.mlr.press/v48/cohenc16.html
-      \endverb
-      \verb{url}
-      \verb https://proceedings.mlr.press/v48/cohenc16.html
-      \endverb
-    \endentry
-    \entry{CohenWelling2017_SteerableCNNs}{inproceedings}{}{}
-      \name{author}{2}{}{%
-        {{hash=edf134d8390d35f2ca53bbf823ba961e}{%
-           family={Cohen},
-           familyi={C\bibinitperiod},
-           given={Taco\bibnamedelima S.},
-           giveni={T\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
-        {{hash=53d2880ad8047b61cdae2c6b2803e763}{%
-           family={Welling},
-           familyi={W\bibinitperiod},
-           given={Max},
-           giveni={M\bibinitperiod}}}%
-      }
-      \strng{namehash}{ba57870691c10a3c8dd30e5878eb9108}
-      \strng{fullhash}{ba57870691c10a3c8dd30e5878eb9108}
-      \strng{fullhashraw}{ba57870691c10a3c8dd30e5878eb9108}
-      \strng{bibnamehash}{ba57870691c10a3c8dd30e5878eb9108}
-      \strng{authorbibnamehash}{ba57870691c10a3c8dd30e5878eb9108}
-      \strng{authornamehash}{ba57870691c10a3c8dd30e5878eb9108}
-      \strng{authorfullhash}{ba57870691c10a3c8dd30e5878eb9108}
-      \strng{authorfullhashraw}{ba57870691c10a3c8dd30e5878eb9108}
-      \field{extraname}{2}
-      \field{sortinit}{1}
-      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{booktitle}{Int. Conf. Learn. Represent.}
-      \field{title}{Steerable {CNN}s}
-      \field{year}{2017}
-      \verb{urlraw}
-      \verb https://openreview.net/forum?id=rJQKYt5ll
-      \endverb
-      \verb{url}
-      \verb https://openreview.net/forum?id=rJQKYt5ll
-      \endverb
-    \endentry
-    \entry{WeilerEtAl2018_3DSteerableCNNs}{inproceedings}{}{}
-      \name{author}{5}{}{%
-        {{hash=d9163fe74270da13b6636edccf1b2bd7}{%
-           family={Weiler},
-           familyi={W\bibinitperiod},
-           given={Maurice},
-           giveni={M\bibinitperiod}}}%
-        {{hash=8269041a68cb53bcac4121f74a3b53cf}{%
-           family={Geiger},
-           familyi={G\bibinitperiod},
-           given={Mario},
-           giveni={M\bibinitperiod}}}%
-        {{hash=53d2880ad8047b61cdae2c6b2803e763}{%
-           family={Welling},
-           familyi={W\bibinitperiod},
-           given={Max},
-           giveni={M\bibinitperiod}}}%
-        {{hash=ff2aef03a3340d44434c8813a54f439b}{%
-           family={Boomsma},
-           familyi={B\bibinitperiod},
-           given={Wouter},
-           giveni={W\bibinitperiod}}}%
-        {{hash=edf134d8390d35f2ca53bbf823ba961e}{%
-           family={Cohen},
-           familyi={C\bibinitperiod},
-           given={Taco\bibnamedelima S.},
-           giveni={T\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
-      }
-      \strng{namehash}{b5d0bacf836591410ee07a29991c3fc9}
-      \strng{fullhash}{7d9da708000b4431ab8ce30d2c0acac7}
-      \strng{fullhashraw}{7d9da708000b4431ab8ce30d2c0acac7}
-      \strng{bibnamehash}{7d9da708000b4431ab8ce30d2c0acac7}
-      \strng{authorbibnamehash}{7d9da708000b4431ab8ce30d2c0acac7}
-      \strng{authornamehash}{b5d0bacf836591410ee07a29991c3fc9}
-      \strng{authorfullhash}{7d9da708000b4431ab8ce30d2c0acac7}
-      \strng{authorfullhashraw}{7d9da708000b4431ab8ce30d2c0acac7}
-      \field{sortinit}{1}
-      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{booktitle}{Adv. Neural Inf. Process. Syst.}
-      \field{title}{3{D} Steerable {CNN}s: Learning Rotationally Equivariant Features in Volumetric Data}
-      \field{volume}{31}
-      \field{year}{2018}
-      \verb{urlraw}
-      \verb https://papers.nips.cc/paper_files/paper/2018/hash/488e4104520c6aab692863cc1dba45af-Abstract.html
-      \endverb
-      \verb{url}
-      \verb https://papers.nips.cc/paper_files/paper/2018/hash/488e4104520c6aab692863cc1dba45af-Abstract.html
-      \endverb
-    \endentry
-    \entry{karras2022elucidating}{inproceedings}{}{}
-      \name{author}{4}{}{%
-        {{hash=9c6cb97b8c2c22b41d64c2c4f4520c11}{%
-           family={Karras},
-           familyi={K\bibinitperiod},
-           given={Tero},
-           giveni={T\bibinitperiod}}}%
-        {{hash=46c9891d2dac80f9bbdd0f7e920aaea1}{%
-           family={Aittala},
-           familyi={A\bibinitperiod},
-           given={Miika},
-           giveni={M\bibinitperiod}}}%
-        {{hash=70c1210f7c167faac22c68d1db1d9175}{%
-           family={Aila},
-           familyi={A\bibinitperiod},
-           given={Timo},
-           giveni={T\bibinitperiod}}}%
-        {{hash=e83c74e19bcc032813595328513ebd5c}{%
-           family={Laine},
-           familyi={L\bibinitperiod},
-           given={Samuli},
-           giveni={S\bibinitperiod}}}%
-      }
-      \list{publisher}{1}{%
-        {Curran Associates, Inc.}%
-      }
-      \strng{namehash}{338fbd4c2ccae5bf5e00de7691045566}
-      \strng{fullhash}{fbe05311ce2028186cf9f8da4a83471c}
-      \strng{fullhashraw}{fbe05311ce2028186cf9f8da4a83471c}
-      \strng{bibnamehash}{fbe05311ce2028186cf9f8da4a83471c}
-      \strng{authorbibnamehash}{fbe05311ce2028186cf9f8da4a83471c}
-      \strng{authornamehash}{338fbd4c2ccae5bf5e00de7691045566}
-      \strng{authorfullhash}{fbe05311ce2028186cf9f8da4a83471c}
-      \strng{authorfullhashraw}{fbe05311ce2028186cf9f8da4a83471c}
-      \field{sortinit}{2}
-      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{booktitle}{Adv. Neural Inf. Process. Syst.}
-      \field{title}{Elucidating the Design Space of Diffusion-Based Generative Models}
-      \field{year}{2022}
-      \field{pages}{26565\bibrangedash 26577}
-      \range{pages}{13}
-      \verb{urlraw}
-      \verb https://proceedings.neurips.cc/paper_files/paper/2022/file/a98846e9d9cc01cfb87eb694d946ce6b-Abstract.html
-      \endverb
-      \verb{url}
-      \verb https://proceedings.neurips.cc/paper_files/paper/2022/file/a98846e9d9cc01cfb87eb694d946ce6b-Abstract.html
-      \endverb
-    \endentry
     \entry{He2016}{inproceedings}{}{}
       \name{author}{4}{}{%
         {{hash=6b4b60e909e78633945f3f9c9dc83e01}{%
@@ -2916,6 +2657,186 @@
       \endverb
       \verb{url}
       \verb https://jmlr.org/papers/volume17/15-239/15-239.pdf
+      \endverb
+    \endentry
+    \entry{CohenWelling2016_GCNN}{inproceedings}{}{}
+      \name{author}{2}{}{%
+        {{hash=edf134d8390d35f2ca53bbf823ba961e}{%
+           family={Cohen},
+           familyi={C\bibinitperiod},
+           given={Taco\bibnamedelima S.},
+           giveni={T\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=53d2880ad8047b61cdae2c6b2803e763}{%
+           family={Welling},
+           familyi={W\bibinitperiod},
+           given={Max},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {PMLR}%
+      }
+      \strng{namehash}{ba57870691c10a3c8dd30e5878eb9108}
+      \strng{fullhash}{ba57870691c10a3c8dd30e5878eb9108}
+      \strng{fullhashraw}{ba57870691c10a3c8dd30e5878eb9108}
+      \strng{bibnamehash}{ba57870691c10a3c8dd30e5878eb9108}
+      \strng{authorbibnamehash}{ba57870691c10a3c8dd30e5878eb9108}
+      \strng{authornamehash}{ba57870691c10a3c8dd30e5878eb9108}
+      \strng{authorfullhash}{ba57870691c10a3c8dd30e5878eb9108}
+      \strng{authorfullhashraw}{ba57870691c10a3c8dd30e5878eb9108}
+      \field{extraname}{1}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Proc. Int. Conf. Mach. Learn.}
+      \field{series}{Proc. Mach. Learn. Res.}
+      \field{title}{Group Equivariant Convolutional Networks}
+      \field{volume}{48}
+      \field{year}{2016}
+      \field{pages}{2990\bibrangedash 2999}
+      \range{pages}{10}
+      \verb{urlraw}
+      \verb https://proceedings.mlr.press/v48/cohenc16.html
+      \endverb
+      \verb{url}
+      \verb https://proceedings.mlr.press/v48/cohenc16.html
+      \endverb
+    \endentry
+    \entry{CohenWelling2017_SteerableCNNs}{inproceedings}{}{}
+      \name{author}{2}{}{%
+        {{hash=edf134d8390d35f2ca53bbf823ba961e}{%
+           family={Cohen},
+           familyi={C\bibinitperiod},
+           given={Taco\bibnamedelima S.},
+           giveni={T\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=53d2880ad8047b61cdae2c6b2803e763}{%
+           family={Welling},
+           familyi={W\bibinitperiod},
+           given={Max},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{ba57870691c10a3c8dd30e5878eb9108}
+      \strng{fullhash}{ba57870691c10a3c8dd30e5878eb9108}
+      \strng{fullhashraw}{ba57870691c10a3c8dd30e5878eb9108}
+      \strng{bibnamehash}{ba57870691c10a3c8dd30e5878eb9108}
+      \strng{authorbibnamehash}{ba57870691c10a3c8dd30e5878eb9108}
+      \strng{authornamehash}{ba57870691c10a3c8dd30e5878eb9108}
+      \strng{authorfullhash}{ba57870691c10a3c8dd30e5878eb9108}
+      \strng{authorfullhashraw}{ba57870691c10a3c8dd30e5878eb9108}
+      \field{extraname}{2}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Int. Conf. Learn. Represent.}
+      \field{title}{Steerable {CNN}s}
+      \field{year}{2017}
+      \verb{urlraw}
+      \verb https://openreview.net/forum?id=rJQKYt5ll
+      \endverb
+      \verb{url}
+      \verb https://openreview.net/forum?id=rJQKYt5ll
+      \endverb
+    \endentry
+    \entry{WeilerEtAl2018_3DSteerableCNNs}{inproceedings}{}{}
+      \name{author}{5}{}{%
+        {{hash=d9163fe74270da13b6636edccf1b2bd7}{%
+           family={Weiler},
+           familyi={W\bibinitperiod},
+           given={Maurice},
+           giveni={M\bibinitperiod}}}%
+        {{hash=8269041a68cb53bcac4121f74a3b53cf}{%
+           family={Geiger},
+           familyi={G\bibinitperiod},
+           given={Mario},
+           giveni={M\bibinitperiod}}}%
+        {{hash=53d2880ad8047b61cdae2c6b2803e763}{%
+           family={Welling},
+           familyi={W\bibinitperiod},
+           given={Max},
+           giveni={M\bibinitperiod}}}%
+        {{hash=ff2aef03a3340d44434c8813a54f439b}{%
+           family={Boomsma},
+           familyi={B\bibinitperiod},
+           given={Wouter},
+           giveni={W\bibinitperiod}}}%
+        {{hash=edf134d8390d35f2ca53bbf823ba961e}{%
+           family={Cohen},
+           familyi={C\bibinitperiod},
+           given={Taco\bibnamedelima S.},
+           giveni={T\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+      }
+      \strng{namehash}{b5d0bacf836591410ee07a29991c3fc9}
+      \strng{fullhash}{7d9da708000b4431ab8ce30d2c0acac7}
+      \strng{fullhashraw}{7d9da708000b4431ab8ce30d2c0acac7}
+      \strng{bibnamehash}{7d9da708000b4431ab8ce30d2c0acac7}
+      \strng{authorbibnamehash}{7d9da708000b4431ab8ce30d2c0acac7}
+      \strng{authornamehash}{b5d0bacf836591410ee07a29991c3fc9}
+      \strng{authorfullhash}{7d9da708000b4431ab8ce30d2c0acac7}
+      \strng{authorfullhashraw}{7d9da708000b4431ab8ce30d2c0acac7}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Adv. Neural Inf. Process. Syst.}
+      \field{title}{3{D} Steerable {CNN}s: Learning Rotationally Equivariant Features in Volumetric Data}
+      \field{volume}{31}
+      \field{year}{2018}
+      \verb{urlraw}
+      \verb https://papers.nips.cc/paper_files/paper/2018/hash/488e4104520c6aab692863cc1dba45af-Abstract.html
+      \endverb
+      \verb{url}
+      \verb https://papers.nips.cc/paper_files/paper/2018/hash/488e4104520c6aab692863cc1dba45af-Abstract.html
+      \endverb
+    \endentry
+    \entry{karras2022elucidating}{inproceedings}{}{}
+      \name{author}{4}{}{%
+        {{hash=9c6cb97b8c2c22b41d64c2c4f4520c11}{%
+           family={Karras},
+           familyi={K\bibinitperiod},
+           given={Tero},
+           giveni={T\bibinitperiod}}}%
+        {{hash=46c9891d2dac80f9bbdd0f7e920aaea1}{%
+           family={Aittala},
+           familyi={A\bibinitperiod},
+           given={Miika},
+           giveni={M\bibinitperiod}}}%
+        {{hash=70c1210f7c167faac22c68d1db1d9175}{%
+           family={Aila},
+           familyi={A\bibinitperiod},
+           given={Timo},
+           giveni={T\bibinitperiod}}}%
+        {{hash=e83c74e19bcc032813595328513ebd5c}{%
+           family={Laine},
+           familyi={L\bibinitperiod},
+           given={Samuli},
+           giveni={S\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Curran Associates, Inc.}%
+      }
+      \strng{namehash}{338fbd4c2ccae5bf5e00de7691045566}
+      \strng{fullhash}{fbe05311ce2028186cf9f8da4a83471c}
+      \strng{fullhashraw}{fbe05311ce2028186cf9f8da4a83471c}
+      \strng{bibnamehash}{fbe05311ce2028186cf9f8da4a83471c}
+      \strng{authorbibnamehash}{fbe05311ce2028186cf9f8da4a83471c}
+      \strng{authornamehash}{338fbd4c2ccae5bf5e00de7691045566}
+      \strng{authorfullhash}{fbe05311ce2028186cf9f8da4a83471c}
+      \strng{authorfullhashraw}{fbe05311ce2028186cf9f8da4a83471c}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Adv. Neural Inf. Process. Syst.}
+      \field{title}{Elucidating the Design Space of Diffusion-Based Generative Models}
+      \field{year}{2022}
+      \field{pages}{26565\bibrangedash 26577}
+      \range{pages}{13}
+      \verb{urlraw}
+      \verb https://proceedings.neurips.cc/paper_files/paper/2022/file/a98846e9d9cc01cfb87eb694d946ce6b-Abstract.html
+      \endverb
+      \verb{url}
+      \verb https://proceedings.neurips.cc/paper_files/paper/2022/file/a98846e9d9cc01cfb87eb694d946ce6b-Abstract.html
       \endverb
     \endentry
     \entry{maier_ff14sb_2015}{article}{}{}
@@ -4342,6 +4263,85 @@
       \verb https://linkinghub.elsevier.com/retrieve/pii/S0969212619300954
       \endverb
     \endentry
+    \entry{amyot_flexible_2025}{article}{}{}
+      \name{author}{8}{}{%
+        {{hash=0002d22db7517712e6b0fb69f42693b3}{%
+           family={Amyot},
+           familyi={A\bibinitperiod},
+           given={Romain},
+           giveni={R\bibinitperiod}}}%
+        {{hash=81d29b1db35bc6bad05be19e9be120a9}{%
+           family={Miyashita},
+           familyi={M\bibinitperiod},
+           given={Osamu},
+           giveni={O\bibinitperiod}}}%
+        {{hash=431c664e2c605c579f2c08e762d39206}{%
+           family={Wu},
+           familyi={W\bibinitperiod},
+           given={Xuan},
+           giveni={X\bibinitperiod}}}%
+        {{hash=7dca2c8435bcae43c496c39b0a293a6c}{%
+           family={Takeda},
+           familyi={T\bibinitperiod},
+           given={Kazusa},
+           giveni={K\bibinitperiod}}}%
+        {{hash=e2d8820e7fac3928f0d83cf97ec87efe}{%
+           family={Kodera},
+           familyi={K\bibinitperiod},
+           given={Noriyuki},
+           giveni={N\bibinitperiod}}}%
+        {{hash=cc2a083455c9ccaa2adcd842ceb0c984}{%
+           family={Konno},
+           familyi={K\bibinitperiod},
+           given={Hiroki},
+           giveni={H\bibinitperiod}}}%
+        {{hash=648079a9a14ad09ebd4627c6b0108cb0}{%
+           family={Tama},
+           familyi={T\bibinitperiod},
+           given={Florence},
+           giveni={F\bibinitperiod}}}%
+        {{hash=a05e866bb7dbe87481243698695a25b5}{%
+           family={Flechsig},
+           familyi={F\bibinitperiod},
+           given={Holger},
+           giveni={H\bibinitperiod}}}%
+      }
+      \strng{namehash}{47308600b45eedf82eb904df89f7916e}
+      \strng{fullhash}{89029dac4ac3c8aa21b821a63b8c92c3}
+      \strng{fullhashraw}{89029dac4ac3c8aa21b821a63b8c92c3}
+      \strng{bibnamehash}{89029dac4ac3c8aa21b821a63b8c92c3}
+      \strng{authorbibnamehash}{89029dac4ac3c8aa21b821a63b8c92c3}
+      \strng{authornamehash}{47308600b45eedf82eb904df89f7916e}
+      \strng{authorfullhash}{89029dac4ac3c8aa21b821a63b8c92c3}
+      \strng{authorfullhashraw}{89029dac4ac3c8aa21b821a63b8c92c3}
+      \field{extraname}{2}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{High-speed atomic force microscopy (HS-AFM) experiments allow direct observation of biomolecular dynamics at the single-molecule level, acquiring a large amount of topographic imaging data that visualizes changes in the molecular surface during functional activity over an extended period of time. Since images have no atomistic resolution, a major challenge has been to develop post-experimental computational methods to infer atomistic information from measurements. The recently developed NMFF-AFM flexible fitting method provides a computationally efficient approach promising to infer atomistic-precision models of conformational dynamics from resolutionlimited AFM imaging data. We report the software integration of this method into the well-established BioAFMviewer platform and demonstrate its first applications to experimental HS-AFM imaging data. To facilitate applications, we developed a direct workflow from raw experimental AFM data to the visualization and analysis of fitting results. The presented applications to experimental data of a single protein domain, a protein complex, and a megadalton-sized protein filament demonstrate the versatility of NMFF-AFM modeling to reproduce large-amplitude conformational motions of biomolecular dynamics from HS-AFM imaging. As a first step toward automated large-scale analysis of AFM imaging data, we furthermore demonstrate reconstruction of an atomistic molecular movie of protein dynamics, involving large-amplitude conformational transitions, from a measured HS-AFM movie sequence. Implementation of flexible fitting within the stand-alone user-friendly interactive BioAFMviewer software provides the opportunity for a broad range of applications to facilitate the understanding of resolution-limited HS-AFM measurements.}
+      \field{issn}{1936-0851, 1936-086X}
+      \field{journaltitle}{ACS Nano}
+      \field{month}{9}
+      \field{number}{38}
+      \field{title}{Flexible {Fitting} to {Infer} {Atomistic}-{Precision} {Models} of {Large}-{Amplitude} {Conformational} {Dynamics} in {Biomolecules} from {High}-{Speed} {Atomic} {Force} {Microscopy} {Imaging}}
+      \field{volume}{19}
+      \field{year}{2025}
+      \field{pages}{34065\bibrangedash 34079}
+      \range{pages}{15}
+      \verb{doi}
+      \verb 10.1021/acsnano.5c10073
+      \endverb
+      \verb{file}
+      \verb PDF:/Users/yasu/Zotero/storage/MY3SU8X7/Amyot et al. - 2025 - Flexible Fitting to Infer Atomistic-Precision Models of Large-Amplitude Conformational Dynamics in B.pdf:application/pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://pubs.acs.org/doi/10.1021/acsnano.5c10073
+      \endverb
+      \verb{url}
+      \verb https://pubs.acs.org/doi/10.1021/acsnano.5c10073
+      \endverb
+    \endentry
     \entry{Kendall2017Uncertainty}{inproceedings}{}{}
       \name{author}{2}{}{%
         {{hash=4b1053f4ffb69cd61c1f122cc435c884}{%
@@ -4496,8 +4496,8 @@
       \strng{authornamehash}{824b3af5bc91a9d106bb3ebe40f8a5d1}
       \strng{authorfullhash}{824b3af5bc91a9d106bb3ebe40f8a5d1}
       \strng{authorfullhashraw}{824b3af5bc91a9d106bb3ebe40f8a5d1}
-      \field{sortinit}{6}
-      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{sortinit}{7}
+      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{shorttitle}
       \field{abstract}{This repository contains data used in a paper "AFM-Fold: Rapid Reconstruction of Protein Conformations from AFM Images" by Kawai et al.    [flhac\_conformations/]: Structural ensembles of the C-terminal domain of FlhA (FlhA\_C) generated by different models.  [alphaflow/] [aflow\_md\_3a5i\_1.dcd, aflow\_md\_3a5i\_1.pdb]: Structural ensemble of FlhA\_C generated by AlphaFlow MD.  [aflow\_pdb\_3a5i\_1.dcd, aflow\_pdb\_3a5i\_1.pdb]: Structural ensemble of FlhA\_C generated by AlphaFlow PDB.  [bioemu/] [bioemu\_3a5i\_1.dcd, bioemu\_3a5i\_1.pdb]: Structural ensemble of FlhA\_C generated by BioEmu.  [msa\_subsampling/] [msa\_subsampling\_3a5i.dcd, msa\_subsampling\_3a5i.pdb]: Structural ensemble of FlhA\_C generated by MSA subsampling ( using ColabFold ).  [guidance\_scheduling/]: Results of structure generation under different guidance strength parameters (t\_start and y\_max).  [ak/*-*-*/results\_*\_*.npz]: Structure generation results of Adenylate Kinase (AK) with varied guidance strength hyperparameters. The three numbers in each directory name correspond to the inter-domain distances (ATPbd–Core, Core–AMPbd, AMPbd–ATPbd, in Å).  [flhac/*-*/results\_*\_*.npz]: Structure generation results of FlhA\_C with varied guidance strength hyperparameters. The two numbers in each directory name correspond to the inter-domain distances (A\_CD\_2–A\_CD\_3, A\_CD\_4–A\_CD\_1, in Å).  [noise\_robustness/] [*-*.npz]: Results obtained by varying the noise standard deviation of the training AFM images and the “experimental” images used for structure estimation.  [real\_afm/] [frame\_*.npz]: Estimated 3D structures of FlhA\_C from time-series real AFM images.  [real\_afm\_histogram.npy]: Histogram of the real AFM image intensity distribution.  [1ake.pdb]: Chain A of PDB ID: 1AKE.  [4ake.pdb]: Chain A of PDB ID: 4AKE.  [3a5i.pdb]: Chain A of PDB ID: 3A5I.  [ak\_train.dcd, ak\_train.pdb]: Candidate conformations of Adenylate Kinase used for model training.  [ak\_train.npz]: Evaluation results for the candidate conformations of Adenylate Kinase.  [flhac\_train.dcd, flhac\_train.pdb]: Candidate conformations of FlhA\_C used for model training.  [flhac\_train.npz]: Evaluation results for the candidate conformations of FlhA\_C.  [ak.pt]: CNN parameters for Adenylate Kinase structural estimation.  [flhac.pt]: CNN parameters for FlhA\_C structural estimation.  [ak\_summary.npz]: Summary of structural estimation results for Adenylate Kinase, trained on noise-free pseudo-AFM images.  [ak\_summary\_noisy.npz]: Summary of structural estimation results for Adenylate Kinase, trained on pseudo-AFM images with noise std. dev. = 0.3 nm.  [ak.dcd, ak.pdb]: Conformations randomly sampled from a 450 ns MD trajectory for validation.}

@@ -1,0 +1,132 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global/global}
+    \entry{maddipatla2025inverse}{article}{}{}
+      \name{author}{7}{}{%
+        {{hash=faaf27aba26626bdef52391033b488be}{%
+           family={Maddipatla},
+           familyi={M\bibinitperiod},
+           given={Advaith},
+           giveni={A\bibinitperiod}}}%
+        {{hash=f76419ea54ed030ffe32ed6aa1bdeb28}{%
+           family={Sellam},
+           familyi={S\bibinitperiod},
+           given={Nadav\bibnamedelima Bojan},
+           giveni={N\bibinitperiod\bibinitdelim B\bibinitperiod}}}%
+        {{hash=3e9d627af92b5d2172f310d75e9f0939}{%
+           family={Bojan},
+           familyi={B\bibinitperiod},
+           given={Meital},
+           giveni={M\bibinitperiod}}}%
+        {{hash=12a07ea583530dac2edf5e836ca3a30b}{%
+           family={Vedula},
+           familyi={V\bibinitperiod},
+           given={Sanketh},
+           giveni={S\bibinitperiod}}}%
+        {{hash=6ec11ed90fc81e2f75760e7ce223b080}{%
+           family={Schanda},
+           familyi={S\bibinitperiod},
+           given={Paul},
+           giveni={P\bibinitperiod}}}%
+        {{hash=7e1164c6a35a9cd8ccb5f18bac802ba3}{%
+           family={Marx},
+           familyi={M\bibinitperiod},
+           given={Ailie},
+           giveni={A\bibinitperiod}}}%
+        {{hash=07067d223af2cd1402927636c1f87d3d}{%
+           family={Bronstein},
+           familyi={B\bibinitperiod},
+           given={Alex\bibnamedelima M.},
+           giveni={A\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+      }
+      \strng{namehash}{64c765413c91e46076beee219a8a61e0}
+      \strng{fullhash}{64c765413c91e46076beee219a8a61e0}
+      \strng{fullhashraw}{64c765413c91e46076beee219a8a61e0}
+      \strng{bibnamehash}{64c765413c91e46076beee219a8a61e0}
+      \strng{authorbibnamehash}{64c765413c91e46076beee219a8a61e0}
+      \strng{authornamehash}{64c765413c91e46076beee219a8a61e0}
+      \strng{authorfullhash}{64c765413c91e46076beee219a8a61e0}
+      \strng{authorfullhashraw}{64c765413c91e46076beee219a8a61e0}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv}
+      \field{note}{(preprint posted Feb 13, 2025)}
+      \field{title}{Inverse problems with experiment-guided AlphaFold}
+      \field{year}{2025}
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2502.09372
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2502.09372
+      \endverb
+    \endentry
+    \entry{raghu2025multiscale}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=434dae1f49c91c6cb83d653bbd1e589b}{%
+           family={Raghu},
+           familyi={R\bibinitperiod},
+           given={Rishwanth},
+           giveni={R\bibinitperiod}}}%
+        {{hash=3d6d470c8ae60ba662213983ea06ad84}{%
+           family={Levy},
+           familyi={L\bibinitperiod},
+           given={Axel},
+           giveni={A\bibinitperiod}}}%
+        {{hash=b41be3c07977ad4113164ba0fb675b9d}{%
+           family={Wetzstein},
+           familyi={W\bibinitperiod},
+           given={Gordon},
+           giveni={G\bibinitperiod}}}%
+        {{hash=00ed87e00fb7f3134992bdf1963537b4}{%
+           family={Zhong},
+           familyi={Z\bibinitperiod},
+           given={Ellen\bibnamedelima D.},
+           giveni={E\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+      }
+      \strng{namehash}{4f285f0b438ae489eaa9013a03dd5641}
+      \strng{fullhash}{4f285f0b438ae489eaa9013a03dd5641}
+      \strng{fullhashraw}{4f285f0b438ae489eaa9013a03dd5641}
+      \strng{bibnamehash}{4f285f0b438ae489eaa9013a03dd5641}
+      \strng{authorbibnamehash}{4f285f0b438ae489eaa9013a03dd5641}
+      \strng{authornamehash}{4f285f0b438ae489eaa9013a03dd5641}
+      \strng{authorfullhash}{4f285f0b438ae489eaa9013a03dd5641}
+      \strng{authorfullhashraw}{4f285f0b438ae489eaa9013a03dd5641}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv}
+      \field{note}{(preprint posted Jun 4, 2025)}
+      \field{title}{Multiscale guidance of AlphaFold3 with heterogeneous cryo-EM data}
+      \field{year}{2025}
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2506.04490
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2506.04490
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

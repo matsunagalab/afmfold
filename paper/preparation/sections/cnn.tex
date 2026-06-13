@@ -19,5 +19,5 @@ A standard CNN is equivariant to translations (shifting the input shifts the out
 A g-CNN extends this to rotations by modifying feature indexing and kernel weight sharing so that the network becomes equivariant under a chosen discrete rotation group \cite{CohenWelling2016_GCNN, e2cnn}.
 Because the rotational symmetry is built into the architecture rather than learned from data, the g-CNN achieves high accuracy with far less training data and shorter training time than a conventional CNN would require.
 In the final layers, group pooling and spatial pooling collapse the equivariant features into a vector that is \emph{invariant} to both rotations and translations, so the same molecular conformation produces the same CV estimate regardless of how it is oriented or positioned in the AFM image.
-We use this g-CNN to estimate CVs from each single AFM image, which then guide the structure generation in \AFiii (as described in the following subsection).
+We use this g-CNN to estimate CVs from each single AFM image, which then guide the structure generation in \AFiii (as described in \Cref{subsec:navigating_af3}).
 The g-CNN is trained in a supervised manner on pairs of simulated pseudo-AFM images and their known CV values, computed from the corresponding 3D conformations.
