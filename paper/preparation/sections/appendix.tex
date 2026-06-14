@@ -112,7 +112,7 @@ All evaluated schedules are shown in \Cref{fig:guidance_scheduling}, and the det
 \section{Model implementation details}
 
 \begin{algorithm}[H]
-\caption{\textsc{Forward function of $(\R^2, +) \rtimes C_8$ invariant CNN}}
+\caption{\textsc{Forward function of the $(\R^2, +) \rtimes C_8$-equivariant CNN}}
 \label{alg:cnscnn}
 \begin{algorithmic}
 \State \textbf{Input:} $I \in \mathbb{R}^{B \times D \cdot N \times H \times W}$, $D=1$, $N=8$, $H=W=35$; \\
@@ -171,7 +171,7 @@ $N_{\text{hidden-layers}} = 3$, $D_{\text{hidden}} = 64$, $D_{\text{out}} = N_{\
 \end{algorithmic}
 \end{algorithm}
 
-\section{Supplementary tables}
+\section{Supplemental tables}
 
 \begin{table}[H]
     \centering
@@ -180,18 +180,18 @@ $N_{\text{hidden-layers}} = 3$, $D_{\text{hidden}} = 64$, $D_{\text{out}} = N_{\
         The guidance schedule parameters were selected on the basis of the systematic sweep described in \Cref{sec:nav_scheduling} (see also \Cref{fig:guidance_scheduling,fig:guidance_scheduling_ak,fig:guidance_scheduling_flhac}).
     }
     \label{tab:guidance_params}
-    \begin{tabular}{|l|c|l|}
+    \begin{tabular}{lcl}
         \hline
         Parameter & Value & Description \\
         \hline
-        \multicolumn{3}{|l|}{\textit{Guidance schedule (\Cref{eq:sigmoid})}} \\
+        \multicolumn{3}{l}{\textit{Guidance schedule (\Cref{eq:sigmoid})}} \\
         \hline
         $\tau_{\text{start}}$ & 0.6 & Restraint onset (fraction of $N$) \\
         $y_{\text{max}}$ & 0.6 & Maximum guidance strength \\
         $\alpha$ & 10.0 & Sigmoid steepness \\
         $\beta$ & 0.5 & Sigmoid midpoint \\
         \hline
-        \multicolumn{3}{|l|}{\textit{Training data generation}} \\
+        \multicolumn{3}{l}{\textit{Training data generation}} \\
         \hline
         CV grid range & $\pm 5.0$~nm around $\phi(X_{\text{ref}})$ & Range of target CV values \\
         CV grid step & 0.5~nm & Spacing of target CV grid \\
@@ -203,7 +203,7 @@ $N_{\text{hidden-layers}} = 3$, $D_{\text{hidden}} = 64$, $D_{\text{out}} = N_{\
     \centering
     \caption{MolProbity score thresholds used for geometric sanitization.}
     \label{tab:score_thresholds}
-    \begin{tabular}{|l|c|}
+    \begin{tabular}{lc}
         \hline
         Criterion & Threshold \\
         \hline
@@ -219,7 +219,7 @@ $N_{\text{hidden-layers}} = 3$, $D_{\text{hidden}} = 64$, $D_{\text{out}} = N_{\
     \centering
     \caption{Settings for training pseudo-AFM images.}
     \label{tab:afm_settings}
-    \begin{tabular}{|l|c|c|}
+    \begin{tabular}{lcc}
         \hline
          & \AK & \flhac \\
         \hline
@@ -237,7 +237,7 @@ $N_{\text{hidden-layers}} = 3$, $D_{\text{hidden}} = 64$, $D_{\text{out}} = N_{\
     \end{tabular}
 \end{table}
 
-\section{Supplementary figures}
+\section{Supplemental figures}
 
 \begin{figure}[H]
     \centering

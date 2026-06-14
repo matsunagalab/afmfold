@@ -936,6 +936,85 @@
       \verb https://pubs.acs.org/doi/full/10.1021/acs.jpcb.4c04189
       \endverb
     \endentry
+    \entry{amyot_flexible_2025}{article}{}{}
+      \name{author}{8}{}{%
+        {{hash=0002d22db7517712e6b0fb69f42693b3}{%
+           family={Amyot},
+           familyi={A\bibinitperiod},
+           given={Romain},
+           giveni={R\bibinitperiod}}}%
+        {{hash=81d29b1db35bc6bad05be19e9be120a9}{%
+           family={Miyashita},
+           familyi={M\bibinitperiod},
+           given={Osamu},
+           giveni={O\bibinitperiod}}}%
+        {{hash=431c664e2c605c579f2c08e762d39206}{%
+           family={Wu},
+           familyi={W\bibinitperiod},
+           given={Xuan},
+           giveni={X\bibinitperiod}}}%
+        {{hash=7dca2c8435bcae43c496c39b0a293a6c}{%
+           family={Takeda},
+           familyi={T\bibinitperiod},
+           given={Kazusa},
+           giveni={K\bibinitperiod}}}%
+        {{hash=e2d8820e7fac3928f0d83cf97ec87efe}{%
+           family={Kodera},
+           familyi={K\bibinitperiod},
+           given={Noriyuki},
+           giveni={N\bibinitperiod}}}%
+        {{hash=cc2a083455c9ccaa2adcd842ceb0c984}{%
+           family={Konno},
+           familyi={K\bibinitperiod},
+           given={Hiroki},
+           giveni={H\bibinitperiod}}}%
+        {{hash=648079a9a14ad09ebd4627c6b0108cb0}{%
+           family={Tama},
+           familyi={T\bibinitperiod},
+           given={Florence},
+           giveni={F\bibinitperiod}}}%
+        {{hash=a05e866bb7dbe87481243698695a25b5}{%
+           family={Flechsig},
+           familyi={F\bibinitperiod},
+           given={Holger},
+           giveni={H\bibinitperiod}}}%
+      }
+      \strng{namehash}{47308600b45eedf82eb904df89f7916e}
+      \strng{fullhash}{89029dac4ac3c8aa21b821a63b8c92c3}
+      \strng{fullhashraw}{89029dac4ac3c8aa21b821a63b8c92c3}
+      \strng{bibnamehash}{89029dac4ac3c8aa21b821a63b8c92c3}
+      \strng{authorbibnamehash}{89029dac4ac3c8aa21b821a63b8c92c3}
+      \strng{authornamehash}{47308600b45eedf82eb904df89f7916e}
+      \strng{authorfullhash}{89029dac4ac3c8aa21b821a63b8c92c3}
+      \strng{authorfullhashraw}{89029dac4ac3c8aa21b821a63b8c92c3}
+      \field{extraname}{2}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{High-speed atomic force microscopy (HS-AFM) experiments allow direct observation of biomolecular dynamics at the single-molecule level, acquiring a large amount of topographic imaging data that visualizes changes in the molecular surface during functional activity over an extended period of time. Since images have no atomistic resolution, a major challenge has been to develop post-experimental computational methods to infer atomistic information from measurements. The recently developed NMFF-AFM flexible fitting method provides a computationally efficient approach promising to infer atomistic-precision models of conformational dynamics from resolutionlimited AFM imaging data. We report the software integration of this method into the well-established BioAFMviewer platform and demonstrate its first applications to experimental HS-AFM imaging data. To facilitate applications, we developed a direct workflow from raw experimental AFM data to the visualization and analysis of fitting results. The presented applications to experimental data of a single protein domain, a protein complex, and a megadalton-sized protein filament demonstrate the versatility of NMFF-AFM modeling to reproduce large-amplitude conformational motions of biomolecular dynamics from HS-AFM imaging. As a first step toward automated large-scale analysis of AFM imaging data, we furthermore demonstrate reconstruction of an atomistic molecular movie of protein dynamics, involving large-amplitude conformational transitions, from a measured HS-AFM movie sequence. Implementation of flexible fitting within the stand-alone user-friendly interactive BioAFMviewer software provides the opportunity for a broad range of applications to facilitate the understanding of resolution-limited HS-AFM measurements.}
+      \field{issn}{1936-0851, 1936-086X}
+      \field{journaltitle}{ACS Nano}
+      \field{month}{9}
+      \field{number}{38}
+      \field{title}{Flexible {Fitting} to {Infer} {Atomistic}-{Precision} {Models} of {Large}-{Amplitude} {Conformational} {Dynamics} in {Biomolecules} from {High}-{Speed} {Atomic} {Force} {Microscopy} {Imaging}}
+      \field{volume}{19}
+      \field{year}{2025}
+      \field{pages}{34065\bibrangedash 34079}
+      \range{pages}{15}
+      \verb{doi}
+      \verb 10.1021/acsnano.5c10073
+      \endverb
+      \verb{file}
+      \verb PDF:/Users/yasu/Zotero/storage/MY3SU8X7/Amyot et al. - 2025 - Flexible Fitting to Infer Atomistic-Precision Models of Large-Amplitude Conformational Dynamics in B.pdf:application/pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://pubs.acs.org/doi/10.1021/acsnano.5c10073
+      \endverb
+      \verb{url}
+      \verb https://pubs.acs.org/doi/10.1021/acsnano.5c10073
+      \endverb
+    \endentry
     \entry{Vuillemot2025AFMfit}{article}{}{}
       \name{author}{3}{}{%
         {{hash=db6bd6bf60b74af28d061b1e73d28c7b}{%
@@ -4261,85 +4340,6 @@
       \endverb
       \verb{url}
       \verb https://linkinghub.elsevier.com/retrieve/pii/S0969212619300954
-      \endverb
-    \endentry
-    \entry{amyot_flexible_2025}{article}{}{}
-      \name{author}{8}{}{%
-        {{hash=0002d22db7517712e6b0fb69f42693b3}{%
-           family={Amyot},
-           familyi={A\bibinitperiod},
-           given={Romain},
-           giveni={R\bibinitperiod}}}%
-        {{hash=81d29b1db35bc6bad05be19e9be120a9}{%
-           family={Miyashita},
-           familyi={M\bibinitperiod},
-           given={Osamu},
-           giveni={O\bibinitperiod}}}%
-        {{hash=431c664e2c605c579f2c08e762d39206}{%
-           family={Wu},
-           familyi={W\bibinitperiod},
-           given={Xuan},
-           giveni={X\bibinitperiod}}}%
-        {{hash=7dca2c8435bcae43c496c39b0a293a6c}{%
-           family={Takeda},
-           familyi={T\bibinitperiod},
-           given={Kazusa},
-           giveni={K\bibinitperiod}}}%
-        {{hash=e2d8820e7fac3928f0d83cf97ec87efe}{%
-           family={Kodera},
-           familyi={K\bibinitperiod},
-           given={Noriyuki},
-           giveni={N\bibinitperiod}}}%
-        {{hash=cc2a083455c9ccaa2adcd842ceb0c984}{%
-           family={Konno},
-           familyi={K\bibinitperiod},
-           given={Hiroki},
-           giveni={H\bibinitperiod}}}%
-        {{hash=648079a9a14ad09ebd4627c6b0108cb0}{%
-           family={Tama},
-           familyi={T\bibinitperiod},
-           given={Florence},
-           giveni={F\bibinitperiod}}}%
-        {{hash=a05e866bb7dbe87481243698695a25b5}{%
-           family={Flechsig},
-           familyi={F\bibinitperiod},
-           given={Holger},
-           giveni={H\bibinitperiod}}}%
-      }
-      \strng{namehash}{47308600b45eedf82eb904df89f7916e}
-      \strng{fullhash}{89029dac4ac3c8aa21b821a63b8c92c3}
-      \strng{fullhashraw}{89029dac4ac3c8aa21b821a63b8c92c3}
-      \strng{bibnamehash}{89029dac4ac3c8aa21b821a63b8c92c3}
-      \strng{authorbibnamehash}{89029dac4ac3c8aa21b821a63b8c92c3}
-      \strng{authornamehash}{47308600b45eedf82eb904df89f7916e}
-      \strng{authorfullhash}{89029dac4ac3c8aa21b821a63b8c92c3}
-      \strng{authorfullhashraw}{89029dac4ac3c8aa21b821a63b8c92c3}
-      \field{extraname}{2}
-      \field{sortinit}{6}
-      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{abstract}{High-speed atomic force microscopy (HS-AFM) experiments allow direct observation of biomolecular dynamics at the single-molecule level, acquiring a large amount of topographic imaging data that visualizes changes in the molecular surface during functional activity over an extended period of time. Since images have no atomistic resolution, a major challenge has been to develop post-experimental computational methods to infer atomistic information from measurements. The recently developed NMFF-AFM flexible fitting method provides a computationally efficient approach promising to infer atomistic-precision models of conformational dynamics from resolutionlimited AFM imaging data. We report the software integration of this method into the well-established BioAFMviewer platform and demonstrate its first applications to experimental HS-AFM imaging data. To facilitate applications, we developed a direct workflow from raw experimental AFM data to the visualization and analysis of fitting results. The presented applications to experimental data of a single protein domain, a protein complex, and a megadalton-sized protein filament demonstrate the versatility of NMFF-AFM modeling to reproduce large-amplitude conformational motions of biomolecular dynamics from HS-AFM imaging. As a first step toward automated large-scale analysis of AFM imaging data, we furthermore demonstrate reconstruction of an atomistic molecular movie of protein dynamics, involving large-amplitude conformational transitions, from a measured HS-AFM movie sequence. Implementation of flexible fitting within the stand-alone user-friendly interactive BioAFMviewer software provides the opportunity for a broad range of applications to facilitate the understanding of resolution-limited HS-AFM measurements.}
-      \field{issn}{1936-0851, 1936-086X}
-      \field{journaltitle}{ACS Nano}
-      \field{month}{9}
-      \field{number}{38}
-      \field{title}{Flexible {Fitting} to {Infer} {Atomistic}-{Precision} {Models} of {Large}-{Amplitude} {Conformational} {Dynamics} in {Biomolecules} from {High}-{Speed} {Atomic} {Force} {Microscopy} {Imaging}}
-      \field{volume}{19}
-      \field{year}{2025}
-      \field{pages}{34065\bibrangedash 34079}
-      \range{pages}{15}
-      \verb{doi}
-      \verb 10.1021/acsnano.5c10073
-      \endverb
-      \verb{file}
-      \verb PDF:/Users/yasu/Zotero/storage/MY3SU8X7/Amyot et al. - 2025 - Flexible Fitting to Infer Atomistic-Precision Models of Large-Amplitude Conformational Dynamics in B.pdf:application/pdf
-      \endverb
-      \verb{urlraw}
-      \verb https://pubs.acs.org/doi/10.1021/acsnano.5c10073
-      \endverb
-      \verb{url}
-      \verb https://pubs.acs.org/doi/10.1021/acsnano.5c10073
       \endverb
     \endentry
     \entry{Kendall2017Uncertainty}{inproceedings}{}{}

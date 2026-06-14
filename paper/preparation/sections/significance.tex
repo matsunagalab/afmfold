@@ -1,9 +1,7 @@
 \begin{sigstatement}
-High-speed atomic force microscopy (HS-AFM) uniquely enables real-time observation of biomolecular dynamics under near-physiological conditions, yet extracting three-dimensional atomic structures from surface topography images remains challenging.
-Existing approaches face a fundamental trade-off: rigid-body fitting is fast but cannot capture conformational flexibility, while molecular dynamics-based flexible fitting captures structural changes but requires hours to days of computation per frame.
+High-speed atomic force microscopy (HS-AFM) enables real-time observation of biomolecular dynamics under near-physiological conditions, yet extracting three-dimensional atomic structures from surface topography images remains challenging.
+Existing approaches face a trade-off: rigid-body fitting is fast but cannot capture conformational flexibility, while molecular dynamics-based flexible fitting captures structural changes but requires hours to days of computation per frame.
 \Model overcomes this trade-off by combining a symmetry-aware neural network with guided diffusion-based structure generation, reconstructing physically plausible conformations in approximately one minute per frame without molecular dynamics simulations.
-This speed enables, for the first time, high-throughput structural analysis of entire HS-AFM movies comprising hundreds of frames, revealing time-correlated domain motions that reflect underlying conformational dynamics.
-An independently trained evaluation model confirms that the reconstructed conformations capture genuine internal structural changes, not mere differences in molecular positioning.
-This approach makes it possible to obtain detailed structural insight from every frame of AFM movies. 
+This speed enables high-throughput structural analysis of entire HS-AFM movies of hundreds of frames through AFM-conditioned generative reconstruction, yielding detailed structural insight into time-correlated domain motions that reflect underlying conformational dynamics.
 \end{sigstatement}
 

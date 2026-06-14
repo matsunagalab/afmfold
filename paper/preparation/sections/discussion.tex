@@ -1,7 +1,7 @@
 \section{Conclusion}
 
 In this work, we have proposed a computational protocol, \Model, to estimate the 3D conformation of biomolecules from AFM images. 
-\Model extracts features from AFM images with a group-invariant (symmetry-aware) CNN, reducing computational cost in two ways.
+\Model extracts features from AFM images with a group-equivariant (symmetry-aware) CNN, reducing computational cost in two ways.
 First, it reduces the amount of required training data, because symmetry-aware representations learn efficiently from limited images \cite{e2cnn}.
 Second, it shortens inference time: guiding \AFiii requires computing $\ptc{\phi_{\text{object}}}{X_t}$; replacing this with $\mathcal{L}_{\text{MSE}}(X_t)$ keeps the computational cost per structure low.
 In the estimations of this study, per-frame estimation finished within one minute on a single GPU.
