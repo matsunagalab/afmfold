@@ -57,6 +57,7 @@ def prepare_staging(staging: Path) -> None:
 
     for filename in [
         "biophys-new.cls",
+        "biophysj.bst",
         "citation_biophysj.bib",
     ]:
         shutil.copy2(ROOT / filename, staging / filename)
@@ -80,6 +81,7 @@ def prepare_staging(staging: Path) -> None:
                 "- biophysj.tex: single-file LaTeX source with local inputs expanded",
                 "- biophysj.pdf: clean final manuscript PDF without embedded figures",
                 "- biophys-new.cls: Biophysical Journal class file",
+                "- biophysj.bst: BibTeX style file required by Editorial Manager",
                 "- citation_biophysj.bib: bibliography database",
                 "- biophysj.bbl: generated bibliography for the manuscript",
                 "- biophysj_SI.aux: cross-reference labels from the Supplemental Material",
@@ -106,6 +108,7 @@ def create_zip(staging: Path, zip_path: Path) -> None:
         "biophysj.tex",
         "biophysj.pdf",
         "biophys-new.cls",
+        "biophysj.bst",
         "citation_biophysj.bib",
         "biophysj.bbl",
         "biophysj_SI.aux",
