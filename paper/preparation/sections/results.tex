@@ -1,7 +1,10 @@
 \section{Results}
 \label{sec:results}
 
-\subsection{Verification using pseudo-AFM images: adenylate kinase}
+The estimation pipeline of \Model operates as follows: given an input AFM image, the trained g-CNN directly estimates the CV values (inter-domain distances) from the image; these estimated CV values are then used as restraints to navigate the generative process of \AFiii, which produces a 3D conformation consistent with the input AFM image.
+Because the group-pooled output of the g-CNN is invariant to in-plane rotations and translations, the same conformation yields the same CV estimate regardless of how the molecule is oriented or positioned in the image, eliminating the need for explicit image alignment.
+
+\subsection{Verification using pseudo-AFM images: Adenylate kinase}
 \label{subsec:ak_results}
 
 Adenylate kinase (\AK) is a well-studied monomeric enzyme known for its large-scale conformational transitions. It is composed of three relatively rigid domains: the central CORE domain (residues 1–29, 68–117, and 161–214), the AMP-binding domain (AMPbd; residues 30–67), and the lid-like ATP-binding domain (LID; residues 118–167). Experimental and computational studies have suggested that upon ligand binding, the enzyme undergoes a transition from an inactive open conformation to an active closed conformation (see \Cref{fig:overview}~(c)). Here, we evaluated how accurately \Model reconstructs 3D conformations of \AK from artificially created pseudo ``experimental'' AFM images. 
@@ -67,9 +70,10 @@ we investigated its robustness against two key factors that degrade image qualit
 measurement noise and imaging conditions (image resolution and probe tip radius).
 
 We first examined the effect of noise by systematically varying the Gaussian noise levels added to both the training and ``experimental'' pseudo-AFM images (\Cref{fig:noise_robustness}~(a)).
-The heat maps of the mean RMSD (\Cref{fig:noise_robustness}~(b)) and the inter-domain distance MSE (\Cref{fig:noise_robustness}~(c)) reveal that, while noise in the input (``experimental'') images is the dominant factor degrading accuracy, the accuracy for a given input is highest when the training images carry a comparable noise level.
-In particular, when the input images are noisy, training on nearly noise-free images yields the worst performance (lower-left corner), whereas matching the training noise to the input noise largely restores accuracy.
-These results indicate that adding noise to the training images at a level comparable to that in the experimental images is important, although the degradation grows only gradually with the mismatch, so that exact matching is not required.
+The resulting heat maps of the mean RMSD (\Cref{fig:noise_robustness}~(b)) and the inter-domain distance MSE (\Cref{fig:noise_robustness}~(c)) reveal two distinct trends.
+Adding noise to the ``experimental'' images consistently led to substantial reductions in estimation accuracy, whereas adding noise to the training data alone had a comparatively minor effect;
+indeed, the best performance was achieved with noise-free training data.
+These results indicate that \Model is sensitive to noise in the input images but does not require noisy training data to handle noisy inputs.
 
 We next assessed the influence of imaging conditions by varying the image resolution $R_{\rm res}$ and the probe tip radius $R_{\rm probe}$ (\Cref{fig:noise_robustness}~(d)).
 The heat maps of the mean RMSD (\Cref{fig:noise_robustness}~(e)) and the inter-domain distance MSE (\Cref{fig:noise_robustness}~(f)) show that image resolution is the dominant factor governing estimation accuracy.
@@ -205,7 +209,7 @@ To characterize the conformational dynamics captured by \Model, we computed the 
 For comparison, we also generated conformational ensembles using AI-based structure generation models: AlphaFlow \cite{jing2024alphaflow}, BioEmu \cite{bioemu2025}, and \AFii with MSA subsampling \cite{delAlamo2022sampling}, which are expected to approximate long-time behaviors of \flhac that are not accessible by brute-force MD simulations.
 Interestingly, \Model tends to estimate more open conformational states than these AI-based models.
 There are three possible explanations for this tendency.
-First, HS-AFM captures molecular dynamics with a frame interval of 66~ms, corresponding to a longer timescale than that of the training data of AlphaFlow or BioEmu, thereby enabling the observation of more open structures.
+First, HS-AFM captures molecular dynamics with a frame interval of 66~ms, which may reflect longer-timescale motions than those sampled by AlphaFlow or BioEmu, thereby enabling the observation of more open structures.
 Second, interactions between the molecule and the stage during AFM imaging may stabilize conformations with larger contact surface areas, thus favoring more open structures.
 Third, estimation errors in \Model could lead to an overrepresentation of highly open conformations with large conformational entropy.
 
